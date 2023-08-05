@@ -16,7 +16,7 @@ impl RusicUtils {
         for my in mysplit {
             myvec.push(my);
         }
-        let path = env::var("RUSIC_THUMBNAILS").unwrap();
+        let path = env::var("RUSIC_THUMBS").unwrap();
         let envsplit = path.split("/");
         let mut envvec = vec![];
         for env in envsplit {
