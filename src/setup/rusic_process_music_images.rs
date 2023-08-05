@@ -4,7 +4,7 @@ use serde::{Serialize, Deserialize};
 use rusqlite::{Connection, Result};
 
 fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
-    let rusic_music_metadata_path = env::var("RUSIC_THUMBNAILS").expect("$RUSIC_THUMBNAILS is not set");
+    let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
     let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
     let out_fname = rusic_music_metadata_path + &new_fname;
     let img = image::open(x).expect("ooooh fuck it didnt open");
