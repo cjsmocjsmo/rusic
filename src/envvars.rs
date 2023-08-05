@@ -21,17 +21,13 @@ pub fn set_env_vars() {
     if pagination.is_err() {
         env::set_var("RUSIC_PAGINATION", "25");
     };
-    let rusic_scan_home = env::var("RUSIC_SCAN_HOME");
-    if rusic_scan_home.is_err() {
-        env::set_var("RUSIC_SCAN_HOME", "yes");
-    };
     let rusic = env::var("RUSIC_PATH");
     if rusic.is_err() {
-        env::set_var("RUSIC_PATH", "/usr/share/rusic");
+        env::set_var("RUSIC_PATH", "/usr/share/rusic/rusic");
     };
     let rusic_thumbs = env::var("RUSIC_THUMBS");
     if rusic_thumbs.is_err() {
-        env::set_var("RUSIC_THUMBS", "/usr/share/rusic/thumbs");
+        env::set_var("RUSIC_THUMBS", "/usr/share/rusic/rusic/thumbs");
     };
     let rusic_raw_http = env::var("RUSIC_RAW_HTTP");
     if rusic_raw_http.is_err() {
