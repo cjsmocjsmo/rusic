@@ -3,14 +3,14 @@ use std::sync::mpsc::channel;
 use threadpool::ThreadPool;
 use std::time::Instant;
 
-pub mod fire_image;
-pub mod fire_misc;
-pub mod fire_mp3_info;
+pub mod rusic_image;
+pub mod rusic_misc;
+pub mod rusic_mp3_info;
 
-pub mod fire_process_music;
-pub mod fire_process_music_images;
-pub mod fire_utils;
-pub mod fire_walk_dirs;
+pub mod rusic_process_music;
+pub mod rusic_process_music_images;
+pub mod rusic_utils;
+pub mod rusic_walk_dirs;
 
 
 
@@ -36,7 +36,7 @@ fn run_music_threads(alist: Vec<String>) -> bool {
         }
         let tx = tx.clone();
         pool.execute(move || {
-            let mfi = crate::setup::fire_process_music::process_mp3s(
+            let mfi = crate::setup::rusic_process_music::process_mp3s(
                 a.clone(),
                 index.to_string(),
                 page.to_string(),
@@ -91,7 +91,7 @@ fn run_music_img_threads(alist: Vec<String>) {
             let tx = tx.clone();
             pool.execute(move || {
                 let img_info =
-                    fire_process_music_images::process_music_images(i.clone(), img_index);
+                    rusic_process_music_images::process_music_images(i.clone(), img_index);
                 tx.send(img_info).expect("Could not send data");
             });
         }
@@ -107,15 +107,15 @@ fn run_music_img_threads(alist: Vec<String>) {
 
 pub fn run_setup() -> bool {
     let start = Instant::now();
-        let media_lists = fire_walk_dirs::scan_all_sources();
+        let media_lists = rusic_walk_dirs::scan_all_sources();
 
         run_music_threads(media_lists.0.clone());
         run_music_img_threads(media_lists.1.clone());
 
 
-        let ab_list = crate::setup::fire_misc::create_art_alb_list(media_lists.0.clone());
-        let artist_list = crate::setup::fire_misc::create_artistids(ab_list.0);
-        let album_list = crate::setup::fire_misc::create_albumids(ab_list.1);
+        let ab_list = crate::setup::rusic_misc::create_art_alb_list(media_lists.0.clone());
+        let artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
+        let album_list = crate::setup::rusic_misc::create_albumids(ab_list.1);
 
         let art_serial = serde_json::to_string(&artist_list).unwrap();
         let alb_serial = serde_json::to_string(&album_list);

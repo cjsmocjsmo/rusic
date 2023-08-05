@@ -27,7 +27,7 @@ fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MusicImageInfo {
-    fireid: String,
+    rusicid: String,
     width: String,
     height: String,
     basedir: String,
@@ -41,8 +41,8 @@ pub struct MusicImageInfo {
     idx: String,
 }
 
-use crate::setup::fire_utils::FireUtils;
-use crate::setup::fire_image;
+use crate::setup::rusic_utils::FireUtils;
+use crate::setup::rusic_image;
 
 
 pub fn process_music_images(x: String, index: i32) -> i32 {
@@ -51,7 +51,7 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
     let dims = FireUtils::get_dims(&foo2);
 
     if dims != (0, 0) {
-        let newdims = fire_image::normalize_music_image(dims);
+        let newdims = rusic_image::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
         let height_r = newdims.1.to_string();
         let base_dir = FireUtils::split_base_dir(&foo2);
@@ -64,7 +64,7 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
         let thumb_path = create_music_thumbnail(&x, artist_results.clone(), album_results.clone());
 
         let music_img_info = MusicImageInfo {
-            fireid: id,
+            rusicid: id,
             width: width_r,
             height: height_r,
             basedir: base_dir,
@@ -85,12 +85,12 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
 }
 
 fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
-    let conn = Connection::open("fire.db").unwrap();
-    
+    let conn = Connection::open("rusic.db").unwrap();
+
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (
             id INTEGER PRIMARY KEY,
-            fireid TEXT NOT NULL,
+            rusicid TEXT NOT NULL,
             width TEXT NOT NULL,
             height TEXT NOT NULL,
             basedir TEXT NOT NULL,
@@ -108,8 +108,8 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
 
     conn.execute(
         "INSERT INTO music_images (
-                fireid,
-                width, 
+                rusicid,
+                width,
                 height,
                 basedir,
                 filename,
@@ -123,7 +123,7 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
             )
             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
         (
-            &music_img_info.fireid,
+            &music_img_info.rusicid,
             &music_img_info.width,
             &music_img_info.height,
             &music_img_info.basedir,

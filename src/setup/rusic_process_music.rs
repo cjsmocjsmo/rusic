@@ -1,5 +1,5 @@
-use crate::setup::fire_mp3_info;
-use crate::setup::fire_utils::FireUtils;
+use crate::setup::rusic_mp3_info;
+use crate::setup::rusic_utils::FireUtils;
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
@@ -7,7 +7,7 @@ use std::env;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MusicInfo {
-    fireid: String,
+    rusicid: String,
     imgurl: String,
     artist: String,
     album: String,
@@ -42,13 +42,13 @@ fn create_thumb_path(art: String, alb: String, ext: String) -> String {
 }
 
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
-    let tags = fire_mp3_info::get_tag_info(&x);
+    let tags = rusic_mp3_info::get_tag_info(&x);
     let artist = tags.0;
     let album = tags.1;
     let song = tags.2;
     let fu = FireUtils { apath: x.clone() };
     let id = FireUtils::get_md5(&fu);
-    let duration_results = fire_mp3_info::get_duration(&x);
+    let duration_results = rusic_mp3_info::get_duration(&x);
     let fullpath = &x.to_string();
     let base_dir = FireUtils::split_base_dir(&fu);
     let filename_results = FireUtils::split_filename(&fu);
@@ -59,7 +59,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let idx = index.to_string();
     let fsize_results = FireUtils::get_file_size(&fu).to_string();
     let music_info = MusicInfo {
-        fireid: id,
+        rusicid: id,
         imgurl: create_thumb_path(
             music_artist_results.clone(),
             music_album_results.clone(),
@@ -86,12 +86,12 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
 }
 
 fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
-    let conn = Connection::open("fire.db").unwrap();
-    
+    let conn = Connection::open("rusic.db").unwrap();
+
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music (
             id INTEGER PRIMARY KEY,
-            fireid TEXT NOT NULL,
+            rusicid TEXT NOT NULL,
             imgurl TEXT NOT NULL,
             artist TEXT NOT NULL,
             album TEXT NOT NULL,
@@ -111,24 +111,24 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
 
     conn.execute(
         "INSERT INTO music (
-                fireid,
-                imgurl, 
-                artist, 
-                album, 
-                song, 
-                filenameresults, 
-                musicartistresults, 
-                musicalbumresults, 
-                durationresults, 
-                fullpath, 
-                extension, 
-                idx, 
-                page, 
+                rusicid,
+                imgurl,
+                artist,
+                album,
+                song,
+                filenameresults,
+                musicartistresults,
+                musicalbumresults,
+                durationresults,
+                fullpath,
+                extension,
+                idx,
+                page,
                 fsizeresults
             )
             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
         (
-            &music_info.fireid,
+            &music_info.rusicid,
             &music_info.imgurl,
             &music_info.artist,
             &music_info.album,

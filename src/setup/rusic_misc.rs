@@ -27,7 +27,7 @@ pub fn create_art_alb_list(alist: Vec<String>) -> (Vec<String>, Vec<String>) {
     let mut alb_vec = Vec::new();
 
     for a in alist {
-        let tags = crate::setup::fire_mp3_info::get_tag_info(&a);
+        let tags = crate::setup::rusic_mp3_info::get_tag_info(&a);
         let artist = tags.0;
         let album = tags.1;
         art_vec.push(artist);
@@ -56,11 +56,11 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
     for a in alist {
         count = count + 1;
 
-        let af = crate::setup::fire_utils::FireUtils {
+        let af = crate::setup::rusic_utils::FireUtils {
             apath: a.to_string()
         };
 
-        let artistid = crate::setup::fire_utils::FireUtils::get_md5(&af);
+        let artistid = crate::setup::rusic_utils::FireUtils::get_md5(&af);
         let artidstruc = ArtId {
             id: count.clone().to_string(),
             artist: a.clone(),
@@ -85,7 +85,7 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
 }
 
 fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
-    let conn = Connection::open("fire.db").unwrap();
+    let conn = Connection::open("rusic.db").unwrap();
     conn.execute(
         "CREATE TABLE IF NOT EXISTS artistids (
             id INTEGER PRIMARY KEY,
@@ -111,7 +111,7 @@ fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
 }
 
 fn write_album_ids_to_db(albidstruc: AlbId) -> Result<()> {
-    let conn = Connection::open("fire.db").unwrap();
+    let conn = Connection::open("rusic.db").unwrap();
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albumids (
             id INTEGER PRIMARY KEY,
@@ -152,11 +152,11 @@ pub fn create_albumids(alist: Vec<String>) -> Vec<AlbId> {
     for a in alist {
         count = count + 1;
 
-        let af = crate::setup::fire_utils::FireUtils {
+        let af = crate::setup::rusic_utils::FireUtils {
             apath: a.to_string()
         };
 
-        let albumid = crate::setup::fire_utils::FireUtils::get_md5(&af);
+        let albumid = crate::setup::rusic_utils::FireUtils::get_md5(&af);
         let albidstruc = AlbId {
             id: count.clone().to_string(),
             album: a.clone(),

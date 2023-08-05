@@ -6,7 +6,7 @@ use md5::{Digest, Md5};
 #[derive(Debug)]
 pub struct FireUtils {
     pub apath: String
-    
+
 }
 
 impl FireUtils {
@@ -67,7 +67,7 @@ impl FireUtils {
         for f in filenamevec {
             fin.push(f);
         }
-        
+
         let artist = String::from(fin[5]);
         let album = String::from(fin[6]);
 
@@ -130,63 +130,63 @@ impl FireUtils {
 
         filename.to_string()
     }
-    pub fn split_movie_name(&self) -> String {
-        let filesplit = self.apath.split("/");
-        let mut filenamevec: Vec<String> = vec![];
-        for file in filesplit {
-            filenamevec.push(file.to_string());
-        }
-        let raw_fname = filenamevec.pop().unwrap();
+    // pub fn split_movie_name(&self) -> String {
+    //     let filesplit = self.apath.split("/");
+    //     let mut filenamevec: Vec<String> = vec![];
+    //     for file in filesplit {
+    //         filenamevec.push(file.to_string());
+    //     }
+    //     let raw_fname = filenamevec.pop().unwrap();
 
-        let fsplit = raw_fname.split(" (");
-        let mut fsplit_vec = vec![];
-        for f in fsplit {
-            fsplit_vec.push(f);
-        }
+    //     let fsplit = raw_fname.split(" (");
+    //     let mut fsplit_vec = vec![];
+    //     for f in fsplit {
+    //         fsplit_vec.push(f);
+    //     }
 
-        fsplit_vec[0].to_string()
-    }
-    pub fn split_movie_year(&self) -> String {
-        let filesplit = self.apath.split("/");
+    //     fsplit_vec[0].to_string()
+    // }
+    // pub fn split_movie_year(&self) -> String {
+    //     let filesplit = self.apath.split("/");
 
-        let mut filenamevec: Vec<String> = vec![];
-        for file in filesplit {
-            filenamevec.push(file.to_string());
-        }
-        let raw_fname = filenamevec.pop().unwrap();
+    //     let mut filenamevec: Vec<String> = vec![];
+    //     for file in filesplit {
+    //         filenamevec.push(file.to_string());
+    //     }
+    //     let raw_fname = filenamevec.pop().unwrap();
 
-        let fsplit = raw_fname.split(" (");
-        let mut fsplit_vec = vec![];
-        for f in fsplit {
-            fsplit_vec.push(f);
-        }
+    //     let fsplit = raw_fname.split(" (");
+    //     let mut fsplit_vec = vec![];
+    //     for f in fsplit {
+    //         fsplit_vec.push(f);
+    //     }
 
-        // println!("this is split_vec{:?}", fsplit_vec.clone());
+    //     // println!("this is split_vec{:?}", fsplit_vec.clone());
 
-        let fsplit2 = fsplit_vec[1].split(")");
-        let mut fsplit_vec2 = vec![];
-        for f2 in fsplit2 {
-            fsplit_vec2.push(f2);
-        }
+    //     let fsplit2 = fsplit_vec[1].split(")");
+    //     let mut fsplit_vec2 = vec![];
+    //     for f2 in fsplit2 {
+    //         fsplit_vec2.push(f2);
+    //     }
 
-        fsplit_vec2[0].to_string()
-        // fsplit_vec[0].clone().to_string()
+    //     fsplit_vec2[0].to_string()
+    //     // fsplit_vec[0].clone().to_string()
 
-    }
-    pub fn split_poster_name(&self) -> String {
-        let filesplit = self.apath.split("/");
+    // }
+    // pub fn split_poster_name(&self) -> String {
+    //     let filesplit = self.apath.split("/");
 
-        let mut filenamevec: Vec<String> = vec![];
-        for file in filesplit {
-            filenamevec.push(file.to_string());
-        }
-        let fname = filenamevec.pop().unwrap();
+    //     let mut filenamevec: Vec<String> = vec![];
+    //     for file in filesplit {
+    //         filenamevec.push(file.to_string());
+    //     }
+    //     let fname = filenamevec.pop().unwrap();
 
-        fname
-    }
+    //     fname
+    // }
     pub fn get_file_size(&self) -> String {
         let path = Path::new(&self.apath);
-    
+
         path.size_on_disk().unwrap().to_string()
     }
     pub fn get_md5(&self) -> String {
@@ -194,12 +194,12 @@ impl FireUtils {
         hasher2.update(&self.apath);
         let a_id = hasher2.finalize();
         let foo = format!("{:x}", a_id);
-    
+
         foo
     }
-    
+
     pub fn get_dims(&self) -> (u32, u32) {
-        let dims = crate::setup::fire_image::get_image_dims(&self.apath);
+        let dims = crate::setup::rusic_image::get_image_dims(&self.apath);
 
         dims
      }
