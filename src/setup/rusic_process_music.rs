@@ -26,16 +26,16 @@ pub struct MusicInfo {
 
 fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
     let mus_info = serde_json::to_string(&mfo).unwrap();
-    let fire_music_metadata_path = env::var("FIRE_NFOS").expect("$FIRE_NFOS is not set");
-    let a = format!("{}/", fire_music_metadata_path.as_str());
+    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let a = format!("{}/", rusic_music_metadata_path.as_str());
     let b = format!("Music_Meta_{}.json", index.to_string());
     let outpath = a + &b;
     std::fs::write(outpath, mus_info).unwrap();
 }
 
 fn create_thumb_path(art: String, alb: String, ext: String) -> String {
-    let myhttpd = env::var("FIRE_HTTP_ADDR").expect("$FIRE_HTTP_ADDR is not set");
-    let myport = env::var("FIRE_HTTP_PORT").expect("$FIRE_HTTP_PORT is not set");
+    let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
+    let myport = env::var("RUSIC_HTTP_PORT").expect("$RUSIC_HTTP_PORT is not set");
     let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + &ext;
 
     newpath

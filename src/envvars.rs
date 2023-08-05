@@ -21,9 +21,9 @@ pub fn set_env_vars() {
     if pagination.is_err() {
         env::set_var("RUSIC_PAGINATION", "25");
     };
-    let fire_scan_home = env::var("FIRE_SCAN_HOME");
-    if fire_scan_home.is_err() {
-        env::set_var("FIRE_SCAN_HOME", "yes");
+    let rusic_scan_home = env::var("RUSIC_SCAN_HOME");
+    if rusic_scan_home.is_err() {
+        env::set_var("RUSIC_SCAN_HOME", "yes");
     };
     let rusic = env::var("RUSIC_PATH");
     if rusic.is_err() {

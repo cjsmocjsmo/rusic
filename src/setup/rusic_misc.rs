@@ -74,9 +74,9 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
     let artidlistserial = serde_json::to_string(&artid_list).unwrap();
     println!("{:#?}", artidlistserial);
 
-    let fire_nfo_path =
-        env::var("FIRE_NFOS").expect("$FIRE_NFOS is not set");
-    let a = format!("{}/", fire_nfo_path.as_str());
+    let rusic_nfo_path =
+        env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let a = format!("{}/", rusic_nfo_path.as_str());
     let b = format!("Artist_ID_List.json");
     let outpath = a + &b;
     std::fs::write(outpath, artidlistserial).unwrap();
@@ -169,10 +169,10 @@ pub fn create_albumids(alist: Vec<String>) -> Vec<AlbId> {
     let albidlistserial = serde_json::to_string(&albid_list).unwrap();
     println!("{:#?}", albidlistserial);
 
-    let fire_nfo_path =
-        env::var("FIRE_NFOS").expect("$FIRE_NFOS is not set");
+    let rusic_nfo_path =
+        env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
 
-    let a = format!("{}/", fire_nfo_path.as_str());
+    let a = format!("{}/", rusic_nfo_path.as_str());
     let b = format!("Album_ID_List.json");
     let outpath = a + &b;
     std::fs::write(outpath, albidlistserial).unwrap();

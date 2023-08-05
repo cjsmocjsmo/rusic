@@ -18,8 +18,6 @@ async fn rusic_setup() -> impl Responder {
 
         let _stp_result = setup::run_setup();
         println!("\nSetup is Complete! \nStarting Server\n");
-        // if setup_result {
-        //     let _start_server = crate::server::fire_server_main();
-        // };
+
     HttpResponse::Ok().body("SETUP COMPLETE!")
 }

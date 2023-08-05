@@ -4,9 +4,9 @@ use serde::{Serialize, Deserialize};
 use rusqlite::{Connection, Result};
 
 fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
-    let fire_music_metadata_path = env::var("FIRE_THUMBNAILS").expect("$FIRE_THUMBNAILS is not set");
+    let rusic_music_metadata_path = env::var("RUSIC_THUMBNAILS").expect("$RUSIC_THUMBNAILS is not set");
     let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
-    let out_fname = fire_music_metadata_path + &new_fname;
+    let out_fname = rusic_music_metadata_path + &new_fname;
     let img = image::open(x).expect("ooooh fuck it didnt open");
     let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
     thumbnail
@@ -17,9 +17,9 @@ fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
 
 fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
     let mii = serde_json::to_string(&miinfo).unwrap();
-    let fire_music_metadata_path =
-        env::var("FIRE_NFOS").expect("$FIRE_NFOS is not set");
-    let a = format!("{}/", fire_music_metadata_path.as_str());
+    let rusic_music_metadata_path =
+        env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let a = format!("{}/", rusic_music_metadata_path.as_str());
     let b = format!("Music_Image_Meta_{}.json", &index);
     let outpath = a + &b;
     std::fs::write(outpath, mii.clone()).unwrap();
