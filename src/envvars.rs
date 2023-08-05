@@ -37,9 +37,9 @@ pub fn set_env_vars() {
     if rusic_raw_http.is_err() {
         env::set_var("RUSIC_RAW_HTTP", "192.168.0.26");
     };
-    let rusic_http = env::var("RUSIC_HTTP");
+    let rusic_http = env::var("RUSIC_HTTP_ADDR");
     if rusic_http.is_err() {
-        env::set_var("RUSIC_HTTP", "http://192.168.0.26");
+        env::set_var("RUSIC_HTTP_ADDR", "http://192.168.0.26");
     };
     let rusic_port = env::var("RUSIC_PORT");
     if rusic_port.is_err() {
