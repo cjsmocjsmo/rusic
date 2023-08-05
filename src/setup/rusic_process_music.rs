@@ -1,5 +1,5 @@
 use crate::setup::rusic_mp3_info;
-use crate::setup::rusic_utils::FireUtils;
+use crate::setup::rusic_utils::RusicUtils;
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
@@ -46,18 +46,18 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let artist = tags.0;
     let album = tags.1;
     let song = tags.2;
-    let fu = FireUtils { apath: x.clone() };
-    let id = FireUtils::get_md5(&fu);
+    let fu = RusicUtils { apath: x.clone() };
+    let id = RusicUtils::get_md5(&fu);
     let duration_results = rusic_mp3_info::get_duration(&x);
     let fullpath = &x.to_string();
-    let base_dir = FireUtils::split_base_dir(&fu);
-    let filename_results = FireUtils::split_filename(&fu);
-    let art_alb = FireUtils::music_split_artist(&fu);
+    let base_dir = RusicUtils::split_base_dir(&fu);
+    let filename_results = RusicUtils::split_filename(&fu);
+    let art_alb = RusicUtils::music_split_artist(&fu);
     let music_artist_results = art_alb.0;
     let music_album_results = art_alb.1;
-    let ext = FireUtils::split_ext(&fu);
+    let ext = RusicUtils::split_ext(&fu);
     let idx = index.to_string();
-    let fsize_results = FireUtils::get_file_size(&fu).to_string();
+    let fsize_results = RusicUtils::get_file_size(&fu).to_string();
     let music_info = MusicInfo {
         rusicid: id,
         imgurl: create_thumb_path(

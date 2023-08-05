@@ -4,19 +4,19 @@ use filesize::PathExt;
 use md5::{Digest, Md5};
 
 #[derive(Debug)]
-pub struct FireUtils {
+pub struct RusicUtils {
     pub apath: String
 
 }
 
-impl FireUtils {
+impl RusicUtils {
     pub fn split_base_dir(&self) -> String {
         let mysplit = self.apath.split("/");
         let mut myvec = vec![];
         for my in mysplit {
             myvec.push(my);
         }
-        let path = env::var("FIRE_THUMBNAILS").unwrap();
+        let path = env::var("RUSIC_THUMBNAILS").unwrap();
         let envsplit = path.split("/");
         let mut envvec = vec![];
         for env in envsplit {

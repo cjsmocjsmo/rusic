@@ -22,7 +22,7 @@ fn run_music_threads(alist: Vec<String>) -> bool {
     let mut page = 1;
     let mut page_count = 0;
 
-    let ofs = env::var("FIRE_PAGINATION").unwrap();
+    let ofs = env::var("RUSIC_PAGINATION").unwrap();
     let offset: u32 = ofs.trim().parse().expect("offset conversion failed");
 
     for a in alist {
@@ -66,7 +66,7 @@ fn run_music_threads(alist: Vec<String>) -> bool {
 //             let tx = tx.clone();
 //             pool.execute(move || {
 //                 let img_info =
-//                     fire_process_movie_images::process_movie_posters(i.clone(), img_index);
+//                     RUSIC_process_movie_images::process_movie_posters(i.clone(), img_index);
 //                 tx.send(img_info).expect("Could not send data");
 //             });
 //         }

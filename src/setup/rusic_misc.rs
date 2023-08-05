@@ -56,11 +56,11 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
     for a in alist {
         count = count + 1;
 
-        let af = crate::setup::rusic_utils::FireUtils {
+        let af = crate::setup::rusic_utils::RusicUtils {
             apath: a.to_string()
         };
 
-        let artistid = crate::setup::rusic_utils::FireUtils::get_md5(&af);
+        let artistid = crate::setup::rusic_utils::RusicUtils::get_md5(&af);
         let artidstruc = ArtId {
             id: count.clone().to_string(),
             artist: a.clone(),
@@ -152,11 +152,11 @@ pub fn create_albumids(alist: Vec<String>) -> Vec<AlbId> {
     for a in alist {
         count = count + 1;
 
-        let af = crate::setup::rusic_utils::FireUtils {
+        let af = crate::setup::rusic_utils::RusicUtils {
             apath: a.to_string()
         };
 
-        let albumid = crate::setup::rusic_utils::FireUtils::get_md5(&af);
+        let albumid = crate::setup::rusic_utils::RusicUtils::get_md5(&af);
         let albidstruc = AlbId {
             id: count.clone().to_string(),
             album: a.clone(),

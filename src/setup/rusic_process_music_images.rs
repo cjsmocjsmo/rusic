@@ -41,25 +41,25 @@ pub struct MusicImageInfo {
     idx: String,
 }
 
-use crate::setup::rusic_utils::FireUtils;
+use crate::setup::rusic_utils::RusicUtils;
 use crate::setup::rusic_image;
 
 
 pub fn process_music_images(x: String, index: i32) -> i32 {
-    let foo2 = FireUtils {apath: x.clone()};
-    let id = FireUtils::get_md5(&foo2);
-    let dims = FireUtils::get_dims(&foo2);
+    let foo2 = RusicUtils {apath: x.clone()};
+    let id = RusicUtils::get_md5(&foo2);
+    let dims = RusicUtils::get_dims(&foo2);
 
     if dims != (0, 0) {
         let newdims = rusic_image::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
         let height_r = newdims.1.to_string();
-        let base_dir = FireUtils::split_base_dir(&foo2);
-        let file_name = FireUtils::split_filename(&foo2);
-        let ext = FireUtils::split_ext(&foo2);
-        let artist_results = FireUtils::image_split_artist(&foo2);
-        let album_results = FireUtils::image_split_album(&foo2);
-        let fsize_results = FireUtils::get_file_size(&foo2).to_string();
+        let base_dir = RusicUtils::split_base_dir(&foo2);
+        let file_name = RusicUtils::split_filename(&foo2);
+        let ext = RusicUtils::split_ext(&foo2);
+        let artist_results = RusicUtils::image_split_artist(&foo2);
+        let album_results = RusicUtils::image_split_album(&foo2);
+        let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
         let full_path = &x.to_string();
         let thumb_path = create_music_thumbnail(&x, artist_results.clone(), album_results.clone());
 
