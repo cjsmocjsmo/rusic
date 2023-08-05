@@ -29,6 +29,10 @@ pub fn set_env_vars() {
     if rusic_thumbs.is_err() {
         env::set_var("RUSIC_THUMBS", "/usr/share/rusic/rusic/thumbs");
     };
+    let rusic_nfo = env::var("RUSIC_NFOS");
+    if rusic_nfo.is_err() {
+        env::set_var("RUSIC_NFOS", "/usr/share/rusic/rusic/nfos");
+    };
     let rusic_raw_http = env::var("RUSIC_RAW_HTTP");
     if rusic_raw_http.is_err() {
         env::set_var("RUSIC_RAW_HTTP", "192.168.0.26");
