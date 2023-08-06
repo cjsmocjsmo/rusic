@@ -1,13 +1,16 @@
+use filesize::PathExt;
+use id3::{Tag, TagLike};
+use md5::{Digest, Md5};
 use std::env;
 use std::path::Path;
-use filesize::PathExt;
-use md5::{Digest, Md5};
-use id3::{Tag, TagLike};
+// use id3_image::extract_first_image;
+use anyhow::anyhow;
+use std::time::Duration;
+// use std::fs;
 
 #[derive(Debug)]
 pub struct RusicUtils {
-    pub apath: String
-
+    pub apath: String,
 }
 
 impl RusicUtils {
@@ -46,7 +49,7 @@ impl RusicUtils {
         let mut fspvec = Vec::new();
         for fp in filesplit.clone() {
             fspvec.push(fp);
-        };
+        }
 
         let fspcount = fspvec.len();
         let fspidx = fspcount.clone() - 3;
@@ -69,8 +72,8 @@ impl RusicUtils {
             fin.push(f);
         }
 
-        let artist = String::from(fin[5]);
-        let album = String::from(fin[6]);
+        let artist = String::from(fin[7]);
+        let album = String::from(fin[8]);
 
         (artist, album)
     }
@@ -79,7 +82,7 @@ impl RusicUtils {
         let mut fspvec = Vec::new();
         for fp in filesplit.clone() {
             fspvec.push(fp);
-        };
+        }
 
         let fspcount = fspvec.len();
         let fspidx = fspcount.clone() - 2;
@@ -193,6 +196,39 @@ impl RusicUtils {
 
         (artist.to_string(), album.to_string(), song.to_string())
     }
+
+    pub fn extract_coverart(&self) -> anyhow::Result<String> {
+        let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
+        let artist = tag.artist().expect("artist has fucked up");
+        let album = tag.album().expect("album has fucked up");
+        let mut coverart_path = env::var("RUSIC_THUMBS").unwrap();
+        coverart_path.push_str(artist);
+        coverart_path.push_str("_-_");
+        coverart_path.push_str(album);
+        coverart_path.push_str(".jpg");
+        let c_path = Path::new(&coverart_path);
+
+        if c_path.exists() {
+            Ok(coverart_path)
+        } else {
+            let first_picture = tag.pictures().next();
+            if let Some(p) = first_picture {
+                match image::load_from_memory(&p.data) {
+                    Ok(image) => {
+                        image.save(&coverart_path).map_err(|e| {
+                            anyhow!("Couldn't write image file {:?}: {}", coverart_path, e)
+                        })?;
+                    }
+                    Err(e) => return Err(anyhow!("Couldn't load image: {}", e)),
+                };
+
+                Ok(coverart_path)
+            } else {
+                Err(anyhow!("No image found in music file"))
+            }
+        }
+    }
+
     pub fn get_file_size(&self) -> String {
         let path = Path::new(&self.apath);
 
@@ -207,9 +243,67 @@ impl RusicUtils {
         foo
     }
 
+    pub fn get_duration(&self) -> String {
+        let path = Path::new(&self.apath);
+        let dur_sec_res = mp3_duration::from_path(&path);
+        let dur_sec = match dur_sec_res {
+            Ok(d) => d,
+            Err(_) => Duration::new(0, 0),
+        };
+
+        // dur_sec.clone();
+
+        // let dur_sec = mp3_duration_extract(x.to_string());
+        if dur_sec != Duration::new(0, 0) {
+            let dur_min = dur_sec.div_f32(60.0);
+            let dur_str = format!("{:?}", dur_min);
+            let mut durvec = vec![];
+            for i in dur_str.chars() {
+                durvec.push(i);
+            }
+
+            let mut newvec = vec![];
+            let mut count: i32 = 0;
+            for c in durvec {
+                count = count + 1;
+                if count < 5 {
+                    newvec.push(c);
+                } else {
+                    break;
+                };
+            }
+
+            let duration: String = newvec.into_iter().collect();
+            return duration.clone();
+        } else {
+            let new_dur = Duration::new(0, 0);
+            let duration = format!("{:?}", new_dur);
+            return duration;
+        };
+    }
+
     pub fn get_dims(&self) -> (u32, u32) {
         let dims = crate::setup::rusic_image::get_image_dims(&self.apath);
 
         dims
-     }
+    }
 }
+
+// pub fn save_coverart(x: String, coverart_path: String) -> Result<(), E> {
+//         let tag = Tag::read_from_path(x.clone()).expect(&x);
+//         let mut first_picture = tag.pictures().next();
+//         if let Some(p) = first_picture {
+//             match image::load_from_memory(&p.data) {
+//                 Ok(image) => {
+//                     image.save(&coverart_path).map_err(|e| {
+//                         anyhow!("Couldn't write image file {:?}: {}", coverart_path, e)
+//                     })?;
+//                 }
+//                 Err(e) => return Err(anyhow!("Couldn't load image: {}", e)),
+//             };
+
+//             Ok(())
+//         } else {
+//             Err(anyhow!("No image found in music file"))
+//         }
+//     }

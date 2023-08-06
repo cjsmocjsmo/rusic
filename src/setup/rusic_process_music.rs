@@ -1,19 +1,19 @@
-use crate::setup::rusic_mp3_info;
+// use crate::setup::rusic_mp3_info;
 use crate::setup::rusic_utils::RusicUtils;
 
+// use id3::Tag;
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
 
-#[derive(Debug, Clone)]
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MusicInfo {
     rusicid: String,
     imgurl: String,
-    artist: String,
-    album: String,
-    song: String,
+    // artist: String,
+    // album: String,
+    // song: String,
     basedir: String,
     filenameresults: String,
     musicartistresults: String,
@@ -36,7 +36,10 @@ fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
 }
 
 fn create_thumb_path(art: String, alb: String, ext: String) -> String {
-    println!("create_thumb_path: art: {:?}, alb: {:?}, ext: {:?}", art, alb, ext);
+    println!(
+        "create_thumb_path: art: {:?}, alb: {:?}, ext: {:?}",
+        art, alb, ext
+    );
     let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
     let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");
     let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + ".jpg";
@@ -44,14 +47,129 @@ fn create_thumb_path(art: String, alb: String, ext: String) -> String {
     newpath
 }
 
-pub async fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TagInfo {
+    pub id: String,
+    pub rusicid: String,
+    pub filename: String,
+    pub artist: String,
+    pub album: String,
+    pub song: String,
+    pub coverart: String,
+}
+
+pub fn insert_tag_info(x: TagInfo) -> Result<()> {
+
+        println!("this is x: {:#?}", x);
+        let conn = Connection::open("./db/rusic.db").unwrap();
+
+        conn.execute(
+            "INSERT INTO tags (
+                    rusicid,
+                    filename,
+                    artist,
+                    album,
+                    song
+                )
+                VALUES (?1, ?2, ?3, ?4, ?5)",
+            (
+                &x.rusicid,
+                &x.filename,
+                &x.artist,
+                &x.album,
+                &x.song,
+            ),
+        )?;
+
+    // let conn = Connection::open("./db/rusic.db").unwrap();
+
+    // conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS tags (
+    //         id INTEGER PRIMARY KEY,
+    //         rusicid TEXT NOT NULL,
+    //         filename TEXT NOT NULL,
+    //         artist TEXT NOT NULL,
+    //         album TEXT NOT NULL,
+    //         song TEXT NOT NULL
+    //     )",
+    //     (),
+    // )?;
+
+    // conn.execute(
+    //     "INSERT INTO tags (
+    //             rusicid,
+    //             filename,
+    //             artist,
+    //             album,
+    //             song
+    //         )
+    //         VALUES (?1, ?2, ?3, ?4, ?5)",
+    //     (
+    //         &tinfo.rusicid,
+    //         &tinfo.filename,
+    //         &tinfo.artist,
+    //         &tinfo.album,
+    //         &tinfo.song,
+    //     ),
+    // )?;
+
+    Ok(())
+}
+
+pub fn insert_file_info(x: String, idx: String, rusicid: String) -> Result<()> {
     let fu = RusicUtils { apath: x.clone() };
-    let tags = RusicUtils::get_tag_info(&fu);
-    let artist = tags.0;
-    let album = tags.1;
-    let song = tags.2;
+    // let rusicid = RusicUtils::get_md5(&fu);
+    let conn = Connection::open("./db/rusic.db").unwrap();
+
+    // conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS fileinfo (
+    //         id INTEGER PRIMARY KEY,
+    //         rusicid TEXT NOT NULL,
+    //         filename TEXT NOT NULL,
+    //         extension TEXT NOT NULL,
+    //         filesize TEXT NOT NULL,
+    //         duration TEXT NOT NULL,
+    //         idx TEXT NOT NULL,
+    //         fullpath TEXT NOT NULL,
+    //         basedir TEXT NOT NULL
+    //     )",
+    //     (),
+    // )?;
+
+    conn.execute(
+        "INSERT INTO fileinfo (
+                id,
+                rusicid,
+                filename,
+                extension,
+                filesize,
+                duration,
+                idx,
+                fullpath,
+                basedir
+            )
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+        (
+            &idx,
+            &rusicid,
+            &x.to_string(),
+            &RusicUtils::split_ext(&fu),
+            &RusicUtils::get_file_size(&fu).to_string(),
+            &RusicUtils::get_duration(&fu),
+            &idx,
+            &x.to_string(),
+            &RusicUtils::split_base_dir(&fu),
+        ),
+    )?;
+
+    Ok(())
+}
+
+pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
+    let fu = RusicUtils { apath: x.clone() };
     let id = RusicUtils::get_md5(&fu);
-    let duration_results = rusic_mp3_info::get_duration(&x);
+
+    let duration_results = RusicUtils::get_duration(&fu);
     let fullpath = &x.to_string();
     let base_dir = RusicUtils::split_base_dir(&fu);
     let filename_results = RusicUtils::split_filename(&fu);
@@ -68,58 +186,55 @@ pub async fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
             music_album_results.clone(),
             ext.clone(),
         ),
-        artist: artist,
-        album: album,
-        song: song,
+        // artist: artist,
+        // album: album,
+        // song: song,
         basedir: base_dir,
         filenameresults: filename_results,
         musicartistresults: music_artist_results.clone(),
         musicalbumresults: music_album_results.clone(),
         durationresults: duration_results,
         fullpath: fullpath.to_string(),
-        extension: format!("{:?}", ext.clone()),
+        extension: ext.clone(),
         idx: idx,
         page: page.to_string(),
         fsizeresults: fsize_results,
     };
     println!("music_info: {:#?}", music_info);
-    write_music_to_db(music_info.clone()).await.expect("Music db insertion failed");
-    write_music_nfos_to_file(music_info.clone(), index.clone());
+    let _wm = write_music_to_db(music_info.clone());
+    let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
     music_info.clone()
 }
 
-async fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
+fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
     let conn = Connection::open("./db/rusic.db").unwrap();
 
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS music (
-            id INTEGER PRIMARY KEY,
-            rusicid TEXT NOT NULL,
-            imgurl TEXT NOT NULL,
-            artist TEXT NOT NULL,
-            album TEXT NOT NULL,
-            song TEXT NOT NULL,
-            filenameresults TEXT NOT NULL,
-            musicartistresults TEXT NOT NULL,
-            musicalbumresults TEXT NOT NULL,
-            durationresults TEXT NOT NULL,
-            fullpath TEXT NOT NULL,
-            extension TEXT NOT NULL,
-            idx TEXT NOT NULL,
-            page TEXT NOT NULL,
-            fsizeresults TEXT NOT NULL
-        )",
-        (),
-    )?;
+    // conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS music (
+    //         id INTEGER PRIMARY KEY,
+    //         rusicid TEXT NOT NULL,
+    //         imgurl TEXT NOT NULL,
+    //         artist TEXT NOT NULL,
+    //         album TEXT NOT NULL,
+    //         song TEXT NOT NULL,
+    //         filenameresults TEXT NOT NULL,
+    //         musicartistresults TEXT NOT NULL,
+    //         musicalbumresults TEXT NOT NULL,
+    //         durationresults TEXT NOT NULL,
+    //         fullpath TEXT NOT NULL,
+    //         extension TEXT NOT NULL,
+    //         idx TEXT NOT NULL,
+    //         page TEXT NOT NULL,
+    //         fsizeresults TEXT NOT NULL
+    //     )",
+    //     (),
+    // )?;
 
     conn.execute(
         "INSERT INTO music (
                 rusicid,
                 imgurl,
-                artist,
-                album,
-                song,
                 filenameresults,
                 musicartistresults,
                 musicalbumresults,
@@ -130,13 +245,13 @@ async fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 page,
                 fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
-            &music_info.artist,
-            &music_info.album,
-            &music_info.song,
+            // &music_info.artist,
+            // &music_info.album,
+            // &music_info.song,
             &music_info.filenameresults,
             &music_info.musicartistresults,
             &music_info.musicalbumresults,

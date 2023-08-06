@@ -89,14 +89,14 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
 
 fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
     let conn = Connection::open("./db/rusic.db").unwrap();
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS artistids (
-            id INTEGER PRIMARY KEY,
-            artist TEXT NOT NULL,
-            artistid TEXT NOT NULL
-        )",
-        (),
-    )?;
+    // conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS artistids (
+    //         id INTEGER PRIMARY KEY,
+    //         artist TEXT NOT NULL,
+    //         artistid TEXT NOT NULL
+    //     )",
+    //     (),
+    // )?;
 
     conn.execute(
         "INSERT INTO artistids (
@@ -115,14 +115,14 @@ fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
 
 fn write_album_ids_to_db(albidstruc: AlbId) -> Result<()> {
     let conn = Connection::open("./db/rusic.db").unwrap();
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS albumids (
-            id INTEGER PRIMARY KEY,
-            album TEXT NOT NULL,
-            albumid TEXT NOT NULL
-        )",
-        (),
-    )?;
+    // conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS albumids (
+    //         id INTEGER PRIMARY KEY,
+    //         album TEXT NOT NULL,
+    //         albumid TEXT NOT NULL
+    //     )",
+    //     (),
+    // )?;
 
     conn.execute(
         "INSERT INTO albumids (
