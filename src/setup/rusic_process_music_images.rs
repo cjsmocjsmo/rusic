@@ -6,7 +6,9 @@ use rusqlite::{Connection, Result};
 fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
     let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
     let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
+    println!("new_fname: {:?}", new_fname);
     let out_fname = rusic_music_metadata_path + &new_fname;
+    println!("out_fname: {:?}", out_fname);
     let img = image::open(x).expect("ooooh fuck it didnt open");
     let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
     thumbnail
@@ -85,7 +87,7 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
 }
 
 fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
-    let conn = Connection::open("rusic.db").unwrap();
+    let conn = Connection::open("./db/rusic.db").unwrap();
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (

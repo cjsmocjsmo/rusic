@@ -5,6 +5,8 @@ use walkdir::WalkDir;
 use rusqlite::{Connection, Result};
 use std::clone::Clone;
 
+use crate::setup::rusic_utils::RusicUtils;
+
 pub fn media_total_size(addr: String) -> String {
     let total_size = WalkDir::new(addr)
         .min_depth(1)
@@ -27,7 +29,8 @@ pub fn create_art_alb_list(alist: Vec<String>) -> (Vec<String>, Vec<String>) {
     let mut alb_vec = Vec::new();
 
     for a in alist {
-        let tags = crate::setup::rusic_mp3_info::get_tag_info(&a);
+        let fu = RusicUtils { apath: a.clone() };
+        let tags = RusicUtils::get_tag_info(&fu);
         let artist = tags.0;
         let album = tags.1;
         art_vec.push(artist);
@@ -85,7 +88,7 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
 }
 
 fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
-    let conn = Connection::open("rusic.db").unwrap();
+    let conn = Connection::open("./db/rusic.db").unwrap();
     conn.execute(
         "CREATE TABLE IF NOT EXISTS artistids (
             id INTEGER PRIMARY KEY,
@@ -111,7 +114,7 @@ fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
 }
 
 fn write_album_ids_to_db(albidstruc: AlbId) -> Result<()> {
-    let conn = Connection::open("rusic.db").unwrap();
+    let conn = Connection::open("./db/rusic.db").unwrap();
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albumids (
             id INTEGER PRIMARY KEY,

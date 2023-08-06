@@ -2,6 +2,7 @@ use std::env;
 use std::path::Path;
 use filesize::PathExt;
 use md5::{Digest, Md5};
+use id3::{Tag, TagLike};
 
 #[derive(Debug)]
 pub struct RusicUtils {
@@ -184,6 +185,14 @@ impl RusicUtils {
 
     //     fname
     // }
+    pub fn get_tag_info(&self) -> (String, String, String) {
+        let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
+        let artist = tag.artist().expect(&self.apath);
+        let album = tag.album().expect(&self.apath);
+        let song = tag.title().expect(&self.apath);
+
+        (artist.to_string(), album.to_string(), song.to_string())
+    }
     pub fn get_file_size(&self) -> String {
         let path = Path::new(&self.apath);
 

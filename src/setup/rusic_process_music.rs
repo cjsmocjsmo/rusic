@@ -1,11 +1,13 @@
 use crate::setup::rusic_mp3_info;
 use crate::setup::rusic_utils::RusicUtils;
+
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize)]
 pub struct MusicInfo {
     rusicid: String,
     imgurl: String,
@@ -34,19 +36,20 @@ fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
 }
 
 fn create_thumb_path(art: String, alb: String, ext: String) -> String {
+    println!("create_thumb_path: art: {:?}, alb: {:?}, ext: {:?}", art, alb, ext);
     let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
     let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");
-    let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + &ext;
+    let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + ".jpg";
 
     newpath
 }
 
-pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
-    let tags = rusic_mp3_info::get_tag_info(&x);
+pub async fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
+    let fu = RusicUtils { apath: x.clone() };
+    let tags = RusicUtils::get_tag_info(&fu);
     let artist = tags.0;
     let album = tags.1;
     let song = tags.2;
-    let fu = RusicUtils { apath: x.clone() };
     let id = RusicUtils::get_md5(&fu);
     let duration_results = rusic_mp3_info::get_duration(&x);
     let fullpath = &x.to_string();
@@ -79,14 +82,15 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         page: page.to_string(),
         fsizeresults: fsize_results,
     };
+    println!("music_info: {:#?}", music_info);
+    write_music_to_db(music_info.clone()).await.expect("Music db insertion failed");
     write_music_nfos_to_file(music_info.clone(), index.clone());
-    write_music_to_db(music_info.clone()).expect("Music db insertion failed");
 
     music_info.clone()
 }
 
-fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
-    let conn = Connection::open("rusic.db").unwrap();
+async fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
+    let conn = Connection::open("./db/rusic.db").unwrap();
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music (

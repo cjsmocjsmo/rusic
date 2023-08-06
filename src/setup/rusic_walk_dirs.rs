@@ -1,6 +1,6 @@
+use crate::setup::rusic_walk_dirs;
 use std::env;
 use walkdir::WalkDir;
-use crate::setup::rusic_walk_dirs;
 
 // fn home_dir() -> String {
 //     let hd = simple_home_dir::home_dir().unwrap().to_string_lossy().to_string();
@@ -102,8 +102,7 @@ use crate::setup::rusic_walk_dirs;
 //     moviesthumbvec
 // }
 
-pub fn walk_additional_dir(apath: String) -> (Vec<String>,Vec<String>) {
-
+pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
     let mut musicvec = Vec::new();
     let mut musicimgvec = Vec::new();
 
@@ -114,41 +113,26 @@ pub fn walk_additional_dir(apath: String) -> (Vec<String>,Vec<String>) {
     {
         if e.metadata().unwrap().is_file() {
             let fname = e.path().to_string_lossy().to_string();
-            if fname.ends_with(".jpg") {
-                if fname.contains("Music") {
+
+            if fname.contains("Music") {
+                if fname.ends_with(".mp3") {
                     musicimgvec.push(fname);
+                } else if fname.ends_with(".jpg") {
+                    musicimgvec.push(fname);
+                } else if fname.ends_with(".png") {
+                    musicimgvec.push(fname);
+                } else if fname.ends_with(".webp") {
+                    musicimgvec.push(fname);
+                } else if fname.ends_with(".jpeg") {
+                    musicvec.push(fname);
                 } else {
                     continue;
-                };
-            } else if fname.ends_with(".jpeg") {
-                if fname.contains("Music") {
-                    musicimgvec.push(fname);
-                } else {
-                    continue;
-                };
-            } else if fname.ends_with(".png") {
-                if fname.contains("Music") {
-                    musicimgvec.push(fname);
-                } else {
-                    continue;
-                };
-            } else if fname.ends_with(".webp") {
-                if fname.contains("Music") {
-                    musicimgvec.push(fname);
-                } else {
-                    continue;
-                };
-            } else if fname.ends_with(".mp3") {
-                musicvec.push(fname);
+                }
             } else {
                 continue;
             }
         }
-    };
-
-
-
-
+    }
 
     (musicimgvec.clone(), musicvec.clone())
 }
@@ -244,12 +228,10 @@ pub fn scan_all_sources() -> (Vec<String>, Vec<String>) {
         let mut usb4_media_iamges = usb4.1;
         master_music_list.append(&mut usb4_music_list);
         master_img_list.append(&mut usb4_media_iamges);
-
     }
 
-    println!("this is media_list: {}", master_music_list.clone().len());
-    println!("this is media_images: {}", master_img_list.clone().len());
+    println!("this is music_list count: {}", master_music_list.clone().len());
+    println!("this is coverart count: {}", master_img_list.clone().len());
 
     (master_music_list, master_img_list)
-
 }

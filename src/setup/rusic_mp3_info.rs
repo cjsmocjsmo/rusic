@@ -1,16 +1,16 @@
-use id3::{Tag, TagLike};
+// use id3::{Tag, TagLike};
 use mp3_duration;
 use std::path::Path;
 use std::time::Duration;
 
-pub fn get_tag_info(x: &String) -> (String, String, String) {
-    let tag = Tag::read_from_path(x).expect(x);
-    let artist = tag.artist().expect(x);
-    let album = tag.album().expect(x);
-    let song = tag.title().expect(x);
+// pub fn get_tag_info(x: &String) -> (String, String, String) {
+//     let tag = Tag::read_from_path(x).expect(x);
+//     let artist = tag.artist().expect(x);
+//     let album = tag.album().expect(x);
+//     let song = tag.title().expect(x);
 
-    (artist.to_string(), album.to_string(), song.to_string())
-}
+//     (artist.to_string(), album.to_string(), song.to_string())
+// }
 
 fn mp3_duration_extract(x: String) -> Duration {
     let path = Path::new(&x);
