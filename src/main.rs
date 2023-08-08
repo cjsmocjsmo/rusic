@@ -21,8 +21,8 @@ async fn main() -> std::io::Result<()> {
             // .service(fs::Files::new("/thumbnails", img_path.clone()).show_files_listing())
         }
     )
-    // .bind(("192.168.0.26", 8080))?
-    .bind(("192.168.0.90", 8080))?
+    .bind(("192.168.0.26", 8080))?
+    // .bind(("192.168.0.90", 8080))?
     .run()
     .await
 }
