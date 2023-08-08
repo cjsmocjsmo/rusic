@@ -17,7 +17,10 @@ pub fn set_env_vars() {
     if usb4.is_err() {
         env::set_var("RUSIC_USB4", "None");
     };
-
+    let no_art_pic = env::var("RUSIC_NO_ART_PIC");
+        if no_art_pic.is_err() {
+            env::set_var("RUSIC_NO_ART_PIC", "/usr/share/rusic/rusic/no_art_pic.jpg");
+        };
 
     let pagination = env::var("RUSIC_PAGINATION");
     if pagination.is_err() {
