@@ -11,9 +11,9 @@ use std::env;
 pub struct MusicInfo {
     rusicid: String,
     imgurl: String,
-    // artist: String,
-    // album: String,
-    // song: String,
+    artist: String,
+    album: String,
+    song: String,
     basedir: String,
     filenameresults: String,
     musicartistresults: String,
@@ -55,13 +55,12 @@ pub struct TagInfo {
     pub artist: String,
     pub album: String,
     pub song: String,
-    pub coverart: String,
 }
 
-pub fn insert_tag_info(x: TagInfo) -> Result<()> {
-
+pub fn insert_tag_info(xx: Vec<TagInfo>) -> Result<()> {
+    let conn = Connection::open("./db/rusic.db").unwrap();
+    for x in xx {
         println!("this is x: {:#?}", x);
-        let conn = Connection::open("./db/rusic.db").unwrap();
 
         conn.execute(
             "INSERT INTO tags (
@@ -72,47 +71,9 @@ pub fn insert_tag_info(x: TagInfo) -> Result<()> {
                     song
                 )
                 VALUES (?1, ?2, ?3, ?4, ?5)",
-            (
-                &x.rusicid,
-                &x.filename,
-                &x.artist,
-                &x.album,
-                &x.song,
-            ),
+            (&x.rusicid, &x.filename, &x.artist, &x.album, &x.song),
         )?;
-
-    // let conn = Connection::open("./db/rusic.db").unwrap();
-
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS tags (
-    //         id INTEGER PRIMARY KEY,
-    //         rusicid TEXT NOT NULL,
-    //         filename TEXT NOT NULL,
-    //         artist TEXT NOT NULL,
-    //         album TEXT NOT NULL,
-    //         song TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
-
-    // conn.execute(
-    //     "INSERT INTO tags (
-    //             rusicid,
-    //             filename,
-    //             artist,
-    //             album,
-    //             song
-    //         )
-    //         VALUES (?1, ?2, ?3, ?4, ?5)",
-    //     (
-    //         &tinfo.rusicid,
-    //         &tinfo.filename,
-    //         &tinfo.artist,
-    //         &tinfo.album,
-    //         &tinfo.song,
-    //     ),
-    // )?;
-
+    }
     Ok(())
 }
 
@@ -120,21 +81,6 @@ pub fn insert_file_info(x: String, idx: String, rusicid: String) -> Result<()> {
     let fu = RusicUtils { apath: x.clone() };
     // let rusicid = RusicUtils::get_md5(&fu);
     let conn = Connection::open("./db/rusic.db").unwrap();
-
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS fileinfo (
-    //         id INTEGER PRIMARY KEY,
-    //         rusicid TEXT NOT NULL,
-    //         filename TEXT NOT NULL,
-    //         extension TEXT NOT NULL,
-    //         filesize TEXT NOT NULL,
-    //         duration TEXT NOT NULL,
-    //         idx TEXT NOT NULL,
-    //         fullpath TEXT NOT NULL,
-    //         basedir TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
 
     conn.execute(
         "INSERT INTO fileinfo (
@@ -168,6 +114,10 @@ pub fn insert_file_info(x: String, idx: String, rusicid: String) -> Result<()> {
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let fu = RusicUtils { apath: x.clone() };
     let id = RusicUtils::get_md5(&fu);
+    let tag = RusicUtils::get_tag_info(&fu);
+    let artist = tag.0;
+    let album = tag.1;
+    let song = tag.2;
 
     let duration_results = RusicUtils::get_duration(&fu);
     let fullpath = &x.to_string();
@@ -186,9 +136,9 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
             music_album_results.clone(),
             ext.clone(),
         ),
-        // artist: artist,
-        // album: album,
-        // song: song,
+        artist: artist,
+        album: album,
+        song: song,
         basedir: base_dir,
         filenameresults: filename_results,
         musicartistresults: music_artist_results.clone(),
@@ -210,31 +160,13 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
 fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
     let conn = Connection::open("./db/rusic.db").unwrap();
 
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS music (
-    //         id INTEGER PRIMARY KEY,
-    //         rusicid TEXT NOT NULL,
-    //         imgurl TEXT NOT NULL,
-    //         artist TEXT NOT NULL,
-    //         album TEXT NOT NULL,
-    //         song TEXT NOT NULL,
-    //         filenameresults TEXT NOT NULL,
-    //         musicartistresults TEXT NOT NULL,
-    //         musicalbumresults TEXT NOT NULL,
-    //         durationresults TEXT NOT NULL,
-    //         fullpath TEXT NOT NULL,
-    //         extension TEXT NOT NULL,
-    //         idx TEXT NOT NULL,
-    //         page TEXT NOT NULL,
-    //         fsizeresults TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
-
     conn.execute(
         "INSERT INTO music (
                 rusicid,
                 imgurl,
+                artist,
+                album,
+                song,
                 filenameresults,
                 musicartistresults,
                 musicalbumresults,
@@ -245,13 +177,13 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 page,
                 fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
-            // &music_info.artist,
-            // &music_info.album,
-            // &music_info.song,
+            &music_info.artist,
+            &music_info.album,
+            &music_info.song,
             &music_info.filenameresults,
             &music_info.musicartistresults,
             &music_info.musicalbumresults,

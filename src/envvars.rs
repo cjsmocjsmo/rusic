@@ -52,7 +52,7 @@ use std::env;
 pub fn set_env_vars() {
     let usb1 = env::var("RUSIC_USB1");
     if usb1.is_err() {
-        env::set_var("RUSIC_USB1", "/media/charliepi/FooBar/media/");
+        env::set_var("RUSIC_USB1", "/media/charliepi/C052-0E64/media/");
     };
     let usb2 = env::var("RUSIC_USB2");
     if usb2.is_err() {
@@ -66,7 +66,10 @@ pub fn set_env_vars() {
     if usb4.is_err() {
         env::set_var("RUSIC_USB4", "None");
     };
-
+    let no_art_pic = env::var("RUSIC_NO_ART_PIC");
+    if no_art_pic.is_err() {
+        env::set_var("RUSIC_NO_ART_PIC", "/media/charliepi/HD/MTVSERVER/rusic/no_art_pic.jpg");
+    };
 
     let pagination = env::var("RUSIC_PAGINATION");
     if pagination.is_err() {
@@ -78,7 +81,10 @@ pub fn set_env_vars() {
     };
     let rusic_thumbs = env::var("RUSIC_THUMBS");
     if rusic_thumbs.is_err() {
-        env::set_var("RUSIC_THUMBS", "/media/charliepi/HD/MTVSERVER/rusic/thumbs/");
+        env::set_var(
+            "RUSIC_THUMBS",
+            "/media/charliepi/HD/MTVSERVER/rusic/thumbs/",
+        );
     };
     let rusic_nfo = env::var("RUSIC_NFOS");
     if rusic_nfo.is_err() {

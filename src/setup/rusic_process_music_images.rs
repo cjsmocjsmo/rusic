@@ -21,9 +21,7 @@ fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
     let mii = serde_json::to_string(&miinfo).unwrap();
     let rusic_music_metadata_path =
         env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
-    let a = format!("{}/", rusic_music_metadata_path.as_str());
-    let b = format!("Music_Image_Meta_{}.json", &index);
-    let outpath = a + &b;
+    let outpath = format!("{}/Music_Image_Meta_{}.json", rusic_music_metadata_path.as_str(), &index);
     std::fs::write(outpath, mii.clone()).unwrap();
 }
 
