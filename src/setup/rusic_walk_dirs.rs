@@ -2,9 +2,6 @@ use crate::setup::rusic_walk_dirs;
 use std::env;
 use walkdir::WalkDir;
 
-// use crate::setup::rusic_process_music;
-// use crate::setup::rusic_utils::RusicUtils;
-
 pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
     let mut musicvec = Vec::new();
     let mut musicimgvec = Vec::new();
@@ -34,28 +31,6 @@ pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
             if fname.contains("Music") {
                 if fname.ends_with(".mp3") {
                     musicvec.push(fname.clone());
-                    // let fu = RusicUtils {
-                    //     apath: fname.clone(),
-                    // };
-                    // let rusicid = RusicUtils::get_md5(&fu);
-                    // let _ins_tag_info = rusic_process_music::insert_tag_info(
-                    //     fname.clone(),
-                    //     index.clone().to_string(),
-                    //     rusicid.clone(),
-                    // );
-                    // let _ins_file_info = rusic_process_music::insert_file_info(
-                    //     fname.clone(),
-                    //     index.clone().to_string(),
-                    //     rusicid.clone(),
-                    // );
-
-                    // let tags = RusicUtils::get_tag_info(&fu);
-
-                    // let fsize = RusicUtils::get_file_size(&fu);
-                    // let dur = RusicUtils::get_duration(&fu);
-                    // let art_alb = RusicUtils::music_split_artist(&fu);
-                    // println!("this is tags: {:?}\n {:?}\n {:?}\n{:?}\n{:?}", tags.clone(), id, fsize, dur, art_alb);
-                    // rusic_process_music::process_mp3s(fname.clone(), index.to_string(), page.to_string());
                 } else if fname.ends_with(".jpg") {
                     musicimgvec.push(fname.clone());
                 } else if fname.ends_with(".png") {
@@ -162,102 +137,3 @@ pub fn scan_all_sources() -> (Vec<String>, Vec<String>) {
     (master_music_list, master_img_list)
 }
 
-// fn home_dir() -> String {
-//     let hd = simple_home_dir::home_dir().unwrap().to_string_lossy().to_string();
-//     return hd
-// }
-
-// fn walk_video_dir(apath: String) -> Vec<String> {
-//     let mut vidvec = Vec::new();
-//     for e in WalkDir::new(apath)
-//         .follow_links(true)
-//         .into_iter()
-//         .filter_map(|e| e.ok())
-//     {
-//         if e.metadata().unwrap().is_file() {
-//             let fname = e.path().to_string_lossy().to_string();
-//             if fname.ends_with("mp4") {
-//                 vidvec.push(fname.clone());
-//             } else if fname.ends_with("mkv") {
-//                 vidvec.push(fname.clone());
-//             } else {
-//                 continue;
-//             }
-//         }
-//     }
-
-//     vidvec
-// }
-
-// fn walk_music_dir_music(apath: String) -> Vec<String> {
-//     let mut mp3vec = Vec::new();
-//     for e in WalkDir::new(apath)
-//         .follow_links(true)
-//         .into_iter()
-//         .filter_map(|e| e.ok())
-//     {
-//         if e.metadata().unwrap().is_file() {
-//             let fname = e.path().to_string_lossy().to_string();
-
-//             if fname.ends_with(".mp3") {
-//                 mp3vec.push(fname.clone());
-//             } else {
-//                 continue;
-//             }
-//         }
-//     }
-
-//     mp3vec
-// }
-
-// fn walk_music_dir_images(apath: String) -> Vec<String> {
-//     let mut musicimagevec = Vec::new();
-//     for e in WalkDir::new(apath)
-//         .follow_links(true)
-//         .into_iter()
-//         .filter_map(|e| e.ok())
-//     {
-//         if e.metadata().unwrap().is_file() {
-//             let fname = e.path().to_string_lossy().to_string();
-//             if fname.ends_with(".jpg") {
-//                 musicimagevec.push(fname);
-//             } else if fname.ends_with(".jpeg") {
-//                 musicimagevec.push(fname);
-//             } else if fname.ends_with(".png") {
-//                 musicimagevec.push(fname);
-//             } else if fname.ends_with(".webp") {
-//                 musicimagevec.push(fname);
-//             } else {
-//                 continue;
-//             }
-//         }
-//     }
-
-//     musicimagevec
-// }
-
-// fn walk_posters2_dir(apath: String) -> Vec<String> {
-//     let mut moviesthumbvec = Vec::new();
-//     for e in WalkDir::new(apath)
-//         .follow_links(true)
-//         .into_iter()
-//         .filter_map(|e| e.ok())
-//     {
-//         if e.metadata().unwrap().is_file() {
-//             let fname = e.path().to_string_lossy().to_string();
-//             if fname.ends_with(".jpg") {
-//                 moviesthumbvec.push(fname);
-//             } else if fname.ends_with(".jpeg") {
-//                 moviesthumbvec.push(fname);
-//             } else if fname.ends_with(".png") {
-//                 moviesthumbvec.push(fname);
-//             } else if fname.ends_with(".webp") {
-//                 moviesthumbvec.push(fname);
-//             } else {
-//                 continue;
-//             }
-//         }
-//     }
-
-//     moviesthumbvec
-// }

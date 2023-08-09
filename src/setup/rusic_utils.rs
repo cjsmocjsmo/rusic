@@ -93,22 +93,6 @@ impl RusicUtils {
 
         album
     }
-    // pub fn music_split_album(&self) -> String {
-    //     let filesplit = self.apath.split("/");
-    //     let mut filenamevec = vec![];
-    //     for file in filesplit {
-    //         filenamevec.push(file);
-    //     }
-
-    //     let count = &filenamevec.len() - 2;
-    //     filenamevec.drain(0..count);
-    //     let mut album = "";
-    //     for f in filenamevec {
-    //         album = f;
-    //     }
-
-    //     String::from(album)
-    // }
     pub fn split_filename(&self) -> String {
         let filesplit = self.apath.split("/");
         let mut filenamevec = vec![];
@@ -134,60 +118,8 @@ impl RusicUtils {
 
         filename.to_string()
     }
-    // pub fn split_movie_name(&self) -> String {
-    //     let filesplit = self.apath.split("/");
-    //     let mut filenamevec: Vec<String> = vec![];
-    //     for file in filesplit {
-    //         filenamevec.push(file.to_string());
-    //     }
-    //     let raw_fname = filenamevec.pop().unwrap();
 
-    //     let fsplit = raw_fname.split(" (");
-    //     let mut fsplit_vec = vec![];
-    //     for f in fsplit {
-    //         fsplit_vec.push(f);
-    //     }
 
-    //     fsplit_vec[0].to_string()
-    // }
-    // pub fn split_movie_year(&self) -> String {
-    //     let filesplit = self.apath.split("/");
-
-    //     let mut filenamevec: Vec<String> = vec![];
-    //     for file in filesplit {
-    //         filenamevec.push(file.to_string());
-    //     }
-    //     let raw_fname = filenamevec.pop().unwrap();
-
-    //     let fsplit = raw_fname.split(" (");
-    //     let mut fsplit_vec = vec![];
-    //     for f in fsplit {
-    //         fsplit_vec.push(f);
-    //     }
-
-    //     // println!("this is split_vec{:?}", fsplit_vec.clone());
-
-    //     let fsplit2 = fsplit_vec[1].split(")");
-    //     let mut fsplit_vec2 = vec![];
-    //     for f2 in fsplit2 {
-    //         fsplit_vec2.push(f2);
-    //     }
-
-    //     fsplit_vec2[0].to_string()
-    //     // fsplit_vec[0].clone().to_string()
-
-    // }
-    // pub fn split_poster_name(&self) -> String {
-    //     let filesplit = self.apath.split("/");
-
-    //     let mut filenamevec: Vec<String> = vec![];
-    //     for file in filesplit {
-    //         filenamevec.push(file.to_string());
-    //     }
-    //     let fname = filenamevec.pop().unwrap();
-
-    //     fname
-    // }
     pub fn get_tag_info(&self) -> (String, String, String) {
         let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
         let artist = tag.artist().expect(&self.apath);
@@ -250,10 +182,6 @@ impl RusicUtils {
             Ok(d) => d,
             Err(_) => Duration::new(0, 0),
         };
-
-        // dur_sec.clone();
-
-        // let dur_sec = mp3_duration_extract(x.to_string());
         if dur_sec != Duration::new(0, 0) {
             let dur_min = dur_sec.div_f32(60.0);
             let dur_str = format!("{:?}", dur_min);

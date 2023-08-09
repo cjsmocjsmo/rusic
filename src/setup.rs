@@ -100,7 +100,7 @@ pub fn run_setup() -> bool {
     println!("media_lists: {:#?}", media_lists);
 
     let _rmt = run_music_threads(media_lists.0.clone());
-    // run_music_img_threads(media_lists.1.clone());
+    run_music_img_threads(media_lists.1.clone());
 
     // let ab_list = crate::setup::rusic_misc::create_art_alb_list(media_lists.0.clone());
     // let artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
@@ -120,31 +120,6 @@ pub fn run_setup() -> bool {
 
     true
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 fn run_music_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());
@@ -187,53 +162,30 @@ fn run_music_threads(alist: Vec<String>) -> bool {
     true
 }
 
-// fn run_video_img_threads(alist: Vec<String>) {
-//     let pool = ThreadPool::new(num_cpus::get());
-//     let (tx, rx) = channel();
+fn run_music_img_threads(alist: Vec<String>) -> bool {
+    let pool = ThreadPool::new(num_cpus::get());
+    let (tx, rx) = channel();
 
-//     let mut img_index = 0;
-//     for i in alist {
-//         img_index = img_index + 1;
-//         if i.contains("MovPosters") {
-//             let tx = tx.clone();
-//             pool.execute(move || {
-//                 let img_info =
-//                     RUSIC_process_movie_images::process_movie_posters(i.clone(), img_index);
-//                 tx.send(img_info).expect("Could not send data");
-//             });
-//         }
-//     }
+    let mut img_index = 0;
+    for i in alist {
+        img_index = img_index + 1;
+        if i.contains("Music") {
+            let tx = tx.clone();
+            pool.execute(move || {
+                let img_info =
+                    rusic_process_music_images::process_music_images(i.clone(), img_index);
+                tx.send(img_info).expect("Could not send data");
+            });
+        }
+    }
 
-//     drop(tx);
-//     for t in rx.iter() {
-//         // Insert this into db
-//         let ifo = t;
-//         println!("Processed Movie img {:#?} file", ifo);
-//     }
-// }
+    drop(tx);
+    for t in rx.iter() {
+        // Insert this into db
+        let ifo = t;
+        println!("Processed Music img {:?} files", ifo);
+    }
 
-// fn run_music_img_threads(alist: Vec<String>) {
-//     let pool = ThreadPool::new(num_cpus::get());
-//     let (tx, rx) = channel();
-
-//     let mut img_index = 0;
-//     for i in alist {
-//         img_index = img_index + 1;
-//         if i.contains("Music") {
-//             let tx = tx.clone();
-//             pool.execute(move || {
-//                 let img_info =
-//                     rusic_process_music_images::process_music_images(i.clone(), img_index);
-//                 tx.send(img_info).expect("Could not send data");
-//             });
-//         }
-//     }
-
-//     drop(tx);
-//     for t in rx.iter() {
-//         // Insert this into db
-//         let ifo = t;
-//         println!("Processed Music img {:?} files", ifo);
-//     }
-// }
+    true
+}
 
