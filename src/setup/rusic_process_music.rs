@@ -28,51 +28,52 @@ pub struct MusicInfo {
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     println!("processing:\n\t {:#?}", x);
     let fu = RusicUtils { apath: x.clone() };
-    let id = RusicUtils::get_md5(&fu);
+
     let tag = RusicUtils::get_tag_info(&fu);
     let artist = tag.0;
     let album = tag.1;
     let song = tag.2;
 
-    let duration_results = RusicUtils::get_duration(&fu);
-    let fullpath = &x.to_string();
-    let base_dir = RusicUtils::split_base_dir(&fu);
-    let filename_results = RusicUtils::split_filename(&fu);
+
     let art_alb = RusicUtils::music_split_artist(&fu);
     let music_artist_results = art_alb.0;
     let music_album_results = art_alb.1;
-    let ext = RusicUtils::split_ext(&fu);
-    let idx = index.to_string();
-    let fsize_results = RusicUtils::get_file_size(&fu).to_string();
+
+    let bar = RusicUtils {
+        apath: music_artist_results.clone(),
+    };
+    let baz = RusicUtils {
+        apath: music_album_results.clone(),
+    };
+
     let music_info = MusicInfo {
-        rusicid: id,
+        rusicid: RusicUtils::get_md5(&fu),
         imgurl: create_thumb_path(
             music_artist_results.clone(),
             music_album_results.clone(),
-            ext.clone(),
+            RusicUtils::get_md5(&fu),
         ),
         artist: artist,
-        artistid: RusicUtils::get_md5(&fu),
+        artistid: RusicUtils::get_md5(&bar),
         album: album,
-        albumid: RusicUtils::get_md5(&fu),
+        albumid: RusicUtils::get_md5(&baz),
         song: song,
-        basedir: base_dir,
-        filenameresults: filename_results,
+        basedir: RusicUtils::split_base_dir(&fu),
+        filenameresults: RusicUtils::split_filename(&fu),
         musicartistresults: music_artist_results.clone(),
         musicalbumresults: music_album_results.clone(),
-        durationresults: duration_results,
-        fullpath: fullpath.to_string(),
-        extension: ext.clone(),
-        idx: idx,
+        durationresults: RusicUtils::get_duration(&fu),
+        fullpath: x.to_string(),
+        extension: RusicUtils::get_md5(&fu),
+        idx: index.to_string(),
         page: page.to_string(),
-        fsizeresults: fsize_results,
+        fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
     };
     let _wm = write_music_to_db(music_info.clone());
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
     music_info.clone()
 }
-
 
 fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
     let mus_info = serde_json::to_string(&mfo).unwrap();
@@ -103,7 +104,9 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 rusicid,
                 imgurl,
                 artist,
+                artistid,
                 album,
+                albumid,
                 song,
                 filenameresults,
                 musicartistresults,
@@ -115,12 +118,14 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 page,
                 fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
             &music_info.artist,
+            &music_info.artistid,
             &music_info.album,
+            &music_info.albumid,
             &music_info.song,
             &music_info.filenameresults,
             &music_info.musicartistresults,
@@ -136,15 +141,6 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
 
     Ok(())
 }
-
-
-
-
-
-
-
-
-
 
 // #[derive(Debug, Clone, Serialize, Deserialize)]
 // pub struct TagInfo {
@@ -208,6 +204,3 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
 
 //     Ok(())
 // }
-
-
-
