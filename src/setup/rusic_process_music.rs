@@ -58,15 +58,15 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let dirz = RusicUtils::split_base_dir_filename(&fu);
     let base_dir = dirz.0;
     let file_name = dirz.1;
-    println!("base_dir: {:#?}", base_dir);
-    println!("file_name: {:#?}", file_name);
+    // println!("base_dir: {:#?}", base_dir);
+    // println!("file_name: {:#?}", file_name);
 
     let art_replace = artist.replace(" ", "_");
     let alb_replace = album.replace(" ", "_");
 
     let c_art_path = base_dir.clone() + "/" + &art_replace + "_-_" + &alb_replace + ".jpg";
 
-    println!("c_art_path: {:#?}", c_art_path);
+    // println!("c_art_path: {:#?}", c_art_path);
     let cover_art_check = cartcheck(c_art_path.clone());
     let mut cap = "None".to_string();
     if cover_art_check == true {
@@ -98,6 +98,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
         coverartpath: cap,
     };
+    println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
