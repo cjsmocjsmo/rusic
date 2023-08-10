@@ -57,7 +57,8 @@ pub fn create_tables() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS artistids (
             id INTEGER PRIMARY KEY,
             artist TEXT NOT NULL,
-            artistid TEXT NOT NULL
+            artistid TEXT NOT NULL,
+            path TEXT NOT NULL
         )",
         (),
     )?;
@@ -66,7 +67,8 @@ pub fn create_tables() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS albumids (
             id INTEGER PRIMARY KEY,
             album TEXT NOT NULL,
-            albumid TEXT NOT NULL
+            albumid TEXT NOT NULL,
+            path TEXT NOT NULL
         )",
         (),
     )?;
@@ -77,7 +79,9 @@ pub fn create_tables() -> Result<()> {
             rusicid TEXT NOT NULL,
             imgurl TEXT NOT NULL,
             artist TEXT NOT NULL,
+            artistid TEXT NOT NULL,
             album TEXT NOT NULL,
+            albumid TEXT NOT NULL,
             song TEXT NOT NULL,
             filenameresults TEXT NOT NULL,
             musicartistresults TEXT NOT NULL,
