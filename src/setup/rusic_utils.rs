@@ -14,7 +14,7 @@ pub struct RusicUtils {
 
 impl RusicUtils {
     pub fn split_base_dir_filename(&self) -> (String, String){
-        let path = Path::new("/path/to/file.txt");
+        let path = Path::new(&self.apath);
 
         let dir_path = path.parent().unwrap();
         let filename = path.file_name().unwrap();

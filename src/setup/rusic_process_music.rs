@@ -58,9 +58,12 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let dirz = RusicUtils::split_base_dir_filename(&fu);
     let base_dir = dirz.0;
     let file_name = dirz.1;
+    println!("base_dir: {:#?}", base_dir);
+    println!("file_name: {:#?}", file_name);
 
 
     let c_art_path = base_dir.clone() + "/" + &artist + "_-_" + &album + ".jpg";
+    println!("c_art_path: {:#?}", c_art_path);
     let cover_art_check = cartcheck(c_art_path.clone());
     let mut cap = "None".to_string();
     if cover_art_check == true {
