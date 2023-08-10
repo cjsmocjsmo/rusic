@@ -1,9 +1,9 @@
-use std::env;
 use byte_unit::Byte;
-use serde::{Serialize, Deserialize};
-use walkdir::WalkDir;
 use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
 use std::clone::Clone;
+use std::env;
+use walkdir::WalkDir;
 
 use crate::setup::rusic_utils::RusicUtils;
 
@@ -35,7 +35,7 @@ pub fn create_art_alb_list(alist: Vec<String>) -> (Vec<String>, Vec<String>) {
         let album = tags.1;
         art_vec.push(artist);
         alb_vec.push(album)
-    };
+    }
     art_vec.sort();
     alb_vec.sort();
 
@@ -53,32 +53,30 @@ pub struct ArtId {
 }
 
 pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
-
     let mut artid_list = Vec::new();
     let mut count = 0;
     for a in alist {
         count = count + 1;
 
         let af = crate::setup::rusic_utils::RusicUtils {
-            apath: a.to_string()
+            apath: a.to_string(),
         };
 
         let artistid = crate::setup::rusic_utils::RusicUtils::get_md5(&af);
         let artidstruc = ArtId {
             id: count.clone().to_string(),
             artist: a.clone(),
-            artistid: artistid.clone()
+            artistid: artistid.clone(),
         };
 
         write_artist_ids_to_db(artidstruc.clone()).expect("artistids insert has failed");
         artid_list.push(artidstruc.clone());
-    };
+    }
 
     let artidlistserial = serde_json::to_string(&artid_list).unwrap();
     println!("{:#?}", artidlistserial);
 
-    let rusic_nfo_path =
-        env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let rusic_nfo_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
     let a = format!("{}/", rusic_nfo_path.as_str());
     let b = format!("Artist_ID_List.json");
     let outpath = a + &b;
@@ -89,14 +87,6 @@ pub fn create_artistids(alist: Vec<String>) -> Vec<ArtId> {
 
 fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
     let conn = Connection::open("./db/rusic.db").unwrap();
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS artistids (
-    //         id INTEGER PRIMARY KEY,
-    //         artist TEXT NOT NULL,
-    //         artistid TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
 
     conn.execute(
         "INSERT INTO artistids (
@@ -104,10 +94,7 @@ fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
                 artistid
             )
             VALUES (?1, ?2)",
-        (
-            &artidstruc.artist,
-            &artidstruc.artistid
-        ),
+        (&artidstruc.artist, &artidstruc.artistid),
     )?;
 
     Ok(())
@@ -115,14 +102,6 @@ fn write_artist_ids_to_db(artidstruc: ArtId) -> Result<()> {
 
 fn write_album_ids_to_db(albidstruc: AlbId) -> Result<()> {
     let conn = Connection::open("./db/rusic.db").unwrap();
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS albumids (
-    //         id INTEGER PRIMARY KEY,
-    //         album TEXT NOT NULL,
-    //         albumid TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
 
     conn.execute(
         "INSERT INTO albumids (
@@ -130,23 +109,17 @@ fn write_album_ids_to_db(albidstruc: AlbId) -> Result<()> {
                 albumid
             )
             VALUES (?1, ?2)",
-        (
-            &albidstruc.album,
-            &albidstruc.albumid
-        ),
+        (&albidstruc.album, &albidstruc.albumid),
     )?;
 
     Ok(())
 }
 
-
-
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbId {
     id: String,
     album: String,
-    albumid: String
+    albumid: String,
 }
 
 pub fn create_albumids(alist: Vec<String>) -> Vec<AlbId> {
@@ -156,24 +129,21 @@ pub fn create_albumids(alist: Vec<String>) -> Vec<AlbId> {
         count = count + 1;
 
         let af = crate::setup::rusic_utils::RusicUtils {
-            apath: a.to_string()
+            apath: a.to_string(),
         };
 
         let albumid = crate::setup::rusic_utils::RusicUtils::get_md5(&af);
         let albidstruc = AlbId {
             id: count.clone().to_string(),
             album: a.clone(),
-            albumid: albumid.clone()
+            albumid: albumid.clone(),
         };
         write_album_ids_to_db(albidstruc.clone()).expect("albumid db insertion has failed");
         albid_list.push(albidstruc);
-
-    };
+    }
     let albidlistserial = serde_json::to_string(&albid_list).unwrap();
-    println!("{:#?}", albidlistserial);
 
-    let rusic_nfo_path =
-        env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let rusic_nfo_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
 
     let a = format!("{}/", rusic_nfo_path.as_str());
     let b = format!("Album_ID_List.json");
@@ -182,4 +152,3 @@ pub fn create_albumids(alist: Vec<String>) -> Vec<AlbId> {
 
     albid_list
 }
-

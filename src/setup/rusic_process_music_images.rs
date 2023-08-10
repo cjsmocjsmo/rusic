@@ -1,7 +1,7 @@
-use std::env;
-use std::clone::Clone;
-use serde::{Serialize, Deserialize};
 use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
+use std::clone::Clone;
+use std::env;
 
 fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
     let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
@@ -19,9 +19,12 @@ fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
 
 fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
     let mii = serde_json::to_string(&miinfo).unwrap();
-    let rusic_music_metadata_path =
-        env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
-    let outpath = format!("{}/Music_Image_Meta_{}.json", rusic_music_metadata_path.as_str(), &index);
+    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let outpath = format!(
+        "{}/Music_Image_Meta_{}.json",
+        rusic_music_metadata_path.as_str(),
+        &index
+    );
     std::fs::write(outpath, mii.clone()).unwrap();
 }
 
@@ -42,16 +45,14 @@ pub struct MusicImageInfo {
 }
 
 use crate::setup::rusic_utils::RusicUtils;
-use crate::setup::rusic_image;
-
 
 pub fn process_music_images(x: String, index: i32) -> i32 {
-    let foo2 = RusicUtils {apath: x.clone()};
+    let foo2 = RusicUtils { apath: x.clone() };
     let id = RusicUtils::get_md5(&foo2);
     let dims = RusicUtils::get_dims(&foo2);
 
     if dims != (0, 0) {
-        let newdims = rusic_image::normalize_music_image(dims);
+        let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
         let height_r = newdims.1.to_string();
         let base_dir = RusicUtils::split_base_dir(&foo2);
@@ -134,12 +135,9 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
             &music_img_info.filesize,
             &music_img_info.fullpath,
             &music_img_info.thumbpath,
-            &music_img_info.idx
+            &music_img_info.idx,
         ),
     )?;
 
-
     Ok(())
 }
-
-

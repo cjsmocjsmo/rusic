@@ -26,7 +26,6 @@ pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
                 page = page + 1;
             }
             let fname = e.path().to_string_lossy().to_string();
-            println!("this is fname: {:?}", fname);
 
             if fname.contains("Music") {
                 if fname.ends_with(".mp3") {
@@ -127,12 +126,6 @@ pub fn scan_all_sources() -> (Vec<String>, Vec<String>) {
         master_music_list.append(&mut usb4_music_list);
         master_img_list.append(&mut usb4_media_iamges);
     }
-
-    println!(
-        "this is music_list count: {}",
-        master_music_list.clone().len()
-    );
-    println!("this is coverart count: {}", master_img_list.clone().len());
 
     (master_music_list, master_img_list)
 }

@@ -1,15 +1,10 @@
-// use crate::setup::rusic_utils::RusicUtils;
-// use crate::setup::rusic_process_music;
+
 use std::env;
 use std::sync::mpsc::channel;
-// use std::thread;
 use std::time::Instant;
 use threadpool::ThreadPool;
 
-
-pub mod rusic_image;
 pub mod rusic_misc;
-pub mod rusic_mp3_info;
 pub mod rusic_tables;
 
 pub mod rusic_process_music;
@@ -102,12 +97,12 @@ pub fn run_setup() -> bool {
     let _rmt = run_music_threads(media_lists.0.clone());
     run_music_img_threads(media_lists.1.clone());
 
-    // let ab_list = crate::setup::rusic_misc::create_art_alb_list(media_lists.0.clone());
-    // let artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
-    // let album_list = crate::setup::rusic_misc::create_albumids(ab_list.1);
+    let ab_list = crate::setup::rusic_misc::create_art_alb_list(media_lists.0.clone());
+    let artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
+    let album_list = crate::setup::rusic_misc::create_albumids(ab_list.1);
 
-    // let art_serial = serde_json::to_string(&artist_list).unwrap();
-    // let alb_serial = serde_json::to_string(&album_list);
+    let art_serial = serde_json::to_string(&artist_list).unwrap();
+    let alb_serial = serde_json::to_string(&album_list);
 
     // println!("artistid_list; {:#?}\n", art_serial);
     // println!("albumid_list; {:#?}\n", alb_serial);

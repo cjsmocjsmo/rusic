@@ -1,7 +1,4 @@
-// use crate::setup::rusic_mp3_info;
 use crate::setup::rusic_utils::RusicUtils;
-
-// use id3::Tag;
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
@@ -26,92 +23,8 @@ pub struct MusicInfo {
     fsizeresults: String,
 }
 
-fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
-    let mus_info = serde_json::to_string(&mfo).unwrap();
-    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
-    let a = format!("{}/", rusic_music_metadata_path.as_str());
-    let b = format!("Music_Meta_{}.json", index.to_string());
-    let outpath = a + &b;
-    std::fs::write(outpath, mus_info).unwrap();
-}
-
-fn create_thumb_path(art: String, alb: String, ext: String) -> String {
-    println!(
-        "create_thumb_path: art: {:?}, alb: {:?}, ext: {:?}",
-        art, alb, ext
-    );
-    let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
-    let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");
-    let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + ".jpg";
-
-    newpath
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TagInfo {
-    pub id: String,
-    pub rusicid: String,
-    pub filename: String,
-    pub artist: String,
-    pub album: String,
-    pub song: String,
-}
-
-pub fn insert_tag_info(xx: Vec<TagInfo>) -> Result<()> {
-    let conn = Connection::open("./db/rusic.db").unwrap();
-    for x in xx {
-        println!("this is x: {:#?}", x);
-
-        conn.execute(
-            "INSERT INTO tags (
-                    rusicid,
-                    filename,
-                    artist,
-                    album,
-                    song
-                )
-                VALUES (?1, ?2, ?3, ?4, ?5)",
-            (&x.rusicid, &x.filename, &x.artist, &x.album, &x.song),
-        )?;
-    }
-    Ok(())
-}
-
-pub fn insert_file_info(x: String, idx: String, rusicid: String) -> Result<()> {
-    let fu = RusicUtils { apath: x.clone() };
-    // let rusicid = RusicUtils::get_md5(&fu);
-    let conn = Connection::open("./db/rusic.db").unwrap();
-
-    conn.execute(
-        "INSERT INTO fileinfo (
-                id,
-                rusicid,
-                filename,
-                extension,
-                filesize,
-                duration,
-                idx,
-                fullpath,
-                basedir
-            )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-        (
-            &idx,
-            &rusicid,
-            &x.to_string(),
-            &RusicUtils::split_ext(&fu),
-            &RusicUtils::get_file_size(&fu).to_string(),
-            &RusicUtils::get_duration(&fu),
-            &idx,
-            &x.to_string(),
-            &RusicUtils::split_base_dir(&fu),
-        ),
-    )?;
-
-    Ok(())
-}
-
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
+    println!("processing:\n\t {:#?}", x);
     let fu = RusicUtils { apath: x.clone() };
     let id = RusicUtils::get_md5(&fu);
     let tag = RusicUtils::get_tag_info(&fu);
@@ -150,11 +63,32 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         page: page.to_string(),
         fsizeresults: fsize_results,
     };
-    println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
     music_info.clone()
+}
+
+
+fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
+    let mus_info = serde_json::to_string(&mfo).unwrap();
+    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let a = format!("{}/", rusic_music_metadata_path.as_str());
+    let b = format!("Music_Meta_{}.json", index.to_string());
+    let outpath = a + &b;
+    std::fs::write(outpath, mus_info).unwrap();
+}
+
+fn create_thumb_path(art: String, alb: String, ext: String) -> String {
+    println!(
+        "create_thumb_path: art: {:?}, alb: {:?}, ext: {:?}",
+        art, alb, ext
+    );
+    let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
+    let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");
+    let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + ".jpg";
+
+    newpath
 }
 
 fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
@@ -198,3 +132,78 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
 
     Ok(())
 }
+
+
+
+
+
+
+
+
+
+
+// #[derive(Debug, Clone, Serialize, Deserialize)]
+// pub struct TagInfo {
+//     pub id: String,
+//     pub rusicid: String,
+//     pub filename: String,
+//     pub artist: String,
+//     pub album: String,
+//     pub song: String,
+// }
+
+// pub fn insert_tag_info(xx: Vec<TagInfo>) -> Result<()> {
+//     let conn = Connection::open("./db/rusic.db").unwrap();
+//     for x in xx {
+//         println!("this is x: {:#?}", x);
+
+//         conn.execute(
+//             "INSERT INTO tags (
+//                     rusicid,
+//                     filename,
+//                     artist,
+//                     album,
+//                     song
+//                 )
+//                 VALUES (?1, ?2, ?3, ?4, ?5)",
+//             (&x.rusicid, &x.filename, &x.artist, &x.album, &x.song),
+//         )?;
+//     }
+//     Ok(())
+// }
+
+// pub fn insert_file_info(x: String, idx: String, rusicid: String) -> Result<()> {
+//     let fu = RusicUtils { apath: x.clone() };
+//     let conn = Connection::open("./db/rusic.db").unwrap();
+
+//     conn.execute(
+//         "INSERT INTO fileinfo (
+//                 id,
+//                 rusicid,
+//                 filename,
+//                 extension,
+//                 filesize,
+//                 duration,
+//                 idx,
+//                 fullpath,
+//                 basedir
+//             )
+//             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+//         (
+//             &idx,
+//             &rusicid,
+//             &x.to_string(),
+//             &RusicUtils::split_ext(&fu),
+//             &RusicUtils::get_file_size(&fu).to_string(),
+//             &RusicUtils::get_duration(&fu),
+//             &idx,
+//             &x.to_string(),
+//             &RusicUtils::split_base_dir(&fu),
+//         ),
+//     )?;
+
+//     Ok(())
+// }
+
+
+
