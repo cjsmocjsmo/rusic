@@ -13,6 +13,14 @@ pub struct RusicUtils {
 }
 
 impl RusicUtils {
+    pub fn split_base_dir_filename(&self) -> (String, String){
+        let path = Path::new("/path/to/file.txt");
+
+        let dir_path = path.parent().unwrap();
+        let filename = path.file_name().unwrap();
+
+        (dir_path.to_string_lossy().to_string(), filename.to_string_lossy().to_string())
+    }
     pub fn split_base_dir(&self) -> String {
         let mysplit = self.apath.split("/");
         let mut myvec = vec![];

@@ -3,6 +3,7 @@ use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
+use std::path::Path;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MusicInfo {
@@ -23,6 +24,14 @@ pub struct MusicInfo {
     idx: String,
     page: String,
     fsizeresults: String,
+    coverartpath: String,
+}
+
+fn cartcheck(apath: String) -> bool {
+    // let c_art_path = bdir + "/" + &art + "_-_" + &alb + ".jpg";
+    let path = Path::new(&apath);
+
+    path.exists()
 }
 
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
@@ -46,20 +55,33 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         apath: music_album_results.clone(),
     };
 
+    let dirz = RusicUtils::split_base_dir_filename(&fu);
+    let base_dir = dirz.0;
+    let file_name = dirz.1;
+
+
+    let c_art_path = base_dir.clone() + "/" + &artist + "_-_" + &album + ".jpg";
+    let cover_art_check = cartcheck(c_art_path.clone());
+    let mut cap = "None".to_string();
+    if cover_art_check == true {
+        cap = c_art_path.clone();
+    }
+
+
     let music_info = MusicInfo {
         rusicid: RusicUtils::get_md5(&fu),
         imgurl: create_thumb_path(
             music_artist_results.clone(),
             music_album_results.clone(),
-            RusicUtils::get_md5(&fu),
+            RusicUtils::split_ext(&fu),
         ),
-        artist: artist,
+        artist: artist.clone(),
         artistid: RusicUtils::get_md5(&bar),
-        album: album,
+        album: album.clone(),
         albumid: RusicUtils::get_md5(&baz),
         song: song,
-        basedir: RusicUtils::split_base_dir(&fu),
-        filenameresults: RusicUtils::split_filename(&fu),
+        basedir: base_dir.clone(),
+        filenameresults: file_name,
         musicartistresults: music_artist_results.clone(),
         musicalbumresults: music_album_results.clone(),
         durationresults: RusicUtils::get_duration(&fu),
@@ -68,6 +90,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         idx: index.to_string(),
         page: page.to_string(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
+        coverartpath: cap,
     };
     let _wm = write_music_to_db(music_info.clone());
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
@@ -116,9 +139,10 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 extension,
                 idx,
                 page,
-                fsizeresults
+                fsizeresults,
+                coverartpath
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
@@ -136,6 +160,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.idx,
             &music_info.page,
             &music_info.fsizeresults,
+
         ),
     )?;
 
