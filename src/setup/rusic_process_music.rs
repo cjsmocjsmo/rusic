@@ -61,8 +61,11 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     println!("base_dir: {:#?}", base_dir);
     println!("file_name: {:#?}", file_name);
 
+    let art_replace = artist.replace(" ", "_");
+    let alb_replace = album.replace(" ", "_");
 
-    let c_art_path = base_dir.clone() + "/" + &artist + "_-_" + &album + ".jpg";
+    let c_art_path = base_dir.clone() + "/" + &art_replace + "_-_" + &alb_replace + ".jpg";
+
     println!("c_art_path: {:#?}", c_art_path);
     let cover_art_check = cartcheck(c_art_path.clone());
     let mut cap = "None".to_string();
