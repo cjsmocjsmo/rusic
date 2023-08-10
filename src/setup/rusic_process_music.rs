@@ -3,7 +3,7 @@ use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
-use std::path::Path;
+// use std::path::Path;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MusicInfo {
@@ -23,16 +23,15 @@ pub struct MusicInfo {
     extension: String,
     idx: String,
     page: String,
-    fsizeresults: String,
-    coverartpath: String,
+    fsizeresults: String
 }
 
-fn cartcheck(apath: String) -> bool {
-    // let c_art_path = bdir + "/" + &art + "_-_" + &alb + ".jpg";
-    let path = Path::new(&apath);
+// fn cartcheck(apath: String) -> bool {
+//     // let c_art_path = bdir + "/" + &art + "_-_" + &alb + ".jpg";
+//     let path = Path::new(&apath);
 
-    path.exists()
-}
+//     path.exists()
+// }
 
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     println!("processing:\n\t {:#?}", x);
@@ -61,17 +60,17 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     // println!("base_dir: {:#?}", base_dir);
     // println!("file_name: {:#?}", file_name);
 
-    let art_replace = artist.replace(" ", "_");
-    let alb_replace = album.replace(" ", "_");
+    // let art_replace = artist.replace(" ", "_");
+    // let alb_replace = album.replace(" ", "_");
 
-    let c_art_path = base_dir.clone() + "/" + &art_replace + "_-_" + &alb_replace + ".jpg";
+    // let c_art_path = base_dir.clone() + "/" + &art_replace + "_-_" + &alb_replace + ".jpg";
 
-    // println!("c_art_path: {:#?}", c_art_path);
-    let cover_art_check = cartcheck(c_art_path.clone());
-    let mut cap = "None".to_string();
-    if cover_art_check == true {
-        cap = c_art_path.clone();
-    }
+    // // println!("c_art_path: {:#?}", c_art_path);
+    // let cover_art_check = cartcheck(c_art_path.clone());
+    // let mut cap = "None".to_string();
+    // if cover_art_check == true {
+    //     cap = c_art_path.clone();
+    // }
 
 
     let music_info = MusicInfo {
@@ -96,7 +95,6 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         idx: index.to_string(),
         page: page.to_string(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
-        coverartpath: cap,
     };
     println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
@@ -146,10 +144,9 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 extension,
                 idx,
                 page,
-                fsizeresults,
-                coverartpath
+                fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
@@ -166,8 +163,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.extension,
             &music_info.idx,
             &music_info.page,
-            &music_info.fsizeresults,
-
+            &music_info.fsizeresults
         ),
     )?;
 

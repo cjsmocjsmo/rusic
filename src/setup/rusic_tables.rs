@@ -91,8 +91,7 @@ pub fn create_tables() -> Result<()> {
             extension TEXT NOT NULL,
             idx TEXT NOT NULL,
             page TEXT NOT NULL,
-            fsizeresults TEXT NOT NULL,
-            coverartpath TEXT NOT NULL
+            fsizeresults TEXT NOT NULL
         )",
         (),
     )?;
