@@ -90,17 +90,13 @@ fn main() -> std::io::Result<()> {
     println!("media_lists: {:#?}", media_lists);
 
     let _rmt = run_music_threads(media_lists.0.clone());
-    run_music_img_threads(media_lists.1.clone());
+    let _rmit = run_music_img_threads(media_lists.1.clone());
 
     let ab_list = crate::setup::rusic_misc::create_art_alb_list(media_lists.0.clone());
-    let artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
-    let album_list = crate::setup::rusic_misc::create_albumids(ab_list.1);
+    let _artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
+    let _album_list = crate::setup::rusic_misc::create_albumids(ab_list.1);
 
-    let art_serial = serde_json::to_string(&artist_list).unwrap();
-    let alb_serial = serde_json::to_string(&album_list);
 
-    // println!("artistid_list; {:#?}\n", art_serial);
-    // println!("albumid_list; {:#?}\n", alb_serial);
 
     println!("music: {}\n", media_lists.0.clone().len());
     println!("images: {}\n", media_lists.1.clone().len());
