@@ -5,6 +5,7 @@ use std::time::Instant;
 use threadpool::ThreadPool;
 
 pub mod setup;
+pub mod envvars;
 
 
 // fn run_music_threads(alist: Vec<String>) -> bool {
@@ -85,6 +86,7 @@ pub mod setup;
 
 fn main() -> std::io::Result<()> {
     let start = Instant::now();
+    let _set_envvars = crate::envvars::set_env_vars();
     let _tables = crate::setup::rusic_tables::create_tables();
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
     println!("media_lists: {:#?}", media_lists);
