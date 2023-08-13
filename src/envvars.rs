@@ -7,11 +7,11 @@ pub fn set_env_vars() {
     };
     let usb2 = env::var("RUSIC_USB2");
     if usb2.is_err() {
-        env::set_var("RUSIC_USB2", "/media/pi/USB2/media");
+        env::set_var("RUSIC_USB2", "None");
     };
     let usb3 = env::var("RUSIC_USB3");
     if usb3.is_err() {
-        env::set_var("RUSIC_USB3", "/media/pi/USB3/media");
+        env::set_var("RUSIC_USB3", "None");
     };
     let usb4 = env::var("RUSIC_USB4");
     if usb4.is_err() {
