@@ -151,28 +151,28 @@ fn run_music_threads(alist: Vec<String>) -> bool {
 }
 
 fn run_music_img_threads(alist: Vec<String>) -> bool {
-    // let pool = ThreadPool::new(num_cpus::get());
-    // let (tx, rx) = channel();
+    let pool = ThreadPool::new(num_cpus::get());
+    let (tx, rx) = channel();
 
     let mut img_index = 0;
     for i in alist {
         img_index = img_index + 1;
         if i.contains("Music") {
-            // let tx = tx.clone();
-            // pool.execute(move || {
+            let tx = tx.clone();
+            pool.execute(move || {
                 let img_info =
                     setup::rusic_process_music_images::process_music_images(i.clone(), img_index);
-            //     tx.send(img_info).expect("Could not send data");
-            // });
+                tx.send(img_info).expect("Could not send data");
+            });
         }
     }
 
-    // drop(tx);
-    // for t in rx.iter() {
-    //     // Insert this into db
-    //     let ifo = t;
-    //     println!("Processed Music img {:?} files", ifo);
-    // }
+    drop(tx);
+    for t in rx.iter() {
+        // Insert this into db
+        let ifo = t;
+        println!("Processed Music img {:?} files", ifo);
+    }
 
     true
 }
