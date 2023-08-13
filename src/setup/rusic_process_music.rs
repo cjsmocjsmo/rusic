@@ -91,7 +91,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         musicalbumresults: music_album_results.clone(),
         durationresults: RusicUtils::get_duration(&fu),
         fullpath: x.to_string(),
-        extension: RusicUtils::get_md5(&fu),
+        extension: RusicUtils::split_ext(&fu),
         idx: index.to_string(),
         page: page.to_string(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),

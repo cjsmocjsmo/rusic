@@ -44,6 +44,7 @@ pub fn create_tables() -> Result<()> {
             filename TEXT NOT NULL,
             extension TEXT NOT NULL,
             artist TEXT NOT NULL,
+
             album TEXT NOT NULL,
             filesize TEXT NOT NULL,
             fullpath TEXT NOT NULL,

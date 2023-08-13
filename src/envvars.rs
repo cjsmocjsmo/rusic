@@ -3,7 +3,7 @@ use std::env;
 pub fn set_env_vars() {
     let usb1 = env::var("RUSIC_USB1");
     if usb1.is_err() {
-        env::set_var("RUSIC_USB1", "/media/pi/FOO/media");
+        env::set_var("RUSIC_USB1", "/media/pi/C052-0E64/media");
     };
     let usb2 = env::var("RUSIC_USB2");
     if usb2.is_err() {
@@ -55,7 +55,7 @@ pub fn set_env_vars() {
 // pub fn set_env_vars() {
 //     let usb1 = env::var("RUSIC_USB1");
 //     if usb1.is_err() {
-//         env::set_var("RUSIC_USB1", "/media/charliepi/C052-0E64/media/");
+//         env::set_var("RUSIC_USB1", "/media/charliepi/USB2/media/");
 //     };
 //     let usb2 = env::var("RUSIC_USB2");
 //     if usb2.is_err() {
@@ -86,7 +86,7 @@ pub fn set_env_vars() {
 //     if rusic_thumbs.is_err() {
 //         env::set_var(
 //             "RUSIC_THUMBS",
-//             "/media/charliepi/HD/MTVSERVER/rusic/thumbs/",
+//             "/media/charliepi/HD/MTVSERVER/rusic/thumbs",
 //         );
 //     };
 //     let rusic_nfo = env::var("RUSIC_NFOS");
