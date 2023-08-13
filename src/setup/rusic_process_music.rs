@@ -78,7 +78,6 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         imgurl: create_thumb_path(
             music_artist_results.clone(),
             music_album_results.clone(),
-            RusicUtils::split_ext(&fu),
         ),
         artist: artist.clone(),
         artistid: RusicUtils::get_md5(&bar),
@@ -98,24 +97,24 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     };
     println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
-    let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
+    // let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
     music_info.clone()
 }
 
-fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
-    let mus_info = serde_json::to_string(&mfo).unwrap();
-    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
-    let a = format!("{}/", rusic_music_metadata_path.as_str());
-    let b = format!("Music_Meta_{}.json", index.to_string());
-    let outpath = a + &b;
-    std::fs::write(outpath, mus_info).unwrap();
-}
+// fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
+//     let mus_info = serde_json::to_string(&mfo).unwrap();
+//     let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+//     let a = format!("{}/", rusic_music_metadata_path.as_str());
+//     let b = format!("Music_Meta_{}.json", index.to_string());
+//     let outpath = a + &b;
+//     std::fs::write(outpath, mus_info).unwrap();
+// }
 
-fn create_thumb_path(art: String, alb: String, ext: String) -> String {
+fn create_thumb_path(art: String, alb: String) -> String {
     println!(
-        "create_thumb_path: art: {:?}, alb: {:?}, ext: {:?}",
-        art, alb, ext
+        "create_thumb_path: art: {:?}, alb: {:?}",
+        art, alb
     );
     let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
     let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");

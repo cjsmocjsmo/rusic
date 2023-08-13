@@ -3,7 +3,7 @@ use id3::{Tag, TagLike};
 use md5::{Digest, Md5};
 use std::env;
 use std::path::Path;
-use anyhow::anyhow;
+// use anyhow::anyhow;
 use std::time::Duration;
 use image::{self};
 
@@ -136,37 +136,37 @@ impl RusicUtils {
         (artist.to_string(), album.to_string(), song.to_string())
     }
 
-    pub fn extract_coverart(&self) -> anyhow::Result<String> {
-        let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
-        let artist = tag.artist().expect("artist has fucked up");
-        let album = tag.album().expect("album has fucked up");
-        let mut coverart_path = env::var("RUSIC_THUMBS").unwrap();
-        coverart_path.push_str(artist);
-        coverart_path.push_str("_-_");
-        coverart_path.push_str(album);
-        coverart_path.push_str(".jpg");
-        let c_path = Path::new(&coverart_path);
+    // pub fn extract_coverart(&self) -> anyhow::Result<String> {
+    //     let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
+    //     let artist = tag.artist().expect("artist has fucked up");
+    //     let album = tag.album().expect("album has fucked up");
+    //     let mut coverart_path = env::var("RUSIC_THUMBS").unwrap();
+    //     coverart_path.push_str(artist);
+    //     coverart_path.push_str("_-_");
+    //     coverart_path.push_str(album);
+    //     coverart_path.push_str(".jpg");
+    //     let c_path = Path::new(&coverart_path);
 
-        if c_path.exists() {
-            Ok(coverart_path)
-        } else {
-            let first_picture = tag.pictures().next();
-            if let Some(p) = first_picture {
-                match image::load_from_memory(&p.data) {
-                    Ok(image) => {
-                        image.save(&coverart_path).map_err(|e| {
-                            anyhow!("Couldn't write image file {:?}: {}", coverart_path, e)
-                        })?;
-                    }
-                    Err(e) => return Err(anyhow!("Couldn't load image: {}", e)),
-                };
+    //     if c_path.exists() {
+    //         Ok(coverart_path)
+    //     } else {
+    //         let first_picture = tag.pictures().next();
+    //         if let Some(p) = first_picture {
+    //             match image::load_from_memory(&p.data) {
+    //                 Ok(image) => {
+    //                     image.save(&coverart_path).map_err(|e| {
+    //                         anyhow!("Couldn't write image file {:?}: {}", coverart_path, e)
+    //                     })?;
+    //                 }
+    //                 Err(e) => return Err(anyhow!("Couldn't load image: {}", e)),
+    //             };
 
-                Ok(coverart_path)
-            } else {
-                Err(anyhow!("No image found in music file"))
-            }
-        }
-    }
+    //             Ok(coverart_path)
+    //         } else {
+    //             Err(anyhow!("No image found in music file"))
+    //         }
+    //     }
+    // }
 
     pub fn get_file_size(&self) -> String {
         let path = Path::new(&self.apath);
