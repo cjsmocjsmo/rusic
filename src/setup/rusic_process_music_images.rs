@@ -18,16 +18,16 @@ fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
     out_fname.to_string()
 }
 
-// fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
-//     let mii = serde_json::to_string(&miinfo).unwrap();
-//     let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
-//     let outpath = format!(
-//         "{}/Music_Image_Meta_{}.json",
-//         rusic_music_metadata_path.as_str(),
-//         &index
-//     );
-//     std::fs::write(outpath, mii.clone()).unwrap();
-// }
+fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
+    let mii = serde_json::to_string(&miinfo).unwrap();
+    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let outpath = format!(
+        "{}/Music_Image_Meta_{}.json",
+        rusic_music_metadata_path.as_str(),
+        &index
+    );
+    std::fs::write(outpath, mii.clone()).unwrap();
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MusicImageInfo {
@@ -87,7 +87,7 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
             thumbpath: thumb_path,
             idx: index.to_string(),
         };
-        // write_music_img_to_file(music_img_info.clone(), index);
+        write_music_img_to_file(music_img_info.clone(), index);
         write_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
     };
 
