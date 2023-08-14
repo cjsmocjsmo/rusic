@@ -65,7 +65,7 @@ impl RusicUtils {
         path.size_on_disk().unwrap().to_string()
     }
 
-    pub fn get_duration(&self) -> String {
+    pub fn get_duration(&self) -> (String, String) {
         let path = Path::new(&self.apath);
         let dur_sec_res = mp3_duration::from_path(&path);
         let dur_sec = match dur_sec_res {
@@ -92,11 +92,11 @@ impl RusicUtils {
             }
 
             let duration: String = newvec.into_iter().collect();
-            return duration.clone();
+            return (duration.clone(), self.apath.clone());
         } else {
             let new_dur = Duration::new(0, 0);
             let duration = format!("{:?}", new_dur);
-            return duration;
+            return (duration.clone(), self.apath.clone());
         };
     }
 

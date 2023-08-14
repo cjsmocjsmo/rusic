@@ -98,7 +98,7 @@ fn main() -> std::io::Result<()> {
     for moo in media_lists.0.clone() {
         let fu = setup::rusic_utils::RusicUtils { apath: moo.clone() };
         let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
-        durvec.push(dur);
+        durvec.push((dur.0, dur.1));
     }
 
     println!("durvec: {:#?}", durvec);
