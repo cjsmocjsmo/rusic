@@ -2,6 +2,7 @@ use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
+use crate::setup::rusic_utils;
 
 fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
     let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
@@ -37,7 +38,9 @@ pub struct MusicImageInfo {
     filename: String,
     extension: String,
     artist: String,
+    artistid: String,
     album: String,
+    albumid: String,
     filesize: String,
     fullpath: String,
     thumbpath: String,
@@ -48,7 +51,7 @@ use crate::setup::rusic_utils::RusicUtils;
 
 pub fn process_music_images(x: String, index: i32) -> i32 {
     let foo2 = RusicUtils { apath: x.clone() };
-    let id = RusicUtils::get_md5(&foo2);
+    let id = rusic_utils::get_md5(x.clone());
     let dims = RusicUtils::get_dims(&foo2);
 
     if dims != (0, 0) {
@@ -71,8 +74,10 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
             basedir: base_dir,
             filename: file_name,
             extension: ext,
-            artist: artist_results,
-            album: album_results,
+            artist: artist_results.clone(),
+            artistid: rusic_utils::get_md5(artist_results.clone()),
+            album: album_results.clone(),
+            albumid: rusic_utils::get_md5(album_results.clone()),
             filesize: fsize_results,
             fullpath: full_path.to_string(),
             thumbpath: thumb_path,
@@ -98,7 +103,9 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
             filename TEXT NOT NULL,
             extension TEXT NOT NULL,
             artist TEXT NOT NULL,
+            artistid TEXT NOT NULL,
             album TEXT NOT NULL,
+            albumid TEXT NOT NULL,
             filesize TEXT NOT NULL,
             fullpath TEXT NOT NULL,
             thumbpath TEXT NOT NULL,
@@ -116,13 +123,15 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
                 filename,
                 extension,
                 artist,
+                artistid,
                 album,
+                albumid,
                 filesize,
                 fullpath,
                 thumbpath,
                 idx
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
         (
             &music_img_info.rusicid,
             &music_img_info.width,
@@ -131,7 +140,9 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
             &music_img_info.filename,
             &music_img_info.extension,
             &music_img_info.artist,
+            &music_img_info.artistid,
             &music_img_info.album,
+            &music_img_info.albumid,
             &music_img_info.filesize,
             &music_img_info.fullpath,
             &music_img_info.thumbpath,

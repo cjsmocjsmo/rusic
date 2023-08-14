@@ -94,11 +94,9 @@ fn main() -> std::io::Result<()> {
     let _rmt = run_music_threads(media_lists.0.clone());
     let _rmit = run_music_img_threads(media_lists.1.clone());
 
-    // let ab_list = crate::setup::rusic_misc::create_art_alb_list(media_lists.0.clone());
-    // let _artist_list = crate::setup::rusic_misc::create_artistids(ab_list.0);
-    // let _album_list = crate::setup::rusic_misc::create_albumids(ab_list.1);
+    // get artist pages together
 
-
+    // get album pagets together
 
     println!("music: {}\n", media_lists.0.clone().len());
     println!("images: {}\n", media_lists.1.clone().len());

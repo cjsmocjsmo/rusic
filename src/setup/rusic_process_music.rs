@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
 // use std::path::Path;
+use crate::setup::rusic_utils;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MusicInfo {
@@ -47,12 +48,12 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let music_artist_results = art_alb.0;
     let music_album_results = art_alb.1;
 
-    let bar = RusicUtils {
-        apath: music_artist_results.clone(),
-    };
-    let baz = RusicUtils {
-        apath: music_album_results.clone(),
-    };
+    // let bar = RusicUtils {
+    //     apath: music_artist_results.clone(),
+    // };
+    // let baz = RusicUtils {
+    //     apath: music_album_results.clone(),
+    // };
 
     let dirz = RusicUtils::split_base_dir_filename(&fu);
     let base_dir = dirz.0;
@@ -74,15 +75,15 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
 
 
     let music_info = MusicInfo {
-        rusicid: RusicUtils::get_md5(&fu),
+        rusicid: rusic_utils::get_md5(x.clone()),
         imgurl: create_thumb_path(
             music_artist_results.clone(),
             music_album_results.clone(),
         ),
         artist: artist.clone(),
-        artistid: RusicUtils::get_md5(&bar),
+        artistid: rusic_utils::get_md5(artist.clone(),),
         album: album.clone(),
-        albumid: RusicUtils::get_md5(&baz),
+        albumid: rusic_utils::get_md5(album.clone()),
         song: song,
         basedir: base_dir.clone(),
         filenameresults: file_name,
