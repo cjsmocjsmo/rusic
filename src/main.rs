@@ -7,77 +7,6 @@ use threadpool::ThreadPool;
 pub mod envvars;
 pub mod setup;
 
-// fn run_music_threads(alist: Vec<String>) -> bool {
-//     let mut index = 0;
-//     let mut page = 1;
-//     let mut page_count = 0;
-
-//     let ofs = env::var("RUSIC_PAGINATION").unwrap();
-//     let offset: u32 = ofs.trim().parse().expect("offset conversion failed");
-
-//     let mut tag_info_vec = Vec::new();
-//     for a in alist {
-//         index = index + 1;
-//         if page_count < offset {
-//             page_count = page_count + 1;
-//             page = page;
-//         } else {
-//             page_count = 1;
-//             page = page + 1;
-//         }
-
-//         let fu = RusicUtils { apath: a.clone() };
-//         let rusic_id = RusicUtils::get_md5(&fu);
-//         let tags = RusicUtils::get_tag_info(&fu);
-//         let artist = tags.0;
-//         let album = tags.1;
-//         let song = tags.2;
-//         // let mut c_art: String = "fuck".to_string();
-//         // if let Ok(cover_art) = RusicUtils::extract_coverart(&fu) {
-//         //     println!("cover_art: {:#?}", cover_art);
-//         //     c_art = cover_art.to_string();
-//         // } else {
-//         //     println!("No cover art found");
-//         //     c_art = "No cover art found".to_string();
-//         // };
-
-//         let tinfo = crate::setup::rusic_process_music::TagInfo {
-//             id: index.to_string(),
-//             rusicid: rusic_id,
-//             filename: a.to_string(),
-//             artist: artist,
-//             album: album,
-//             song: song,
-
-//         };
-//         println!("tinfo: {:#?}", tinfo);
-//         tag_info_vec.push(tinfo);
-//     }
-//     println!("taginfovec: {:#?}", tag_info_vec);
-//     // let _ins_tag_info = insert_tag_info(tag_info_vec);
-
-//     // for tag in tag_info_vec {
-//     //     let handle = thread::spawn(move || {
-//     //     for i in 1..10 {
-//     //         println!("thread number {}", i);
-//     //         let _ins_tag_info = insert_tag_info(tag.clone());
-//     //     }
-//     // });
-//     // handle.join().unwrap();
-//     // }
-
-//     // let mfi = crate::setup::rusic_process_music::insert_tag_info(
-//     //     a.clone(),
-//     //     index.to_string(),
-//     //     page.to_string(),
-//     // );
-//     // println!(
-//     //     "this is music_info\n {:?}\n\t",
-//     //     mfi.expect("Insert failed").clone()
-//     // );
-
-//     true
-// }
 
 fn main() -> std::io::Result<()> {
     let start = Instant::now();
@@ -86,18 +15,8 @@ fn main() -> std::io::Result<()> {
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
     println!("media_lists: {:#?}", media_lists.0);
 
-    // let _rmt = run_music_threads(media_lists.0.clone());
-    // let _rmit = run_music_img_threads(media_lists.1.clone());
-
-    // let mut durvec = vec![];
-    // for moo in media_lists.0.clone() {
-    //     let fu = setup::rusic_utils::RusicUtils { apath: moo.clone() };
-    //     let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
-    //     durvec.push((dur.0, dur.1));
-    // }
-
-    // println!("durvec: {:#?}", durvec);
-
+    let _rmt = run_music_threads(media_lists.0.clone());
+    let _rmit = run_music_img_threads(media_lists.1.clone());
     let _rdt = run_duration_threads(media_lists.0.clone());
 
     // get artist pages together
