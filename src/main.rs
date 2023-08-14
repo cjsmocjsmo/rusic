@@ -124,9 +124,10 @@ fn run_duration_threads(alist: Vec<String>) -> bool {
 
 
     for a in alist {
-        let fu = setup::rusic_utils::RusicUtils { apath: a.clone() };
+
         let tx = tx.clone();
         pool.execute(move || {
+            let fu = setup::rusic_utils::RusicUtils { apath: a.clone() };
             let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
             tx.send(dur).expect("Could not send data");
         });
