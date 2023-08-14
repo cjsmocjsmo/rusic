@@ -91,8 +91,19 @@ fn main() -> std::io::Result<()> {
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
     println!("media_lists: {:#?}", media_lists);
 
-    let _rmt = run_music_threads(media_lists.0.clone());
-    let _rmit = run_music_img_threads(media_lists.1.clone());
+    // let _rmt = run_music_threads(media_lists.0.clone());
+    // let _rmit = run_music_img_threads(media_lists.1.clone());
+
+    // let mut durvec = vec![];
+    // for moo in media_lists.0.clone() {
+    //     let fu = setup::rusic_utils::RusicUtils { apath: moo.clone() };
+    //     let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
+    //     durvec.push(dur);
+    // }
+
+    // println!("durvec: {:#?}", durvec);
+
+    let _rdt = run_duration_threads(media_lists.0.clone());
 
     // get artist pages together
 
@@ -105,6 +116,30 @@ fn main() -> std::io::Result<()> {
     println!("Setup completed in: {} seconds", duration.as_secs());
 
     Ok(())
+}
+
+fn run_duration_threads(alist: Vec<String>) -> bool {
+    let pool = ThreadPool::new(num_cpus::get());
+    let (tx, rx) = channel();
+
+
+    for a in alist {
+        let tx = tx.clone();
+        pool.execute(move || {
+            let fu = setup::rusic_utils::RusicUtils { apath: a.clone() };
+            let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
+            tx.send(dur).expect("Could not send data");
+        });
+    }
+
+    drop(tx);
+    for t in rx.iter() {
+        // Insert this into db
+        let _ifo = t;
+        // println!("this is music_info\n {:?}\n\t", ifo);
+    };
+
+    true
 }
 
 fn run_music_threads(alist: Vec<String>) -> bool {
