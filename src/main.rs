@@ -138,7 +138,9 @@ fn run_duration_threads(alist: Vec<String>) -> bool {
     for t in rx.iter() {
         // Insert this into db
         let ifo = t;
-        println!("this is music_info\n {:?}\n\t", ifo);
+        println!("duration {:?}\n\t", ifo.0);
+        println!("path\n {:?}\n\t", ifo.1);
+
     };
 
     true
