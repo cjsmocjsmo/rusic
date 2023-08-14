@@ -89,7 +89,7 @@ fn main() -> std::io::Result<()> {
     let _set_envvars = crate::envvars::set_env_vars();
     let _tables = crate::setup::rusic_tables::create_tables();
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
-    println!("media_lists: {:#?}", media_lists);
+    println!("media_lists: {:#?}", media_lists.0);
 
     // let _rmt = run_music_threads(media_lists.0.clone());
     // let _rmit = run_music_img_threads(media_lists.1.clone());
@@ -103,7 +103,7 @@ fn main() -> std::io::Result<()> {
 
     // println!("durvec: {:#?}", durvec);
 
-    let _rdt = run_duration_threads(media_lists.0.clone());
+    let _rdt = run_duration_threads(media_lists.1.clone());
 
     // get artist pages together
 
