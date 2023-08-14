@@ -103,7 +103,7 @@ fn main() -> std::io::Result<()> {
 
     // println!("durvec: {:#?}", durvec);
 
-    let _rdt = run_duration_threads(media_lists.1.clone());
+    let _rdt = run_duration_threads(media_lists.0.clone());
 
     // get artist pages together
 
