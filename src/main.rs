@@ -94,16 +94,16 @@ fn main() -> std::io::Result<()> {
     // let _rmt = run_music_threads(media_lists.0.clone());
     // let _rmit = run_music_img_threads(media_lists.1.clone());
 
-    let mut durvec = vec![];
-    for moo in media_lists.0.clone() {
-        let fu = setup::rusic_utils::RusicUtils { apath: moo.clone() };
-        let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
-        durvec.push((dur.0, dur.1));
-    }
+    // let mut durvec = vec![];
+    // for moo in media_lists.0.clone() {
+    //     let fu = setup::rusic_utils::RusicUtils { apath: moo.clone() };
+    //     let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
+    //     durvec.push((dur.0, dur.1));
+    // }
 
-    println!("durvec: {:#?}", durvec);
+    // println!("durvec: {:#?}", durvec);
 
-    // let _rdt = run_duration_threads(media_lists.1.clone());
+    let _rdt = run_duration_threads(media_lists.1.clone());
 
     // get artist pages together
 
@@ -136,8 +136,8 @@ fn run_duration_threads(alist: Vec<String>) -> bool {
     drop(tx);
     for t in rx.iter() {
         // Insert this into db
-        let _ifo = t;
-        // println!("this is music_info\n {:?}\n\t", ifo);
+        let ifo = t;
+        println!("this is music_info\n {:?}\n\t", ifo);
     };
 
     true
