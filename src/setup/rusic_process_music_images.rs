@@ -1,33 +1,8 @@
+use crate::setup::rusic_utils;
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
-use crate::setup::rusic_utils;
-
-fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
-    let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
-    let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
-    println!("new_fname: {:?}", new_fname);
-    let out_fname = rusic_music_metadata_path + &new_fname;
-    println!("out_fname: {:?}", out_fname);
-    let img = image::open(x).expect("ooooh fuck it didnt open");
-    let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
-    thumbnail
-        .save(out_fname.clone())
-        .expect("Saving image failed");
-    out_fname.to_string()
-}
-
-fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
-    let mii = serde_json::to_string(&miinfo).unwrap();
-    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
-    let outpath = format!(
-        "{}/Music_Image_Meta_{}.json",
-        rusic_music_metadata_path.as_str(),
-        &index
-    );
-    std::fs::write(outpath, mii.clone()).unwrap();
-}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MusicImageInfo {
@@ -92,6 +67,31 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
     };
 
     index
+}
+
+fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
+    let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
+    let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
+    println!("new_fname: {:?}", new_fname);
+    let out_fname = rusic_music_metadata_path + &new_fname;
+    println!("out_fname: {:?}", out_fname);
+    let img = image::open(x).expect("ooooh fuck it didnt open");
+    let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
+    thumbnail
+        .save(out_fname.clone())
+        .expect("Saving image failed");
+    out_fname.to_string()
+}
+
+fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
+    let mii = serde_json::to_string(&miinfo).unwrap();
+    let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
+    let outpath = format!(
+        "{}/Music_Image_Meta_{}.json",
+        rusic_music_metadata_path.as_str(),
+        &index
+    );
+    std::fs::write(outpath, mii.clone()).unwrap();
 }
 
 fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {

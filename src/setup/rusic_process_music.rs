@@ -3,7 +3,6 @@ use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
-// use std::path::Path;
 use crate::setup::rusic_utils;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -27,13 +26,6 @@ pub struct MusicInfo {
     fsizeresults: String
 }
 
-// fn cartcheck(apath: String) -> bool {
-//     // let c_art_path = bdir + "/" + &art + "_-_" + &alb + ".jpg";
-//     let path = Path::new(&apath);
-
-//     path.exists()
-// }
-
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     println!("processing:\n\t {:#?}", x);
     let fu = RusicUtils { apath: x.clone() };
@@ -48,31 +40,9 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let music_artist_results = art_alb.0;
     let music_album_results = art_alb.1;
 
-    // let bar = RusicUtils {
-    //     apath: music_artist_results.clone(),
-    // };
-    // let baz = RusicUtils {
-    //     apath: music_album_results.clone(),
-    // };
-
     let dirz = RusicUtils::split_base_dir_filename(&fu);
     let base_dir = dirz.0;
     let file_name = dirz.1;
-    // println!("base_dir: {:#?}", base_dir);
-    // println!("file_name: {:#?}", file_name);
-
-    // let art_replace = artist.replace(" ", "_");
-    // let alb_replace = album.replace(" ", "_");
-
-    // let c_art_path = base_dir.clone() + "/" + &art_replace + "_-_" + &alb_replace + ".jpg";
-
-    // // println!("c_art_path: {:#?}", c_art_path);
-    // let cover_art_check = cartcheck(c_art_path.clone());
-    // let mut cap = "None".to_string();
-    // if cover_art_check == true {
-    //     cap = c_art_path.clone();
-    // }
-
 
     let music_info = MusicInfo {
         rusicid: rusic_utils::get_md5(x.clone()),
@@ -89,7 +59,6 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         filenameresults: file_name,
         musicartistresults: music_artist_results.clone(),
         musicalbumresults: music_album_results.clone(),
-        // durationresults: RusicUtils::get_duration(&fu),
         durationresults: "0".to_string(),
         fullpath: x.to_string(),
         extension: RusicUtils::split_ext(&fu),
@@ -114,10 +83,6 @@ fn write_music_nfos_to_file(mfo: MusicInfo, index: String) {
 }
 
 fn create_thumb_path(art: String, alb: String) -> String {
-    println!(
-        "create_thumb_path: art: {:?}, alb: {:?}",
-        art, alb
-    );
     let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
     let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");
     let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + ".jpg";
@@ -201,35 +166,3 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
 //     Ok(())
 // }
 
-// pub fn insert_file_info(x: String, idx: String, rusicid: String) -> Result<()> {
-//     let fu = RusicUtils { apath: x.clone() };
-//     let conn = Connection::open("./db/rusic.db").unwrap();
-
-//     conn.execute(
-//         "INSERT INTO fileinfo (
-//                 id,
-//                 rusicid,
-//                 filename,
-//                 extension,
-//                 filesize,
-//                 duration,
-//                 idx,
-//                 fullpath,
-//                 basedir
-//             )
-//             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-//         (
-//             &idx,
-//             &rusicid,
-//             &x.to_string(),
-//             &RusicUtils::split_ext(&fu),
-//             &RusicUtils::get_file_size(&fu).to_string(),
-//             &RusicUtils::get_duration(&fu),
-//             &idx,
-//             &x.to_string(),
-//             &RusicUtils::split_base_dir(&fu),
-//         ),
-//     )?;
-
-//     Ok(())
-// }

@@ -56,8 +56,8 @@ fn run_duration_threads(alist: Vec<String>) -> bool {
     for t in rx.iter() {
         // Insert this into db
         let ifo = t;
-        println!("duration {:?}\n\t", ifo.0);
-        println!("rusicid\n {:?}\n\t", ifo.1);
+        println!("rusicid\n {:?}\n\t", ifo.0);
+        println!("duration {:?}\n\t", ifo.1);
         println!("path\n {:?}\n\t", ifo.2);
         let dinfo = DurationInfo {
             rusicid: ifo.0,

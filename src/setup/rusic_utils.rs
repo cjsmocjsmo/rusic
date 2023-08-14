@@ -153,21 +153,3 @@ pub fn normalize_music_image(dims: (u32, u32)) -> (u32, u32) {
     resizetup
 }
 
-// pub fn save_coverart(x: String, coverart_path: String) -> Result<(), E> {
-//         let tag = Tag::read_from_path(x.clone()).expect(&x);
-//         let mut first_picture = tag.pictures().next();
-//         if let Some(p) = first_picture {
-//             match image::load_from_memory(&p.data) {
-//                 Ok(image) => {
-//                     image.save(&coverart_path).map_err(|e| {
-//                         anyhow!("Couldn't write image file {:?}: {}", coverart_path, e)
-//                     })?;
-//                 }
-//                 Err(e) => return Err(anyhow!("Couldn't load image: {}", e)),
-//             };
-
-//             Ok(())
-//         } else {
-//             Err(anyhow!("No image found in music file"))
-//         }
-//     }
