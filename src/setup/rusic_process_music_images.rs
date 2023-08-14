@@ -53,19 +53,23 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
     let foo2 = RusicUtils { apath: x.clone() };
     let id = rusic_utils::get_md5(x.clone());
     let dims = RusicUtils::get_dims(&foo2);
+    let bdfn = RusicUtils::split_base_dir_filename(&foo2);
+    let basedir = bdfn.0;
+    let filename = bdfn.1;
+    let artalb = RusicUtils::split_artist_album(&foo2);
+    let artist1 = artalb.0;
+    let album1 = artalb.1;
 
     if dims != (0, 0) {
         let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
         let height_r = newdims.1.to_string();
-        let base_dir = RusicUtils::split_base_dir(&foo2);
-        let file_name = RusicUtils::split_filename(&foo2);
+        let base_dir = basedir;
+        let file_name = filename;
         let ext = RusicUtils::split_ext(&foo2);
-        let artist_results = RusicUtils::image_split_artist(&foo2);
-        let album_results = RusicUtils::image_split_album(&foo2);
         let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
         let full_path = &x.to_string();
-        let thumb_path = create_music_thumbnail(&x, artist_results.clone(), album_results.clone());
+        let thumb_path = create_music_thumbnail(&x, artist1.clone(), album1.clone());
 
         let music_img_info = MusicImageInfo {
             rusicid: id,
@@ -74,10 +78,10 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
             basedir: base_dir,
             filename: file_name,
             extension: ext,
-            artist: artist_results.clone(),
-            artistid: rusic_utils::get_md5(artist_results.clone()),
-            album: album_results.clone(),
-            albumid: rusic_utils::get_md5(album_results.clone()),
+            artist: artist1.clone(),
+            artistid: rusic_utils::get_md5(artist1.clone()),
+            album: album1.clone(),
+            albumid: rusic_utils::get_md5(album1.clone()),
             filesize: fsize_results,
             fullpath: full_path.to_string(),
             thumbpath: thumb_path,

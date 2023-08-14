@@ -44,7 +44,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let song = tag.2;
 
 
-    let art_alb = RusicUtils::music_split_artist(&fu);
+    let art_alb = RusicUtils::split_artist_album(&fu);
     let music_artist_results = art_alb.0;
     let music_album_results = art_alb.1;
 
