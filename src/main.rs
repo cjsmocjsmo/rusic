@@ -1,12 +1,11 @@
-
+use rusqlite::{Connection, Result};
 use std::env;
 use std::sync::mpsc::channel;
 use std::time::Instant;
 use threadpool::ThreadPool;
 
-pub mod setup;
 pub mod envvars;
-
+pub mod setup;
 
 // fn run_music_threads(alist: Vec<String>) -> bool {
 //     let mut index = 0;
@@ -42,7 +41,6 @@ pub mod envvars;
 //         //     c_art = "No cover art found".to_string();
 //         // };
 
-
 //         let tinfo = crate::setup::rusic_process_music::TagInfo {
 //             id: index.to_string(),
 //             rusicid: rusic_id,
@@ -57,7 +55,6 @@ pub mod envvars;
 //     }
 //     println!("taginfovec: {:#?}", tag_info_vec);
 //     // let _ins_tag_info = insert_tag_info(tag_info_vec);
-
 
 //     // for tag in tag_info_vec {
 //     //     let handle = thread::spawn(move || {
@@ -79,10 +76,8 @@ pub mod envvars;
 //     //     mfi.expect("Insert failed").clone()
 //     // );
 
-
 //     true
 // }
-
 
 fn main() -> std::io::Result<()> {
     let start = Instant::now();
@@ -118,20 +113,24 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
+#[derive(Debug)]
+struct DurationInfo {
+    rusicid: String,
+    duration: String,
+    path: String,
+}
+
 fn run_duration_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());
     let (tx, rx) = channel();
 
-
     for a in alist {
-
         let tx = tx.clone();
         pool.execute(move || {
             let fu = setup::rusic_utils::RusicUtils { apath: a.clone() };
             let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
             tx.send(dur).expect("Could not send data");
         });
-
     }
 
     drop(tx);
@@ -139,9 +138,15 @@ fn run_duration_threads(alist: Vec<String>) -> bool {
         // Insert this into db
         let ifo = t;
         println!("duration {:?}\n\t", ifo.0);
-        println!("path\n {:?}\n\t", ifo.1);
-
-    };
+        println!("rusicid\n {:?}\n\t", ifo.1);
+        println!("path\n {:?}\n\t", ifo.2);
+        let dinfo = DurationInfo {
+            rusicid: ifo.0,
+            duration: ifo.1,
+            path: ifo.2,
+        };
+        let _wdt = write_duration_to_db(dinfo).unwrap();
+    }
 
     true
 }
@@ -182,7 +187,7 @@ fn run_music_threads(alist: Vec<String>) -> bool {
         // Insert this into db
         let _ifo = t;
         // println!("this is music_info\n {:?}\n\t", ifo);
-    };
+    }
 
     true
 }
@@ -214,3 +219,22 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
     true
 }
 
+fn write_duration_to_db(duration_info: DurationInfo) -> Result<()> {
+    let conn = Connection::open("./db/rusic.db").unwrap();
+
+    conn.execute(
+        "INSERT INTO duration (
+                rusicid,
+                duration,
+                path
+            )
+            VALUES (?1, ?2, ?3)",
+        (
+            &duration_info.rusicid,
+            &duration_info.duration,
+            &duration_info.path,
+        ),
+    )?;
+
+    Ok(())
+}

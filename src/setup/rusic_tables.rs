@@ -7,17 +7,15 @@ pub fn create_tables() -> Result<()> {
     // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db")?;
 
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS tags (
-    //         id INTEGER PRIMARY KEY,
-    //         rusicid TEXT NOT NULL,
-    //         filename TEXT NOT NULL,
-    //         artist TEXT NOT NULL,
-    //         album TEXT NOT NULL,
-    //         song TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS duration (
+            id INTEGER PRIMARY KEY,
+            rusicid TEXT NOT NULL,
+            duration TEXT NOT NULL,
+            path TEXT NOT NULL
+        )",
+        (),
+    )?;
 
     // conn.execute(
     //     "CREATE TABLE IF NOT EXISTS fileinfo (
