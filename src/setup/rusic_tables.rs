@@ -52,7 +52,6 @@ pub fn create_tables() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS songs_for_album (
             id INTEGER PRIMARY KEY,
             albumid TEXT NOT NULL,
-            album TEXT NOT NULL,
             songs TEXT NOT NULL
         )",
         (),
