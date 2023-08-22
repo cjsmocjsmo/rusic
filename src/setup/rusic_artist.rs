@@ -1,6 +1,6 @@
 use rusqlite::Connection;
 // use serde::{Deserialize, Serialize};
-use std::env;
+// use std::env;
 
 pub fn unique_artistids() -> bool {
     // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
@@ -13,7 +13,7 @@ pub fn unique_artistids() -> bool {
     for row in rows {
         artistids.push(row.unwrap());
     }
-    println!("artistids: {:#?}", artistids);
+    println!("artistids: {:#?}", artistids.len());
 
     // let mut rows = stmt.query(&[&qemail]).expect("Unable to query db");
     // let mut exists = false;

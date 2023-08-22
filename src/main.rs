@@ -17,6 +17,7 @@ fn main() -> std::io::Result<()> {
 
     let _rmt = run_music_threads(media_lists.0.clone());
     let _aids = setup::rusic_artist::unique_artistids();
+    let _alids = setup::rusic_album::unique_albumids();
     // let _rmit = run_music_img_threads(media_lists.1.clone());
 
 
