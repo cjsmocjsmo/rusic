@@ -1,4 +1,5 @@
-use rusqlite::Connection;
+use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
 use serde_json;
 
 pub fn unique_albumids() -> Vec<String> {
@@ -17,7 +18,7 @@ pub fn unique_albumids() -> Vec<String> {
     albumids
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbumSongs {
     pub albumid: String,
     pub rusicids: String,
@@ -51,7 +52,7 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
     albums_songs_vec
 }
 
-fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()> {
+pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()> {
     for alb in albumsongsvec {
         let conn = Connection::open("./db/rusic.db").unwrap();
 

@@ -16,11 +16,15 @@ fn main() -> std::io::Result<()> {
     // println!("media_lists: {:#?}", media_lists.0);
 
     let _rmt = run_music_threads(media_lists.0.clone());
-    let _aids = setup::rusic_artist::unique_artistids();
+    let arids = setup::rusic_artist::unique_artistids();
+    let aalbs = setup::rusic_artist::albumids_for_artistid(arids.clone());
+    let _insert_aalbs = setup::rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
+
+
 
     let alids = setup::rusic_album::unique_albumids();
-
-    let _sids = setup::rusic_album::songids_for_albumid(alids.clone());
+    let sids = setup::rusic_album::songids_for_albumid(alids.clone());
+    let _insert_sids = setup::rusic_album::write_songs_for_album_to_db(sids.clone()).unwrap();
 
 
 
