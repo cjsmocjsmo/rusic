@@ -1,7 +1,7 @@
 use rusqlite::Connection;
 // use serde::{Deserialize, Serialize};
 
-pub fn unique_albumids() -> bool {
+pub fn unique_albumids() -> Vec<String> {
     // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
     let mut stmt = conn
@@ -12,17 +12,30 @@ pub fn unique_albumids() -> bool {
     for row in rows {
         albumids.push(row.unwrap());
     }
-    println!("albumids: {:#?}", albumids.len());
+    println!("albumids: {:?}", albumids.len());
 
-    // let mut rows = stmt.query(&[&qemail]).expect("Unable to query db");
-    // let mut exists = false;
-    // while let Some(row) = rows.next().expect("Unable to get next row") {
-    //     let acct: String = row.get(0).expect("Unable to get acct");
+    albumids
+}
 
-    //     if acct == qemail {
-    //         exists = true;
-    //     };
+pub fn songids_for_albumid(xid: String) -> Vec<String> {
+    // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
+    let conn = Connection::open("/db/rusic.db").expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT rusicid FROM music WHERE albumid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&xid]).expect("Unable to query db");
+
+    let mut songids: Vec<String> = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        songids.push(row.get(0).unwrap());
+    }
+
+
+    // let mut songids: Vec<String> = Vec::new();
+    // for row in rows {
+    //     songids.push(row.unwrap());
     // }
+    // println!("albumids: {:?}", songids.len());
 
-    false
+    songids
 }

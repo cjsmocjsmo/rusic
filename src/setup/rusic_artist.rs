@@ -2,7 +2,7 @@ use rusqlite::Connection;
 // use serde::{Deserialize, Serialize};
 // use std::env;
 
-pub fn unique_artistids() -> bool {
+pub fn unique_artistids() -> Vec<String> {
     // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
     let mut stmt = conn
@@ -13,17 +13,13 @@ pub fn unique_artistids() -> bool {
     for row in rows {
         artistids.push(row.unwrap());
     }
-    println!("artistids: {:#?}", artistids.len());
+    println!("artistids: {:?}", artistids.len());
 
-    // let mut rows = stmt.query(&[&qemail]).expect("Unable to query db");
-    // let mut exists = false;
-    // while let Some(row) = rows.next().expect("Unable to get next row") {
-    //     let acct: String = row.get(0).expect("Unable to get acct");
+    artistids
+}
 
-    //     if acct == qemail {
-    //         exists = true;
-    //     };
-    // }
+pub fn albumids_for_artistid() -> bool {
+
 
     false
 }
