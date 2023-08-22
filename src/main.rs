@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()> {
     let alids = setup::rusic_album::unique_albumids();
     for a in alids {
         let sids = setup::rusic_album::songids_for_albumid(a.clone());
-        println!("songids: {:?}", sids);
+        println!("songids: {:#?}", sids);
     }
 
 

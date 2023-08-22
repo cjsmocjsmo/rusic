@@ -17,7 +17,7 @@ pub fn unique_albumids() -> Vec<String> {
     albumids
 }
 
-pub fn songids_for_albumid(xid: String) -> Vec<String> {
+pub fn songids_for_albumid(xid: String) -> (String, Vec<String>) {
     // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
     let mut stmt = conn
@@ -37,5 +37,5 @@ pub fn songids_for_albumid(xid: String) -> Vec<String> {
     // }
     // println!("albumids: {:?}", songids.len());
 
-    songids
+    (xid, songids)
 }
