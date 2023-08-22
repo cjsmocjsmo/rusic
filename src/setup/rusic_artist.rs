@@ -3,8 +3,8 @@ use rusqlite::Connection;
 use std::env;
 
 pub fn unique_artistids() -> bool {
-    let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
-    let conn = Connection::open(db_path).expect("unable to open db file");
+    // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
     let mut stmt = conn
         .prepare("SELECT DISTINCT artistid FROM music;")
         .unwrap();
