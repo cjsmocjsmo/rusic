@@ -16,9 +16,10 @@ fn main() -> std::io::Result<()> {
     // println!("media_lists: {:#?}", media_lists.0);
 
     let _rmt = run_music_threads(media_lists.0.clone());
-    let _rmit = run_music_img_threads(media_lists.1.clone());
-
     let _aids = setup::rusic_artist::unique_artistids();
+    // let _rmit = run_music_img_threads(media_lists.1.clone());
+
+
 
 
     // get artist pages together
