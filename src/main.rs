@@ -28,7 +28,7 @@ fn main() -> std::io::Result<()> {
 
 
 
-    // let _rmit = run_music_img_threads(media_lists.1.clone());
+    let _rmit = run_music_img_threads(media_lists.1.clone());
 
 
 
