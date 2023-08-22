@@ -13,7 +13,7 @@ pub fn unique_artistids() -> Vec<String> {
     for row in rows {
         artistids.push(row.unwrap());
     }
-    println!("artistids: {:?}", artistids.len());
+    // println!("artistids: {:?}", artistids.len());
 
     artistids
 }
