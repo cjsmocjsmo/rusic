@@ -3,6 +3,8 @@ pub mod rusic_process_music;
 pub mod rusic_process_music_images;
 pub mod rusic_utils;
 pub mod rusic_walk_dirs;
+pub mod rusic_artist;
+pub mod rusic_album;
 
 // pub fn save_coverart(x: String, coverart_path: String) -> Result<(), E> {
 //         let tag = Tag::read_from_path(x.clone()).expect(&x);

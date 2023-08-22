@@ -1,36 +1,8 @@
 use rusqlite::{Connection, Result};
-// use std::env;
-// use std::path::Path;
-// use std::fs;
 
 pub fn create_tables() -> Result<()> {
     // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db")?;
-
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS duration (
-            id INTEGER PRIMARY KEY,
-            rusicid TEXT NOT NULL,
-            duration TEXT NOT NULL,
-            path TEXT NOT NULL
-        )",
-        (),
-    )?;
-
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS fileinfo (
-    //         id INTEGER PRIMARY KEY,
-    //         rusicid TEXT NOT NULL,
-    //         filename TEXT NOT NULL,
-    //         extension TEXT NOT NULL,
-    //         filesize TEXT NOT NULL,
-    //         duration TEXT NOT NULL,
-    //         idx TEXT NOT NULL,
-    //         fullpath TEXT NOT NULL,
-    //         basedir TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (
@@ -49,26 +21,6 @@ pub fn create_tables() -> Result<()> {
             fullpath TEXT NOT NULL,
             thumbpath TEXT NOT NULL,
             idx TEXT NOT NULL
-        )",
-        (),
-    )?;
-
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS artistids (
-            id INTEGER PRIMARY KEY,
-            artist TEXT NOT NULL,
-            artistid TEXT NOT NULL,
-            path TEXT NOT NULL
-        )",
-        (),
-    )?;
-
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS albumids (
-            id INTEGER PRIMARY KEY,
-            album TEXT NOT NULL,
-            albumid TEXT NOT NULL,
-            path TEXT NOT NULL
         )",
         (),
     )?;
@@ -96,5 +48,70 @@ pub fn create_tables() -> Result<()> {
         (),
     )?;
 
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS songs_for_album (
+            id INTEGER PRIMARY KEY,
+            albumid TEXT NOT NULL,
+            album TEXT NOT NULL,
+            songs TEXT NOT NULL
+        )",
+        (),
+    )?;
+
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS albums_for_artist (
+            id INTEGER PRIMARY KEY,
+            artistid TEXT NOT NULL,
+            artist TEXT NOT NULL,
+            albums TEXT NOT NULL
+        )",
+        (),
+    )?;
+
     Ok(())
 }
+
+// conn.execute(
+//     "CREATE TABLE IF NOT EXISTS duration (
+//         id INTEGER PRIMARY KEY,
+//         rusicid TEXT NOT NULL,
+//         duration TEXT NOT NULL,
+//         path TEXT NOT NULL
+//     )",
+//     (),
+// )?;
+
+// conn.execute(
+//     "CREATE TABLE IF NOT EXISTS fileinfo (
+//         id INTEGER PRIMARY KEY,
+//         rusicid TEXT NOT NULL,
+//         filename TEXT NOT NULL,
+//         extension TEXT NOT NULL,
+//         filesize TEXT NOT NULL,
+//         duration TEXT NOT NULL,
+//         idx TEXT NOT NULL,
+//         fullpath TEXT NOT NULL,
+//         basedir TEXT NOT NULL
+//     )",
+//     (),
+// )?;
+
+// conn.execute(
+//     "CREATE TABLE IF NOT EXISTS artistids (
+//         id INTEGER PRIMARY KEY,
+//         artist TEXT NOT NULL,
+//         artistid TEXT NOT NULL,
+//         path TEXT NOT NULL
+//     )",
+//     (),
+// )?;
+
+// conn.execute(
+//     "CREATE TABLE IF NOT EXISTS albumids (
+//         id INTEGER PRIMARY KEY,
+//         album TEXT NOT NULL,
+//         albumid TEXT NOT NULL,
+//         path TEXT NOT NULL
+//     )",
+//     (),
+// )?;

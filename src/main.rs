@@ -1,4 +1,4 @@
-use rusqlite::{Connection, Result};
+// use rusqlite::{Connection, Result};
 use std::env;
 use std::sync::mpsc::channel;
 use std::time::Instant;
@@ -17,7 +17,9 @@ fn main() -> std::io::Result<()> {
 
     let _rmt = run_music_threads(media_lists.0.clone());
     let _rmit = run_music_img_threads(media_lists.1.clone());
-    let _rdt = run_duration_threads(media_lists.0.clone());
+
+    let _aids = setup::rusic_artist::unique_artistids();
+
 
     // get artist pages together
 
@@ -26,49 +28,52 @@ fn main() -> std::io::Result<()> {
     println!("music: {}\n", media_lists.0.clone().len());
     println!("images: {}\n", media_lists.1.clone().len());
 
+    // THIS RUNS EXTREMELY SLOW EVEN WITH THREADS
+    // let _rdt = run_duration_threads(media_lists.0.clone());
+
     let duration = start.elapsed();
     println!("Setup completed in: {} seconds", duration.as_secs());
 
     Ok(())
 }
 
-#[derive(Debug)]
-struct DurationInfo {
-    rusicid: String,
-    duration: String,
-    path: String,
-}
+// #[derive(Debug)]
+// struct DurationInfo {
+//     rusicid: String,
+//     duration: String,
+//     path: String,
+// }
 
-fn run_duration_threads(alist: Vec<String>) -> bool {
-    let pool = ThreadPool::new(num_cpus::get());
-    let (tx, rx) = channel();
+// fn run_duration_threads(alist: Vec<String>) -> bool {
+//     let pool = ThreadPool::new(num_cpus::get());
+//     let (tx, rx) = channel();
 
-    for a in alist {
-        let tx = tx.clone();
-        pool.execute(move || {
-            let fu = setup::rusic_utils::RusicUtils { apath: a.clone() };
-            let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
-            tx.send(dur).expect("Could not send data");
-        });
-    }
+//     for a in alist {
+//         let tx = tx.clone();
+//         pool.execute(move || {
+//             let fu = setup::rusic_utils::RusicUtils { apath: a.clone() };
+//             let dur = setup::rusic_utils::RusicUtils::get_duration(&fu);
+//             tx.send(dur).expect("Could not send data");
+//         });
+//     }
 
-    drop(tx);
-    for t in rx.iter() {
-        // Insert this into db
-        let ifo = t;
-        println!("rusicid\n {:?}\n\t", ifo.0);
-        println!("duration {:?}\n\t", ifo.1);
-        println!("path\n {:?}\n\t", ifo.2);
-        let dinfo = DurationInfo {
-            rusicid: ifo.0,
-            duration: ifo.1,
-            path: ifo.2,
-        };
-        let _wdt = write_duration_to_db(dinfo).unwrap();
-    }
+//     drop(tx);
+//     for t in rx.iter() {
+//         // Insert this into db
+//         let ifo = t;
+//         println!("rusicid\n {:?}\n\t", ifo.0);
+//         println!("duration {:?}\n\t", ifo.1);
+//         println!("path\n {:?}\n\t", ifo.2);
+//         let dinfo = DurationInfo {
+//             rusicid: ifo.0,
+//             duration: ifo.1,
+//             path: ifo.2,
+//         };
+//         let _wdt = write_duration_to_db(dinfo).unwrap();
+//     }
 
-    true
-}
+//     true
+// }
 
 fn run_music_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());
@@ -138,22 +143,22 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
     true
 }
 
-fn write_duration_to_db(duration_info: DurationInfo) -> Result<()> {
-    let conn = Connection::open("./db/rusic.db").unwrap();
+// fn write_duration_to_db(duration_info: DurationInfo) -> Result<()> {
+//     let conn = Connection::open("./db/rusic.db").unwrap();
 
-    conn.execute(
-        "INSERT INTO duration (
-                rusicid,
-                duration,
-                path
-            )
-            VALUES (?1, ?2, ?3)",
-        (
-            &duration_info.rusicid,
-            &duration_info.duration,
-            &duration_info.path,
-        ),
-    )?;
+//     conn.execute(
+//         "INSERT INTO duration (
+//                 rusicid,
+//                 duration,
+//                 path
+//             )
+//             VALUES (?1, ?2, ?3)",
+//         (
+//             &duration_info.rusicid,
+//             &duration_info.duration,
+//             &duration_info.path,
+//         ),
+//     )?;
 
-    Ok(())
-}
+//     Ok(())
+// }

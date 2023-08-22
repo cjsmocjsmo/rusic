@@ -3,7 +3,7 @@ use id3::{Tag, TagLike};
 use image::{self};
 use md5::{Digest, Md5};
 use std::path::Path;
-use std::time::Duration;
+// use std::time::Duration;
 
 #[derive(Debug)]
 pub struct RusicUtils {
@@ -63,43 +63,6 @@ impl RusicUtils {
         let path = Path::new(&self.apath);
 
         path.size_on_disk().unwrap().to_string()
-    }
-
-    pub fn get_duration(&self) -> (String, String, String) {
-        let path = Path::new(&self.apath);
-        let dur_sec_res = mp3_duration::from_path(&path);
-        let dur_sec = match dur_sec_res {
-            Ok(d) => d,
-            Err(_) => Duration::new(0, 0),
-        };
-        if dur_sec != Duration::new(0, 0) {
-            let dur_min = dur_sec.div_f32(60.0);
-            let dur_str = format!("{:?}", dur_min);
-            let mut durvec = vec![];
-            for i in dur_str.chars() {
-                durvec.push(i);
-            }
-
-            let mut newvec = vec![];
-            let mut count: i32 = 0;
-            for c in durvec {
-                count = count + 1;
-                if count < 5 {
-                    newvec.push(c);
-                } else {
-                    break;
-                };
-            }
-
-            let rusicid = get_md5(self.apath.clone());
-            let duration: String = newvec.into_iter().collect();
-            return (rusicid.clone(), duration.clone(), self.apath.clone());
-        } else {
-            let rusicid = get_md5(self.apath.clone());
-            let new_dur = Duration::new(0, 0);
-            let duration = format!("{:?}", new_dur);
-            return (rusicid.clone(), duration.clone(), self.apath.clone());
-        };
     }
 
     pub fn get_dims(&self) -> (u32, u32) {
