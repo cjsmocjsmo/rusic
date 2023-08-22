@@ -17,6 +17,7 @@ pub fn unique_albumids() -> Vec<String> {
     albumids
 }
 
+#[derive(Debug)]
 pub struct AlbumSongs {
     pub albumid: String,
     pub songids: String,
@@ -45,7 +46,7 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
 
     }
 
-    println!("albums_songs_vec: {:#?}", albums_songs_vec.len());
+    println!("albums_songs_vec: {:#?}", albums_songs_vec);
 
     albums_songs_vec
 }
