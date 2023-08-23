@@ -29,7 +29,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
     for x in xlist {
         let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
         let mut stmt = conn
-            .prepare("SELECT albumid FROM music WHERE artistid = ?1")
+            .prepare("SELECT DISTINCT albumid FROM music WHERE artistid = ?1")
             .unwrap();
         let mut rows = stmt.query(&[&x]).expect("Unable to query db");
 
