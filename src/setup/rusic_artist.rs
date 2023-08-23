@@ -22,8 +22,8 @@ pub fn unique_artistids() -> Vec<String> {
 pub struct ArtistAlbums {
     pub artistid: String,
     pub albumids: String,
-    pub page: i32,
     pub index: i32,
+    pub page: i32,
 }
 
 pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
