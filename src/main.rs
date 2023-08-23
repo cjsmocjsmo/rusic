@@ -3,13 +3,17 @@ use std::env;
 use std::sync::mpsc::channel;
 use std::time::Instant;
 use threadpool::ThreadPool;
+use env_logger::{Builder, Target};
 
 pub mod envvars;
 pub mod setup;
 
-
 fn main() -> std::io::Result<()> {
     let start = Instant::now();
+    Builder::new().target(Target::Stdout).init();
+
+    log::info!("Rusic setup started");
+
     let _set_envvars = crate::envvars::set_env_vars();
     let _tables = crate::setup::rusic_tables::create_tables();
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
@@ -20,31 +24,24 @@ fn main() -> std::io::Result<()> {
     let aalbs = setup::rusic_artist::albumids_for_artistid(arids.clone());
     let _insert_aalbs = setup::rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
 
-
-
     let alids = setup::rusic_album::unique_albumids();
     let sids = setup::rusic_album::songids_for_albumid(alids.clone());
     let _insert_sids = setup::rusic_album::write_songs_for_album_to_db(sids.clone()).unwrap();
 
-
-
     let _rmit = run_music_img_threads(media_lists.1.clone());
-
-
-
 
     // get artist pages together
 
     // get album pagets together
 
-    println!("music: {}\n", media_lists.0.clone().len());
-    println!("images: {}\n", media_lists.1.clone().len());
+    log::info!("music: {}\n", media_lists.0.clone().len());
+    log::info!("images: {}\n", media_lists.1.clone().len());
 
     // THIS RUNS EXTREMELY SLOW EVEN WITH THREADS
     // let _rdt = run_duration_threads(media_lists.0.clone());
 
     let duration = start.elapsed();
-    println!("Setup completed in: {} seconds", duration.as_secs());
+    log::info!("Setup completed in: {} seconds", duration.as_secs());
 
     Ok(())
 }

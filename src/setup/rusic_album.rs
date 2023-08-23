@@ -13,7 +13,8 @@ pub fn unique_albumids() -> Vec<String> {
     for row in rows {
         albumids.push(row.unwrap());
     }
-    // println!("albumids: {:?}", albumids.len());
+
+    log::info!("albumids: {:?}", albumids.len());
 
     albumids
 }
@@ -58,7 +59,7 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
 
     }
 
-    println!("albums_songs_vec: {:#?}", albums_songs_vec);
+    log::info!("albums_songs_vec: {:#?}", albums_songs_vec);
 
     albums_songs_vec
 }
@@ -70,12 +71,16 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()>
         conn.execute(
             "INSERT INTO songs_for_album (
                     albumid,
-                    songs
+                    songs,
+                    index,
+                    page
                 )
-                VALUES (?1, ?2)",
+                VALUES (?1, ?2, ?3, ?4)",
             (
                 &alb.albumid,
-                &alb.rusicids
+                &alb.rusicids,
+                &alb.index,
+                &alb.page,
             ),
         )?;
 
