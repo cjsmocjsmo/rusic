@@ -22,13 +22,13 @@ fn main() -> std::io::Result<()> {
 
 
 
-    // let alids = setup::rusic_album::unique_albumids();
-    // let sids = setup::rusic_album::songids_for_albumid(alids.clone());
-    // let _insert_sids = setup::rusic_album::write_songs_for_album_to_db(sids.clone()).unwrap();
+    let alids = setup::rusic_album::unique_albumids();
+    let sids = setup::rusic_album::songids_for_albumid(alids.clone());
+    let _insert_sids = setup::rusic_album::write_songs_for_album_to_db(sids.clone()).unwrap();
 
 
 
-    // let _rmit = run_music_img_threads(media_lists.1.clone());
+    let _rmit = run_music_img_threads(media_lists.1.clone());
 
 
 
