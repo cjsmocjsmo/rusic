@@ -22,11 +22,20 @@ pub fn unique_artistids() -> Vec<String> {
 pub struct ArtistAlbums {
     pub artistid: String,
     pub albumids: String,
+    pub page: i32,
+    pub index: i32,
 }
 
 pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
+    let mut page = 1;
+    let mut index = 1;
     let mut artists_albums_vec = Vec::new();
     for x in xlist {
+        index += 1;
+        if index == 26 {
+            page += 1;
+            index = 1;
+        }
         let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
         let mut stmt = conn
             .prepare("SELECT DISTINCT albumid FROM music WHERE artistid = ?1")
@@ -41,6 +50,8 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         let artistalbums = ArtistAlbums {
             artistid: x,
             albumids: vstring,
+            page: page,
+            index: index,
         };
         artists_albums_vec.push(artistalbums);
     }
