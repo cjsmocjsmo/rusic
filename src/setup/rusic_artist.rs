@@ -22,8 +22,8 @@ pub fn unique_artistids() -> Vec<String> {
 pub struct ArtistAlbums {
     pub artistid: String,
     pub albums: String,
-    pub index: String,
-    pub page: String,
+    // pub index: String,
+    // pub page: String
 }
 
 pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
@@ -52,8 +52,8 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         let artistalbums = ArtistAlbums {
             artistid: x,
             albums: vstring,
-            index: String::from(index.to_string()),
-            page: String::from(page.to_string()),
+            // index: String::from(index.to_string()),
+            // page: String::from(page.to_string()),
         };
         artists_albums_vec.push(artistalbums);
     }
@@ -73,12 +73,13 @@ pub fn write_albums_for_artist_to_db(artistsalbumssvec: Vec<ArtistAlbums>) -> Re
         conn.execute(
             "INSERT INTO albums_for_artist (
                     artistid,
-                    albums,
-                    index,
-                    page
+                    albums
+
                 )
-                VALUES (?1, ?2, ?3, ?4)",
-            (&art.artistid, &art.albums, &art.index, &art.page),
+                VALUES (?1, ?2)",
+            (
+                &art.artistid,
+                &art.albums),
         )?;
     }
     Ok(())
