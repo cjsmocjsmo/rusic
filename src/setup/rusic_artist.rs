@@ -22,8 +22,8 @@ pub fn unique_artistids() -> Vec<String> {
 pub struct ArtistAlbums {
     pub artistid: String,
     pub albums: String,
-    pub index: i32,
-    pub page: i32,
+    pub index: String,
+    pub page: String,
 }
 
 pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
@@ -50,8 +50,8 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         let artistalbums = ArtistAlbums {
             artistid: x,
             albums: vstring,
-            index: index.to_string().parse::<i32>().unwrap(),
-            page: page.to_string().parse::<i32>().unwrap(),
+            index: String::from(index.to_string()),
+            page: String::from(page.to_string()),
         };
         artists_albums_vec.push(artistalbums);
     }
