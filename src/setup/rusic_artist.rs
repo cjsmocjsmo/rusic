@@ -67,6 +67,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
 pub fn write_albums_for_artist_to_db(artistsalbumssvec: Vec<ArtistAlbums>) -> Result<()> {
     for art in artistsalbumssvec {
         log::info!("art: {:#?}", art);
+        println!("art: {:#?}", art);
         let conn = Connection::open("./db/rusic.db").unwrap();
 
         conn.execute(
