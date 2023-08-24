@@ -5,6 +5,29 @@ pub fn create_tables() -> Result<()> {
     let conn = Connection::open("./db/rusic.db")?;
 
     conn.execute(
+        "CREATE TABLE IF NOT EXISTS songsforalbum (
+            id INTEGER PRIMARY KEY,
+            page INTEGER NOT NULL,
+            albumid TEXT NOT NULL,
+            songs TEXT NOT NULL
+        )",
+        (),
+    )?;
+
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS albumsforartist (
+            id INTEGER PRIMARY KEY,
+            artistid TEXT NOT NULL,
+            albums TEXT NOT NULL,
+            index TEXT NOT NULL,
+            page TEXT NOT NULL
+        )",
+        (),
+    )?;
+
+
+
+    conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (
             id INTEGER PRIMARY KEY,
             rusicid TEXT NOT NULL,
@@ -48,28 +71,7 @@ pub fn create_tables() -> Result<()> {
         (),
     )?;
 
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS songsforalbum (
-            id INTEGER PRIMARY KEY,
-            index INTEGER NOT NULL,
-            page INTEGER NOT NULL,
-            albumid TEXT NOT NULL,
-            songs TEXT NOT NULL
-        )",
-        (),
-    )?;
 
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS albumsforartist (
-            id INTEGER PRIMARY KEY,
-            artistid TEXT NOT NULL,
-            albums TEXT NOT NULL,
-            index TEXT NOT NULL,
-            page TEXT NOT NULL
-
-        )",
-        (),
-    )?;
 
     Ok(())
 }

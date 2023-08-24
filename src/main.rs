@@ -14,8 +14,8 @@ fn main() -> std::io::Result<()> {
 
     log::info!("Rusic setup started");
 
-    let _set_envvars = crate::envvars::set_env_vars();
-    let _tables = crate::setup::rusic_tables::create_tables();
+    let _set_envvars = envvars::set_env_vars();
+    let _tables = setup::rusic_tables::create_tables();
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
     // println!("media_lists: {:#?}", media_lists.0);
 
