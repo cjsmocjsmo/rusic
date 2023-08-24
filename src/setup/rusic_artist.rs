@@ -50,8 +50,8 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         let artistalbums = ArtistAlbums {
             artistid: x,
             albums: vstring,
-            index: index,
-            page: page,
+            index: index.to_string().parse::<i32>().unwrap(),
+            page: page.to_string().parse::<i32>().unwrap(),
         };
         artists_albums_vec.push(artistalbums);
     }
