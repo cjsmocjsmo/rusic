@@ -5,9 +5,7 @@ use serde_json;
 pub fn unique_albumids() -> Vec<String> {
     // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
-    let mut stmt = conn
-        .prepare("SELECT DISTINCT albumid FROM music;")
-        .unwrap();
+    let mut stmt = conn.prepare("SELECT DISTINCT albumid FROM music;").unwrap();
     let rows = stmt.query_map([], |row| row.get(0)).unwrap();
     let mut albumids: Vec<String> = Vec::new();
     for row in rows {
@@ -47,17 +45,15 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
         let mut songids: Vec<String> = Vec::new();
         while let Some(row) = rows.next().unwrap() {
             songids.push(row.get(0).unwrap());
-        };
+        }
         let vstring = serde_json::to_string(&songids).unwrap();
         let albumsongs = AlbumSongs {
             index: String::from(index.to_string()),
             page: String::from(page.to_string()),
             albumid: x,
             rusicids: vstring,
-
         };
         albums_songs_vec.push(albumsongs);
-
     }
 
     log::info!("albums_songs_vec: {:#?}", albums_songs_vec);
@@ -70,24 +66,15 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()>
         let conn = Connection::open("./db/rusic.db").unwrap();
 
         conn.execute(
-            "INSERT INTO songs_for_album (
-                index,
+            "INSERT INTO songsforalbum (
+                    index,
                     page,
                     albumid,
                     songs
-
                 )
                 VALUES (?1, ?2, ?3, ?4)",
-            (
-                &alb.index,
-                &alb.page,
-                &alb.albumid,
-                &alb.rusicids,
-
-            ),
+            (&alb.index, &alb.page, &alb.albumid, &alb.rusicids),
         )?;
-
-
     }
     Ok(())
 }
