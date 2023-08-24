@@ -21,7 +21,7 @@ pub fn unique_artistids() -> Vec<String> {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ArtistAlbums {
     pub artistid: String,
-    pub albumids: String,
+    pub albums: String,
     pub index: i32,
     pub page: i32,
 }
@@ -49,7 +49,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         let vstring = serde_json::to_string(&albumids).unwrap();
         let artistalbums = ArtistAlbums {
             artistid: x,
-            albumids: vstring,
+            albums: vstring,
             index: index,
             page: page,
         };
@@ -73,7 +73,7 @@ pub fn write_albums_for_artist_to_db(artistsalbumssvec: Vec<ArtistAlbums>) -> Re
                     page
                 )
                 VALUES (?1, ?2, ?3, ?4)",
-            (&art.artistid, &art.albumids, &art.index, &art.page),
+            (&art.artistid, &art.albums, &art.index, &art.page),
         )?;
     }
     Ok(())
