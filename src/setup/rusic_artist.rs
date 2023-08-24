@@ -32,6 +32,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
     let mut artists_albums_vec = Vec::new();
     for x in xlist {
         log::info!("x: {:#?}", x);
+        println!("x: {:#?}", x);
         index += 1;
         if index == 26 {
             page += 1;
@@ -58,6 +59,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
     }
 
     log::info!("artist_albums_vec: {:#?}", artists_albums_vec);
+    println!("artist_albums_vec: {:#?}", artists_albums_vec.len());
 
     artists_albums_vec
 }
