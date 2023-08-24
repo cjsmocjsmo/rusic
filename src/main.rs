@@ -15,7 +15,10 @@ fn main() -> std::io::Result<()> {
     log::info!("Rusic setup started");
 
     let _set_envvars = envvars::set_env_vars();
-    let _tables = setup::rusic_tables::create_tables();
+    let _csfat = setup::rusic_tables::create_songs_for_album_table();
+    let _cafat = setup::rusic_tables::create_albums_for_artist_table();
+    let _cmit = setup::rusic_tables::create_music_images_table();
+    let _cmt = setup::rusic_tables::create_music_table();
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
     // println!("media_lists: {:#?}", media_lists.0);
 

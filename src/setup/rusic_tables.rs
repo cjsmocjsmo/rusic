@@ -1,6 +1,6 @@
 use rusqlite::{Connection, Result};
 
-pub fn create_tables() -> Result<()> {
+pub fn create_songs_for_album_table() -> Result<()> {
     // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db")?;
 
@@ -14,6 +14,12 @@ pub fn create_tables() -> Result<()> {
         (),
     )?;
 
+    Ok(())
+}
+
+pub fn create_albums_for_artist_table() -> Result<()> {
+    // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db")?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albumsforartist (
             id INTEGER PRIMARY KEY,
@@ -25,7 +31,13 @@ pub fn create_tables() -> Result<()> {
         (),
     )?;
 
+    Ok(())
+}
 
+
+pub fn create_music_images_table() -> Result<()> {
+    // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db")?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (
@@ -47,6 +59,13 @@ pub fn create_tables() -> Result<()> {
         )",
         (),
     )?;
+
+    Ok(())
+}
+
+pub fn create_music_table() -> Result<()> {
+    // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db")?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music (
@@ -70,8 +89,6 @@ pub fn create_tables() -> Result<()> {
         )",
         (),
     )?;
-
-
 
     Ok(())
 }
