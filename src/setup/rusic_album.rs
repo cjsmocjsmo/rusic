@@ -52,8 +52,8 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
         let albumsongs = AlbumSongs {
             albumid: x,
             rusicids: vstring,
-            index: index.to_string(),
-            page: page.to_string(),
+            index: String::from(index.to_string()),
+            page: String::from(page.to_string()),
         };
         albums_songs_vec.push(albumsongs);
 
