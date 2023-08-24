@@ -20,14 +20,14 @@ pub fn unique_artistids() -> Vec<String> {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ArtistAlbums {
+    pub page: i32,
     pub artistid: String,
     pub albums: String,
-    pub index: String,
-    pub page: String,
+
 }
 
 pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
-    let mut page = 1;
+    let mut pge = 1;
     let mut index = 1;
     let mut artists_albums_vec = Vec::new();
     for x in xlist {
@@ -35,7 +35,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         println!("x: {:#?}", x);
         index += 1;
         if index == 26 {
-            page += 1;
+            pge += 1;
             index = 1;
         }
         let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
@@ -50,10 +50,10 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
         }
         let vstring = serde_json::to_string(&albumids).unwrap();
         let artistalbums = ArtistAlbums {
+            page: pge,
             artistid: x,
             albums: vstring,
-            index: String::from(index.to_string()),
-            page: String::from(page.to_string()),
+
         };
         artists_albums_vec.push(artistalbums);
     }
@@ -72,17 +72,15 @@ pub fn write_albums_for_artist_to_db(artistsalbumssvec: Vec<ArtistAlbums>) -> Re
 
         conn.execute(
             "INSERT INTO albumsforartist (
+                    page,
                     artistid,
-                    albums,
-                    index,
-                    page
+                    albums
                 )
-                VALUES (?1, ?2, ?3, ?4)",
+                VALUES (?1, ?2, ?3)",
             (
+                &art.page,
                 &art.artistid,
                 &art.albums,
-                &art.index,
-                &art.page,
             ),
         )?;
     }

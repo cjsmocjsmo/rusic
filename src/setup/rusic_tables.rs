@@ -23,10 +23,9 @@ pub fn create_albums_for_artist_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albumsforartist (
             id INTEGER PRIMARY KEY,
+            page INTEGER NOT NULL,
             artistid TEXT NOT NULL,
-            albums TEXT NOT NULL,
-            index TEXT NOT NULL,
-            page TEXT NOT NULL
+            albums TEXT NOT NULL
         )",
         (),
     )?;
