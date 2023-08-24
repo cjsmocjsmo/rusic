@@ -47,9 +47,11 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
             songids.push(row.get(0).unwrap());
         }
         let vstring = serde_json::to_string(&songids).unwrap();
+        let idx = String::from(index.to_string());
+        let pge = String::from(page.to_string());
         let albumsongs = AlbumSongs {
-            index: String::from(index.to_string()),
-            page: String::from(page.to_string()),
+            index: idx,
+            page: pge,
             albumid: x,
             rusicids: vstring,
         };
