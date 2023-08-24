@@ -21,10 +21,10 @@ pub fn unique_albumids() -> Vec<String> {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbumSongs {
-    pub albumid: String,
-    pub rusicids: String,
     pub index: String,
     pub page: String,
+    pub albumid: String,
+    pub rusicids: String,
 }
 
 pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
@@ -50,10 +50,11 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
         };
         let vstring = serde_json::to_string(&songids).unwrap();
         let albumsongs = AlbumSongs {
-            albumid: x,
-            rusicids: vstring,
             index: String::from(index.to_string()),
             page: String::from(page.to_string()),
+            albumid: x,
+            rusicids: vstring,
+
         };
         albums_songs_vec.push(albumsongs);
 
@@ -70,17 +71,19 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()>
 
         conn.execute(
             "INSERT INTO songs_for_album (
+                index,
+                    page,
                     albumid,
-                    songs,
-                    index,
-                    page
+                    songs
+
                 )
                 VALUES (?1, ?2, ?3, ?4)",
             (
-                &alb.albumid,
-                &alb.rusicids,
                 &alb.index,
                 &alb.page,
+                &alb.albumid,
+                &alb.rusicids,
+
             ),
         )?;
 
