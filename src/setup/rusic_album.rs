@@ -19,22 +19,22 @@ pub fn unique_albumids() -> Vec<String> {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbumSongs {
-    // pub index: String,
-    // pub page: String,
+    pub index: i32,
+    pub page: i32,
     pub albumid: String,
     pub rusicids: String,
 }
 
 pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
     // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
-    let mut index = 1;
-    let mut page = 1;
+    let mut idx = 1;
+    let mut pge = 1;
     let mut albums_songs_vec = Vec::new();
     for x in xlist {
-        index += 1;
-        if index == 26 {
-            page += 1;
-            index = 1;
+        idx += 1;
+        if idx == 26 {
+            pge += 1;
+            idx = 1;
         }
         let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
         let mut stmt = conn
@@ -47,11 +47,11 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
             songids.push(row.get(0).unwrap());
         }
         let vstring = serde_json::to_string(&songids).unwrap();
-        let idx = String::from(index.to_string());
-        let pge = String::from(page.to_string());
+        // let _idx = String::from(index.to_string());
+        // let _pge = String::from(page.to_string());
         let albumsongs = AlbumSongs {
-            // index: idx,
-            // page: pge,
+            index: idx,
+            page: pge,
             albumid: x,
             rusicids: vstring,
         };
@@ -59,6 +59,7 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
     }
 
     log::info!("albums_songs_vec: {:#?}", albums_songs_vec);
+    println!("albums_songs_vec: {:#?}", albums_songs_vec);
 
     albums_songs_vec
 }
@@ -69,12 +70,13 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()>
 
         conn.execute(
             "INSERT INTO songsforalbum (
-
+                    index,
+                    page,
                     albumid,
                     songs
                 )
-                VALUES (?1, ?2)",
-            (&alb.albumid, &alb.rusicids),
+                VALUES (?1, ?2, ?3, ?4)",
+            (&alb.index, &alb.page, &alb.albumid, &alb.rusicids),
         )?;
     }
     Ok(())
