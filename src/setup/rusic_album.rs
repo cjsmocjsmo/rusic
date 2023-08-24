@@ -19,8 +19,8 @@ pub fn unique_albumids() -> Vec<String> {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbumSongs {
-    pub index: String,
-    pub page: String,
+    // pub index: String,
+    // pub page: String,
     pub albumid: String,
     pub rusicids: String,
 }
@@ -50,8 +50,8 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
         let idx = String::from(index.to_string());
         let pge = String::from(page.to_string());
         let albumsongs = AlbumSongs {
-            index: idx,
-            page: pge,
+            // index: idx,
+            // page: pge,
             albumid: x,
             rusicids: vstring,
         };
@@ -69,13 +69,12 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()>
 
         conn.execute(
             "INSERT INTO songsforalbum (
-                    index,
-                    page,
+
                     albumid,
                     songs
                 )
                 VALUES (?1, ?2, ?3, ?4)",
-            (&alb.index, &alb.page, &alb.albumid, &alb.rusicids),
+            (&alb.albumid, &alb.rusicids),
         )?;
     }
     Ok(())
