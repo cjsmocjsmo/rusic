@@ -1,5 +1,13 @@
 use rusqlite::{Connection, Result};
 
+pub fn create_tables() {
+    let _csfat = create_songs_for_album_table().expect("Unable to create songs for album table");
+    let _cafat =
+        create_albums_for_artist_table().expect("Unable to create albums for artist table");
+    let _cmit = create_music_images_table().expect("Unable to create music images table");
+    let _cmt = create_music_table().expect("Unable to create music table");
+}
+
 pub fn create_songs_for_album_table() -> Result<()> {
     // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
     let conn = Connection::open("./db/rusic.db")?;
@@ -32,7 +40,6 @@ pub fn create_albums_for_artist_table() -> Result<()> {
 
     Ok(())
 }
-
 
 pub fn create_music_images_table() -> Result<()> {
     // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");

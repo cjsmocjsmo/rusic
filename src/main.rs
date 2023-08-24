@@ -15,10 +15,7 @@ fn main() -> std::io::Result<()> {
     log::info!("Rusic setup started");
 
     let _set_envvars = envvars::set_env_vars();
-    let _csfat = setup::rusic_tables::create_songs_for_album_table();
-    let _cafat = setup::rusic_tables::create_albums_for_artist_table();
-    let _cmit = setup::rusic_tables::create_music_images_table();
-    let _cmt = setup::rusic_tables::create_music_table();
+    let _create_tables = setup::rusic_tables::create_tables();
     let media_lists = setup::rusic_walk_dirs::scan_all_sources();
     // println!("media_lists: {:#?}", media_lists.0);
 
@@ -32,20 +29,21 @@ fn main() -> std::io::Result<()> {
     let sids = setup::rusic_album::songids_for_albumid(alids.clone());
     let _insert_sids = setup::rusic_album::write_songs_for_album_to_db(sids.clone()).unwrap();
 
-    // let _rmit = run_music_img_threads(media_lists.1.clone());
+    let _rmit = run_music_img_threads(media_lists.1.clone());
 
     // get artist pages together
 
     // get album pagets together
 
-    log::info!("music: {}\n", media_lists.0.clone().len());
-    log::info!("images: {}\n", media_lists.1.clone().len());
+    println!("music: {}\n", media_lists.0.clone().len());
+    println!("images: {}\n", media_lists.1.clone().len());
 
     // THIS RUNS EXTREMELY SLOW EVEN WITH THREADS
     // let _rdt = run_duration_threads(media_lists.0.clone());
 
     let duration = start.elapsed();
     log::info!("Setup completed in: {} seconds", duration.as_secs());
+    println!("Setup completed in: {} seconds", duration.as_secs());
 
     Ok(())
 }
