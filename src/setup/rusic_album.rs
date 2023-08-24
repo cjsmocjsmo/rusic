@@ -73,7 +73,7 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()>
                     albumid,
                     songs
                 )
-                VALUES (?1, ?2, ?3, ?4)",
+                VALUES (?1, ?2)",
             (&alb.albumid, &alb.rusicids),
         )?;
     }
