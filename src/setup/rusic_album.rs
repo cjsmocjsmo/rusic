@@ -1,10 +1,11 @@
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::env;
 
 pub fn unique_albumids() -> Vec<String> {
-    // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
-    let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).expect("unable to open db file");
     let mut stmt = conn.prepare("SELECT DISTINCT albumid FROM music;").unwrap();
     let rows = stmt.query_map([], |row| row.get(0)).unwrap();
     let mut albumids: Vec<String> = Vec::new();
@@ -25,7 +26,7 @@ pub struct AlbumSongs {
 }
 
 pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
-    // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let mut idx = 1;
     let mut pge = 1;
     let mut albums_songs_vec = Vec::new();
@@ -35,7 +36,7 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
             pge += 1;
             idx = 1;
         }
-        let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
+        let conn = Connection::open(db_path.clone()).expect("unable to open db file");
         let mut stmt = conn
             .prepare("SELECT rusicid FROM music WHERE albumid = ?1")
             .unwrap();
@@ -53,9 +54,6 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
         };
         albums_songs_vec.push(albumsongs);
     }
-
-    log::info!("albums_songs_vec: {:#?}", albums_songs_vec);
-    println!("albums_songs_vec: {:#?}", albums_songs_vec);
 
     albums_songs_vec
 }

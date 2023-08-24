@@ -95,7 +95,8 @@ fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
 }
 
 fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
-    let conn = Connection::open("./db/rusic.db").unwrap();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (

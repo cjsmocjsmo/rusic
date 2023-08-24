@@ -1,10 +1,11 @@
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::env;
 
 pub fn unique_artistids() -> Vec<String> {
-    // let db_path = env::var("ATS_DB_PATH").expect("ATS_DB_PATH not set");
-    let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).expect("unable to open db file");
     let mut stmt = conn
         .prepare("SELECT DISTINCT artistid FROM music;")
         .unwrap();
@@ -27,6 +28,7 @@ pub struct ArtistAlbums {
 }
 
 pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let mut pge = 1;
     let mut index = 1;
     let mut artists_albums_vec = Vec::new();
@@ -38,7 +40,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
             pge += 1;
             index = 1;
         }
-        let conn = Connection::open("./db/rusic.db").expect("unable to open db file");
+        let conn = Connection::open(db_path.clone()).expect("unable to open db file");
         let mut stmt = conn
             .prepare("SELECT DISTINCT albumid FROM music WHERE artistid = ?1")
             .unwrap();
@@ -66,9 +68,8 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<ArtistAlbums> {
 
 pub fn write_albums_for_artist_to_db(artistsalbumssvec: Vec<ArtistAlbums>) -> Result<()> {
     for art in artistsalbumssvec {
-        log::info!("art: {:#?}", art);
-        println!("art: {:#?}", art);
-        let conn = Connection::open("./db/rusic.db").unwrap();
+        let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+        let conn = Connection::open(db_path).unwrap();
 
         conn.execute(
             "INSERT INTO albumsforartist (

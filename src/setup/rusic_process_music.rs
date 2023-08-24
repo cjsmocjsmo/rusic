@@ -91,7 +91,8 @@ fn create_thumb_path(art: String, alb: String) -> String {
 }
 
 fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
-    let conn = Connection::open("./db/rusic.db").unwrap();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
 
     conn.execute(
         "INSERT INTO music (
