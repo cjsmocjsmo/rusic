@@ -51,10 +51,8 @@ pub fn create_tables() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS songsforalbum (
             id INTEGER PRIMARY KEY,
-
             albumid TEXT NOT NULL,
-            songs TEXT NOT NULL,
-
+            songs TEXT NOT NULL
         )",
         (),
     )?;
