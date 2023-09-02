@@ -17,10 +17,17 @@ pub fn set_env_vars() {
     if usb4.is_err() {
         env::set_var("RUSIC_USB4", "None");
     };
+
     let db_path = env::var("RUSIC_DB_PATH");
     if db_path.is_err() {
         env::set_var("RUSIC_DB_PATH", "/usr/share/rusic/rusic/db/rusic.db");
     };
+    let db_check_file_path = env::var("RUSIC_DB_CHECK_FILE_PATH");
+    if db_check_file_path.is_err() {
+        env::set_var("RUSIC_DB_CHECK_FILE_PATH", "/usr/share/rusic/rusic/db/db_check_file.txt");
+    };
+
+
     let no_art_pic = env::var("RUSIC_NO_ART_PIC");
     if no_art_pic.is_err() {
         env::set_var("RUSIC_NO_ART_PIC", "/usr/share/rusic/rusic/no_art_pic.jpg");

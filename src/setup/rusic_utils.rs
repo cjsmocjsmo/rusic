@@ -3,6 +3,9 @@ use id3::{Tag, TagLike};
 use image::{self};
 use md5::{Digest, Md5};
 use std::path::Path;
+use std::env;
+use std::fs::File;
+use std::io::Write;
 // use std::time::Duration;
 
 #[derive(Debug)]
@@ -114,5 +117,18 @@ pub fn normalize_music_image(dims: (u32, u32)) -> (u32, u32) {
     }
 
     resizetup
+}
+
+pub fn gen_db_check_file() {
+    let db_check_file_path = env::var("RUSIC_DB_CHECK_FILE_PATH").unwrap();
+    let mut file = File::create(db_check_file_path).unwrap();
+    file.write_all(b"1").unwrap();
+}
+
+pub fn is_db_check_file_present() -> bool {
+    let db_check_file_path = env::var("RUSIC_DB_CHECK_FILE_PATH").unwrap();
+    let path = Path::new(&db_check_file_path);
+
+    path.exists()
 }
 

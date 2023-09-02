@@ -26,6 +26,9 @@ pub fn setup() -> String {
     let aalbs = rusic_artist::albumids_for_artistid(arids.clone());
     let _insert_aalbs = rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
 
+
+    let _gen_db_check_file = rusic_utils::gen_db_check_file();
+
     let alids = rusic_album::unique_albumids();
     let sids = rusic_album::songids_for_albumid(alids.clone());
     let insert_sids_result = rusic_album::write_songs_for_album_to_db(sids.clone());
@@ -37,24 +40,9 @@ pub fn setup() -> String {
     println!("music: {}\n", media_lists.0.clone().len());
     println!("images: {}\n", media_lists.1.clone().len());
 
-    // let boo_results = insert_sids.clone();
-    // let boo = match boo_results {
-    //     Ok(boo) => boo,
-    //     Err(boo) => boo,
-    // };
-
     insert_sids
 
 }
-
-
-
-
-
-
-
-
-
 
 fn run_music_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());
