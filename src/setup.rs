@@ -1,3 +1,9 @@
+// use env_logger::{Builder, Target};
+// use std::time::Instant;
+use std::env;
+use std::sync::mpsc::channel;
+use threadpool::ThreadPool;
+
 pub mod rusic_tables;
 pub mod rusic_process_music;
 pub mod rusic_process_music_images;
@@ -5,6 +11,126 @@ pub mod rusic_utils;
 pub mod rusic_walk_dirs;
 pub mod rusic_artist;
 pub mod rusic_album;
+
+
+
+
+pub fn setup() -> String {
+    let _create_tables = rusic_tables::create_tables();
+    let media_lists = rusic_walk_dirs::scan_all_sources();
+
+    let _rmt = run_music_threads(media_lists.0.clone());
+    let _rmit = run_music_img_threads(media_lists.1.clone());
+
+    let arids = rusic_artist::unique_artistids();
+    let aalbs = rusic_artist::albumids_for_artistid(arids.clone());
+    let _insert_aalbs = rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
+
+    let alids = rusic_album::unique_albumids();
+    let sids = rusic_album::songids_for_albumid(alids.clone());
+    let insert_sids_result = rusic_album::write_songs_for_album_to_db(sids.clone());
+    let insert_sids = match insert_sids_result {
+        Ok(_) => String::from("Exit 0"),
+        Err(_) => String::from("Exit 1"),
+    };
+
+    println!("music: {}\n", media_lists.0.clone().len());
+    println!("images: {}\n", media_lists.1.clone().len());
+
+    // let boo_results = insert_sids.clone();
+    // let boo = match boo_results {
+    //     Ok(boo) => boo,
+    //     Err(boo) => boo,
+    // };
+
+    insert_sids
+
+}
+
+
+
+
+
+
+
+
+
+
+fn run_music_threads(alist: Vec<String>) -> bool {
+    let pool = ThreadPool::new(num_cpus::get());
+    let (tx, rx) = channel();
+
+    let mut index = 0;
+    let mut page = 1;
+    let mut page_count = 0;
+
+    let ofs = env::var("RUSIC_PAGINATION").unwrap();
+    let offset: u32 = ofs.trim().parse().expect("offset conversion failed");
+
+    for a in alist {
+        index = index + 1;
+        if page_count < offset {
+            page_count = page_count + 1;
+            page = page;
+        } else {
+            page_count = 1;
+            page = page + 1;
+        }
+        let tx = tx.clone();
+        pool.execute(move || {
+            let mfi = crate::setup::rusic_process_music::process_mp3s(
+                a.clone(),
+                index.to_string(),
+                page.to_string(),
+            );
+            tx.send(mfi).expect("Could not send data");
+        });
+    }
+
+    drop(tx);
+    for t in rx.iter() {
+        let _ifo = t;
+        // println!("this is music_info\n {:?}\n\t", ifo);
+    }
+
+    true
+}
+
+
+
+
+fn run_music_img_threads(alist: Vec<String>) -> bool {
+    let pool = ThreadPool::new(num_cpus::get());
+    let (tx, rx) = channel();
+
+    let mut img_index = 0;
+    for i in alist {
+        img_index = img_index + 1;
+        if i.contains("Music") {
+            let tx = tx.clone();
+            pool.execute(move || {
+                let img_info =
+                    rusic_process_music_images::process_music_images(i.clone(), img_index);
+                tx.send(img_info).expect("Could not send data");
+            });
+        }
+    }
+
+    drop(tx);
+    for t in rx.iter() {
+        // Insert this into db
+        let ifo = t;
+        println!("Processed Music img {:?} files", ifo);
+    }
+
+    true
+}
+
+
+
+
+
+
 
 // pub fn save_coverart(x: String, coverart_path: String) -> Result<(), E> {
 //         let tag = Tag::read_from_path(x.clone()).expect(&x);

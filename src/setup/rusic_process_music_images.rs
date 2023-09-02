@@ -25,46 +25,56 @@ pub struct MusicImageInfo {
 use crate::setup::rusic_utils::RusicUtils;
 
 pub fn process_music_images(x: String, index: i32) -> i32 {
-    let foo2 = RusicUtils { apath: x.clone() };
-    let id = rusic_utils::get_md5(x.clone());
-    let dims = RusicUtils::get_dims(&foo2);
-    let bdfn = RusicUtils::split_base_dir_filename(&foo2);
-    let basedir = bdfn.0;
-    let filename = bdfn.1;
-    let artalb = RusicUtils::split_artist_album(&foo2);
-    let artist1 = artalb.0;
-    let album1 = artalb.1;
+    if x.ends_with("webp") {
+        println!(".webp found please convert to jpg: {:?}", x);
+    } else if x.ends_with("jpeg") {
+        println!(".jpeg found please convert to jpg: {:?}", x);
+    } else if x.ends_with("png") {
+        println!(".png found please convert to jpg: {:?}", x);
+    } else if x.ends_with("gif") {
+        println!(".gif found please convert to jpg: {:?}", x);
+    } else {
+        let foo2 = RusicUtils { apath: x.clone() };
+        let id = rusic_utils::get_md5(x.clone());
+        let dims = RusicUtils::get_dims(&foo2);
+        let bdfn = RusicUtils::split_base_dir_filename(&foo2);
+        let basedir = bdfn.0;
+        let filename = bdfn.1;
+        let artalb = RusicUtils::split_artist_album(&foo2);
+        let artist1 = artalb.0;
+        let album1 = artalb.1;
 
-    if dims != (0, 0) {
-        let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
-        let width_r = newdims.0.to_string();
-        let height_r = newdims.1.to_string();
-        let base_dir = basedir;
-        let file_name = filename;
-        let ext = RusicUtils::split_ext(&foo2);
-        let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
-        let full_path = &x.to_string();
-        let thumb_path = create_music_thumbnail(&x, artist1.clone(), album1.clone());
+        if dims != (0, 0) {
+            let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
+            let width_r = newdims.0.to_string();
+            let height_r = newdims.1.to_string();
+            let base_dir = basedir;
+            let file_name = filename;
+            let ext = RusicUtils::split_ext(&foo2);
+            let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
+            let full_path = &x.to_string();
+            let thumb_path = create_music_thumbnail(&x, artist1.clone(), album1.clone());
 
-        let music_img_info = MusicImageInfo {
-            rusicid: id,
-            width: width_r,
-            height: height_r,
-            basedir: base_dir,
-            filename: file_name,
-            extension: ext,
-            artist: artist1.clone(),
-            artistid: rusic_utils::get_md5(artist1.clone()),
-            album: album1.clone(),
-            albumid: rusic_utils::get_md5(album1.clone()),
-            filesize: fsize_results,
-            fullpath: full_path.to_string(),
-            thumbpath: thumb_path,
-            idx: index.to_string(),
+            let music_img_info = MusicImageInfo {
+                rusicid: id,
+                width: width_r,
+                height: height_r,
+                basedir: base_dir,
+                filename: file_name,
+                extension: ext,
+                artist: artist1.clone(),
+                artistid: rusic_utils::get_md5(artist1.clone()),
+                album: album1.clone(),
+                albumid: rusic_utils::get_md5(album1.clone()),
+                filesize: fsize_results,
+                fullpath: full_path.to_string(),
+                thumbpath: thumb_path,
+                idx: index.to_string(),
+            };
+            write_music_img_to_file(music_img_info.clone(), index);
+            write_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
         };
-        write_music_img_to_file(music_img_info.clone(), index);
-        write_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
-    };
+    }
 
     index
 }

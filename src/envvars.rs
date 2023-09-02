@@ -22,10 +22,9 @@ pub fn set_env_vars() {
         env::set_var("RUSIC_DB_PATH", "/usr/share/rusic/rusic/db/rusic.db");
     };
     let no_art_pic = env::var("RUSIC_NO_ART_PIC");
-        if no_art_pic.is_err() {
-            env::set_var("RUSIC_NO_ART_PIC", "/usr/share/rusic/rusic/no_art_pic.jpg");
-        };
-
+    if no_art_pic.is_err() {
+        env::set_var("RUSIC_NO_ART_PIC", "/usr/share/rusic/rusic/no_art_pic.jpg");
+    };
     let pagination = env::var("RUSIC_PAGINATION");
     if pagination.is_err() {
         env::set_var("RUSIC_PAGINATION", "25");
