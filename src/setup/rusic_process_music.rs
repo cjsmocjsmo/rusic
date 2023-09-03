@@ -23,7 +23,9 @@ pub struct MusicInfo {
     extension: String,
     idx: String,
     page: String,
-    fsizeresults: String
+    fsizeresults: String,
+    artstartswith: String,
+    albstartswith: String,
 }
 
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
@@ -34,6 +36,9 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let artist = tag.0;
     let album = tag.1;
     let song = tag.2;
+
+    let art_starts_with = rusic_utils::artist_starts_with(artist.clone());
+    let alb_starts_with = rusic_utils::album_starts_with(album.clone());
 
 
     let art_alb = RusicUtils::split_artist_album(&fu);
@@ -65,6 +70,8 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         idx: index.to_string(),
         page: page.to_string(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
+        artstartswith: art_starts_with,
+        albstartswith: alb_starts_with,
     };
     println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
@@ -112,8 +119,10 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 idx,
                 page,
                 fsizeresults
+                artstartswith,
+                albstartswith
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
@@ -130,7 +139,9 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.extension,
             &music_info.idx,
             &music_info.page,
-            &music_info.fsizeresults
+            &music_info.fsizeresults,
+            &music_info.artstartswith,
+            &music_info.albstartswith
         ),
     )?;
 

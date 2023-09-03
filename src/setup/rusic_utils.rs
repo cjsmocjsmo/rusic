@@ -132,3 +132,14 @@ pub fn is_db_check_file_present() -> bool {
     path.exists()
 }
 
+pub fn artist_starts_with(x: String) -> String {
+    let first_letter = x.chars().next().unwrap();
+
+    first_letter.to_string()
+}
+
+pub fn album_starts_with(x: String) -> String {
+    let first_letter = x.chars().next().unwrap();
+
+    first_letter.to_string()
+}

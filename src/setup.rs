@@ -4,16 +4,13 @@ use std::env;
 use std::sync::mpsc::channel;
 use threadpool::ThreadPool;
 
-pub mod rusic_tables;
+pub mod rusic_album;
+pub mod rusic_artist;
 pub mod rusic_process_music;
 pub mod rusic_process_music_images;
+pub mod rusic_tables;
 pub mod rusic_utils;
 pub mod rusic_walk_dirs;
-pub mod rusic_artist;
-pub mod rusic_album;
-
-
-
 
 pub fn setup() -> String {
     let _create_tables = rusic_tables::create_tables();
@@ -26,9 +23,6 @@ pub fn setup() -> String {
     let aalbs = rusic_artist::albumids_for_artistid(arids.clone());
     let _insert_aalbs = rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
 
-
-    let _gen_db_check_file = rusic_utils::gen_db_check_file();
-
     let alids = rusic_album::unique_albumids();
     let sids = rusic_album::songids_for_albumid(alids.clone());
     let insert_sids_result = rusic_album::write_songs_for_album_to_db(sids.clone());
@@ -36,12 +30,11 @@ pub fn setup() -> String {
         Ok(_) => String::from("Exit 0"),
         Err(_) => String::from("Exit 1"),
     };
-
+    let _gen_db_check_file = rusic_utils::gen_db_check_file();
     println!("music: {}\n", media_lists.0.clone().len());
     println!("images: {}\n", media_lists.1.clone().len());
 
     insert_sids
-
 }
 
 fn run_music_threads(alist: Vec<String>) -> bool {
@@ -84,9 +77,6 @@ fn run_music_threads(alist: Vec<String>) -> bool {
     true
 }
 
-
-
-
 fn run_music_img_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());
     let (tx, rx) = channel();
@@ -114,12 +104,6 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
     true
 }
 
-
-
-
-
-
-
 // pub fn save_coverart(x: String, coverart_path: String) -> Result<(), E> {
 //         let tag = Tag::read_from_path(x.clone()).expect(&x);
 //         let mut first_picture = tag.pictures().next();
@@ -138,7 +122,6 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
 //             Err(anyhow!("No image found in music file"))
 //         }
 //     }
-
 
 // pub fn media_total_size(addr: String) -> String {
 //     let total_size = WalkDir::new(addr)
