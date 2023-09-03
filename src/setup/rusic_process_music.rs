@@ -70,8 +70,8 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         idx: index.to_string(),
         page: page.to_string(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
-        artstartswith: art_starts_with,
-        albstartswith: alb_starts_with,
+        artstartswith: art_starts_with.to_string(),
+        albstartswith: alb_starts_with.to_string(),
     };
     println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
@@ -140,8 +140,6 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.idx,
             &music_info.page,
             &music_info.fsizeresults,
-            &music_info.artstartswith,
-            &music_info.albstartswith
         ),
     )?;
 
