@@ -35,8 +35,8 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let album = tag.1;
     let song = tag.2;
 
-    let art_starts_with = rusic_utils::artist_starts_with(artist.clone());
-    let alb_starts_with = rusic_utils::album_starts_with(album.clone());
+    // let _art_starts_with = rusic_utils::artist_starts_with(artist.clone());
+    // let alb_starts_with = rusic_utils::album_starts_with(album.clone());
 
 
     let art_alb = RusicUtils::split_artist_album(&fu);
