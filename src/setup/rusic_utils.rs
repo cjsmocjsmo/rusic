@@ -2,12 +2,12 @@ use filesize::PathExt;
 use id3::{Tag, TagLike};
 use image::{self};
 use md5::{Digest, Md5};
-use std::path::Path;
+use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs::File;
 use std::io::Write;
-use rusqlite::{Connection, Result};
-use serde::{Deserialize, Serialize};
+use std::path::Path;
 // use std::time::Duration;
 
 #[derive(Debug)]
@@ -158,18 +158,16 @@ pub struct FirstLetterInfo {
     pub albumid: String,
     pub artist_first_letter: String,
     pub album_first_letter: String,
-
-
 }
 
 pub fn gen_first_letter_db(media_list: Vec<String>) -> Result<()> {
-    let mut first_letter_db: Vec<FirstLetterInfo> = Vec::new();
+    // let mut first_letter_db: Vec<FirstLetterInfo> = Vec::new();
 
     for media in media_list {
-        let rus = RusicUtils { apath: media.clone() };
+        let rus = RusicUtils {
+            apath: media.clone(),
+        };
         let tags = rus.get_tag_info();
-
-
 
         let artist_first_letter = rus.artist_starts_with();
         let album_first_letter = rus.album_starts_with();
@@ -187,14 +185,15 @@ pub fn gen_first_letter_db(media_list: Vec<String>) -> Result<()> {
             album_first_letter: album_first_letter.clone(),
         };
 
-        first_letter_db.push(first_letter_info.clone());
+        println!("first_letter_info: {:?}", first_letter_info);
 
+        // first_letter_db.push(first_letter_info.clone());
 
         let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
-    let conn = Connection::open(db_path).unwrap();
+        let conn = Connection::open(db_path).unwrap();
 
-    conn.execute(
-        "INSERT INTO startswith (
+        conn.execute(
+            "INSERT INTO startswith (
                 rusicid,
                 artist,
                 album,
@@ -204,17 +203,16 @@ pub fn gen_first_letter_db(media_list: Vec<String>) -> Result<()> {
                 album_first_letter
             )
             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-        (
-            &first_letter_info.rusicid,
-            &first_letter_info.artist,
-            &first_letter_info.album,
-            &first_letter_info.artistid,
-            &first_letter_info.albumid,
-            &first_letter_info.artist_first_letter,
-            &first_letter_info.album_first_letter,
-        ),
-    )?;
-
+            (
+                &first_letter_info.rusicid,
+                &first_letter_info.artist,
+                &first_letter_info.album,
+                &first_letter_info.artistid,
+                &first_letter_info.albumid,
+                &first_letter_info.artist_first_letter,
+                &first_letter_info.album_first_letter,
+            ),
+        )?;
     }
 
     Ok(())
