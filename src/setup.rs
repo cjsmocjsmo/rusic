@@ -14,6 +14,16 @@ pub mod rusic_walk_dirs;
 
 pub fn setup() -> String {
     let _create_tables = rusic_tables::create_tables();
+
+    let usb_drives = rusic_walk_dirs::scan_for_usb_devices();
+
+
+
+
+
+
+
+
     let media_lists = rusic_walk_dirs::scan_all_sources();
 
     let _rmt = run_music_threads(media_lists.0.clone());
@@ -42,6 +52,8 @@ pub fn setup() -> String {
     };
     let _gen_db_check_file = rusic_utils::gen_db_check_file();
 
+    println!("Found {:?} USB devices", usb_drives.len());
+    println!("Found {:?} usb devices", usb_drives);
     println!("\n\nProcessed {} Mp3 files", media_lists.0.clone().len());
     println!("Processed {} Jpg files", media_lists.1.clone().len());
     println!("Mp3 size on disk {}", human_total_size);

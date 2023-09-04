@@ -1,4 +1,6 @@
 use crate::setup::rusic_walk_dirs;
+use std::fs;
+use std::path::Path;
 use std::env;
 use walkdir::WalkDir;
 
@@ -130,3 +132,20 @@ pub fn scan_all_sources() -> (Vec<String>, Vec<String>) {
     (master_music_list, master_img_list)
 }
 
+pub fn scan_for_usb_devices() -> Vec<String> {
+    let mut usb_devices = Vec::new();
+    let path = env::var("RUSIC_USBR").expect("$RUSIC_USB is not set");
+    let usb_dir_path = Path::new(&path);
+    for entry in fs::read_dir(usb_dir_path).unwrap() {
+        let entry = entry.unwrap();
+        if entry.file_type().unwrap().is_dir() {
+            let dir_name = entry.path();
+            let dir_name = dir_name.to_str().unwrap();
+            let dname = dir_name.to_string();
+            usb_devices.push(dname);
+        }
+    }
+    println!("Found USB device: {:?}", usb_devices);
+
+    usb_devices
+}
