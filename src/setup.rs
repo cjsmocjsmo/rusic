@@ -42,7 +42,7 @@ pub fn setup() -> String {
     };
     let _gen_db_check_file = rusic_utils::gen_db_check_file();
 
-    println!("Processed {} Mp3 files", media_lists.0.clone().len());
+    println!("\n\nProcessed {} Mp3 files", media_lists.0.clone().len());
     println!("Processed {} Jpg files", media_lists.1.clone().len());
     println!("Mp3 size on disk {}", human_total_size);
     // insert_sids
