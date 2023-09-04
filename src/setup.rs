@@ -17,6 +17,7 @@ pub fn setup() -> String {
     let media_lists = rusic_walk_dirs::scan_all_sources();
 
     let _rmt = run_music_threads(media_lists.0.clone());
+    let _genfirstletter = rusic_utils::gen_first_letter_db(media_lists.0.clone()).unwrap();
     // for media in media_lists.0.clone() {
     //     let rus = rusic_utils::RusicUtils { apath: media.clone() };
     //     let artist_first_letter = rus.artist_starts_with();
