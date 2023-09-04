@@ -1,7 +1,7 @@
 use crate::setup::rusic_walk_dirs;
+use std::env;
 use std::fs;
 use std::path::Path;
-use std::env;
 use walkdir::WalkDir;
 
 pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
@@ -50,6 +50,22 @@ pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
     }
 
     (musicimgvec.clone(), musicvec.clone())
+}
+
+pub fn walk_usb_drives(usb_list: Vec<String>) -> (Vec<String>, Vec<String>) {
+    let mut add_music_list = Vec::new();
+    let mut add_media_img_list = Vec::new();
+    for usb in usb_list {
+        let media = rusic_walk_dirs::walk_additional_dir(usb);
+        for m in media.0 {
+            add_media_img_list.push(m);
+        };
+        for m in media.1 {
+            add_music_list.push(m);
+        };
+    }
+
+    (add_media_img_list, add_music_list)
 }
 
 fn scan_usb1() -> (Vec<String>, Vec<String>) {
