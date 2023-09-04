@@ -55,15 +55,15 @@ pub fn walk_additional_dir(apath: String) -> (Vec<String>, Vec<String>) {
 pub fn walk_usb_drives(usb_list: Vec<String>) -> (Vec<String>, Vec<String>) {
     let mut add_music_list = Vec::new();
     let mut add_media_img_list = Vec::new();
-    for usb in usb_list {
-        if usb.contains("Music") {
-            let media = rusic_walk_dirs::walk_additional_dir(usb);
-            for m in media.0 {
-                add_media_img_list.push(m);
-            }
-            for z in media.1 {
-                add_music_list.push(z);
-            }
+    for usb in usb_list.0 {
+        let media = rusic_walk_dirs::walk_additional_dir(usb);
+        for m in media.0 {
+            add_media_img_list.push(m);
+        }
+    }
+    for usb in usb_list.1 {
+        for z in media.1 {
+            add_music_list.push(z);
         }
     }
 
