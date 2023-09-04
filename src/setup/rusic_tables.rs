@@ -108,7 +108,7 @@ pub fn create_startswith_table() -> Result<()> {
         id INTEGER PRIMARY KEY,
         rusicid TEXT NOT NULL,
         artist TEXT NOT NULL,
-        arttistid TEXT NOT NULL,
+        artistid TEXT NOT NULL,
         album TEXT NOT NULL,
         albumid TEXT NOT NULL,
         artist_first_letter TEXT NOT NULL,
