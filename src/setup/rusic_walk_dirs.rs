@@ -134,7 +134,7 @@ pub fn scan_all_sources() -> (Vec<String>, Vec<String>) {
 
 pub fn scan_for_usb_devices() -> Vec<String> {
     let mut usb_devices = Vec::new();
-    let path = env::var("RUSIC_USBR").expect("$RUSIC_USB is not set");
+    let path = env::var("RUSIC_USB").expect("$RUSIC_USB is not set");
     let usb_dir_path = Path::new(&path);
     for entry in fs::read_dir(usb_dir_path).unwrap() {
         let entry = entry.unwrap();
