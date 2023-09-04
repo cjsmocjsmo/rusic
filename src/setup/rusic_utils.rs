@@ -229,18 +229,17 @@ pub fn convert_bytes(mut bytes: usize) -> String {
 }
 
 pub fn mp3_total_size(media_lists: Vec<String>) -> String {
-
-let mut mp3_total_size = Vec::new();
+    let mut mp3_total_size = Vec::new();
     for media in media_lists {
-        let rus = RusicUtils { apath: media.clone() };
+        let rus = RusicUtils {
+            apath: media.clone(),
+        };
         let fsize = rus.get_file_size();
         let fusize: usize = fsize.parse().unwrap();
         mp3_total_size.push(fusize);
     }
-
     let sum = mp3_total_size.iter().sum::<usize>();
     let humansum = convert_bytes(sum);
-    println!("Total size of mp3s: {}", humansum);
 
     humansum.to_string()
 }

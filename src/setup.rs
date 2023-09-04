@@ -19,39 +19,27 @@ pub fn setup() -> String {
     let _rmt = run_music_threads(media_lists.0.clone());
     let _genfirstletter = rusic_utils::gen_first_letter_db(media_lists.0.clone()).unwrap();
     let human_total_size = rusic_utils::mp3_total_size(media_lists.0.clone());
-    println!("Total size of mp3s: {}", human_total_size);
 
-    // let mut mp3_total_size = Vec::new();
-    // for media in media_lists.0.clone() {
-    //     let rus = rusic_utils::RusicUtils { apath: media.clone() };
-    //     let fsize = rus.get_file_size();
-    //     let fusize: usize = fsize.parse().unwrap();
-    //     mp3_total_size.push(fusize);
-    // }
+    let _rmit = run_music_img_threads(media_lists.1.clone());
 
-    // let sum = mp3_total_size.iter().sum::<usize>();
-    // let humansum = rusic_utils::convert_bytes(sum);
-    // println!("Total size of mp3s: {}", humansum);
+    let arids = rusic_artist::unique_artistids();
+    let aalbs = rusic_artist::albumids_for_artistid(arids.clone());
+    let _insert_aalbs = rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
 
-    // let _rmit = run_music_img_threads(media_lists.1.clone());
-
-    // let arids = rusic_artist::unique_artistids();
-    // let aalbs = rusic_artist::albumids_for_artistid(arids.clone());
-    // let _insert_aalbs = rusic_artist::write_albums_for_artist_to_db(aalbs.clone()).unwrap();
-
-    // let alids = rusic_album::unique_albumids();
-    // let sids = rusic_album::songids_for_albumid(alids.clone());
-    // let insert_sids_result = rusic_album::write_songs_for_album_to_db(sids.clone());
-    // let insert_sids = match insert_sids_result {
-    //     Ok(_) => String::from("Exit 0"),
-    //     Err(_) => String::from("Exit 1"),
-    // };
+    let alids = rusic_album::unique_albumids();
+    let sids = rusic_album::songids_for_albumid(alids.clone());
+    let insert_sids_result = rusic_album::write_songs_for_album_to_db(sids.clone());
+    let insert_sids = match insert_sids_result {
+        Ok(_) => String::from("Exit 0"),
+        Err(_) => String::from("Exit 1"),
+    };
     let _gen_db_check_file = rusic_utils::gen_db_check_file();
-    println!("music: {}\n", media_lists.0.clone().len());
-    println!("images: {}\n", media_lists.1.clone().len());
 
+    println!("Total Number Of Mp3: {}", media_lists.0.clone().len());
+    println!("Total Number of Images: {}", media_lists.1.clone().len());
+    println!("Total size of mp3s: {}", human_total_size);
     // insert_sids
-    String::from("Exit 0")
+    insert_sids
 }
 
 fn run_music_threads(alist: Vec<String>) -> bool {
