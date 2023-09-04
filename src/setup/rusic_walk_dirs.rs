@@ -65,7 +65,7 @@ pub fn walk_usb_drives(usb_list: Vec<String>) -> (Vec<String>, Vec<String>) {
         };
     }
 
-    (add_media_img_list, add_music_list)
+    (add_music_list, add_media_img_list)
 }
 
 // fn scan_usb1() -> (Vec<String>, Vec<String>) {
