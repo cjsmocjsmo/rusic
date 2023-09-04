@@ -185,7 +185,7 @@ pub fn gen_first_letter_db(media_list: Vec<String>) -> Result<()> {
             album_first_letter: album_first_letter.clone(),
         };
 
-        println!("first_letter_info: {:?}", first_letter_info);
+        // println!("first_letter_info: {:?}", first_letter_info);
 
         // first_letter_db.push(first_letter_info.clone());
 
