@@ -6,6 +6,8 @@ use std::path::Path;
 use std::env;
 use std::fs::File;
 use std::io::Write;
+use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
 // use std::time::Duration;
 
 #[derive(Debug)]
@@ -147,3 +149,83 @@ pub fn is_db_check_file_present() -> bool {
     path.exists()
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FirstLetterInfo {
+    pub rusicid: String,
+    pub artist: String,
+    pub album: String,
+    pub artistid: String,
+    pub albumid: String,
+    pub artist_first_letter: String,
+    pub album_first_letter: String,
+
+
+}
+
+pub fn gen_first_letter_db(media_list: Vec<String>) -> Result<()> {
+    let mut first_letter_db: Vec<FirstLetterInfo> = Vec::new();
+
+    for media in media_list {
+        let rus = RusicUtils { apath: media.clone() };
+        let tags = rus.get_tag_info();
+
+
+
+        let artist_first_letter = rus.artist_starts_with();
+        let album_first_letter = rus.album_starts_with();
+        // let rusicid = get_md5(media.clone());
+        // let artistid = get_md5(tags.0.clone());
+        // let albumid = get_md5(tags.1.clone());
+
+        let first_letter_info = FirstLetterInfo {
+            rusicid: get_md5(media.clone()),
+            artist: tags.0.clone(),
+            album: tags.1.clone(),
+            artistid: get_md5(tags.0.clone()),
+            albumid: get_md5(tags.1.clone()),
+            artist_first_letter: artist_first_letter.clone(),
+            album_first_letter: album_first_letter.clone(),
+        };
+
+        first_letter_db.push(first_letter_info.clone());
+
+
+        let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
+
+    conn.execute(
+        "INSERT INTO startswith (
+                rusicid,
+                artist,
+                album,
+                artistid,
+                albumid,
+                artist_first_letter,
+                album_first_letter
+            )
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+        (
+            &first_letter_info.rusicid,
+            &first_letter_info.artist,
+            &first_letter_info.album,
+            &first_letter_info.artistid,
+            &first_letter_info.albumid,
+            &first_letter_info.artist_first_letter,
+            &first_letter_info.album_first_letter,
+        ),
+    )?;
+
+    }
+
+    Ok(())
+}
+// for media in media_lists.0.clone() {
+//     let rus = rusic_utils::RusicUtils { apath: media.clone() };
+//     let artist_first_letter = rus.artist_starts_with();
+//     let album_first_letter = rus.album_starts_with();
+//     let rusicid = rusic_utils::get_md5(media.clone());
+
+//     println!("artist_first_letter: {:?}\n album_first_letter: {:?}", artist_first_letter, album_first_letter);
+// }
+
+// }

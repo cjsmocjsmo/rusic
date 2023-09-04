@@ -7,7 +7,6 @@ pub fn create_tables() {
     let _cmit = create_music_images_table().expect("Unable to create music images table");
     let _cmt = create_music_table().expect("Unable to create music table");
     let _caswt = create_startswith_table().expect("Unable to create artiststartswith table");
-
 }
 
 pub fn create_songs_for_album_table() -> Result<()> {
@@ -107,18 +106,19 @@ pub fn create_startswith_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS startswith (
         id INTEGER PRIMARY KEY,
-        path TEXT NOT NULL,
+        rusicid TEXT NOT NULL,
         artist TEXT NOT NULL,
-        artstartswith TEXT NOT NULL,
+        arttistid TEXT NOT NULL,
         album TEXT NOT NULL,
-        albstartswith TEXT NOT NULL
+        albumid TEXT NOT NULL,
+        artist_first_letter TEXT NOT NULL,
+        album_first_letter TEXT NOT NULL
     )",
         (),
     )?;
 
     Ok(())
 }
-
 
 
 // conn.execute(
