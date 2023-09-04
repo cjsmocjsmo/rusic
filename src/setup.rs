@@ -19,7 +19,8 @@ pub fn setup() -> String {
 
     let media_lists = rusic_walk_dirs::walk_usb_drives(usb_drives.clone());
 
-
+    let mp3_count = media_lists.0.clone().len();
+    let img_count = media_lists.1.clone().len();
 
 
 
@@ -54,7 +55,8 @@ pub fn setup() -> String {
         Err(_) => String::from("Exit 1"),
     };
     let _gen_db_check_file = rusic_utils::gen_db_check_file();
-
+    println!("this is image count {:?}", img_count);
+    println!("this is mp3 count {:?}", mp3_count);
     println!("\n\nFound {:?} USB devices", usb_drives.len());
     println!("Found {:?} usb devices", usb_drives);
     println!("Processed {} Mp3 files", media_lists.0.clone().len());
