@@ -18,14 +18,19 @@ pub fn setup() -> String {
 
     let _rmt = run_music_threads(media_lists.0.clone());
     let _genfirstletter = rusic_utils::gen_first_letter_db(media_lists.0.clone()).unwrap();
-    // for media in media_lists.0.clone() {
-    //     let rus = rusic_utils::RusicUtils { apath: media.clone() };
-    //     let artist_first_letter = rus.artist_starts_with();
-    //     let album_first_letter = rus.album_starts_with();
-    //     let rusicid = rusic_utils::get_md5(media.clone());
 
-    //     println!("artist_first_letter: {:?}\n album_first_letter: {:?}", artist_first_letter, album_first_letter);
-    // }
+    let mut mp3_total_size = Vec::new();
+    for media in media_lists.0.clone() {
+        let rus = rusic_utils::RusicUtils { apath: media.clone() };
+        let fsize = rus.get_file_size();
+        let fusize: usize = fsize.parse().unwrap();
+        mp3_total_size.push(fusize);
+    }
+
+    let sum = mp3_total_size.iter().sum::<usize>();
+    let humansum = rusic_utils::convert_bytes(sum);
+    println!("Total size of mp3s: {}", humansum);
+
     // let _rmit = run_music_img_threads(media_lists.1.clone());
 
     // let arids = rusic_artist::unique_artistids();

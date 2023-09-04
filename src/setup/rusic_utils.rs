@@ -217,6 +217,16 @@ pub fn gen_first_letter_db(media_list: Vec<String>) -> Result<()> {
 
     Ok(())
 }
+
+pub fn convert_bytes(mut bytes: usize) -> String {
+    let units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    let mut i = 0;
+    while bytes >= 1024 {
+        bytes /= 1024;
+        i += 1;
+    }
+    return format!("{:.2} {}", bytes, units[i]);
+}
 // for media in media_lists.0.clone() {
 //     let rus = rusic_utils::RusicUtils { apath: media.clone() };
 //     let artist_first_letter = rus.artist_starts_with();
