@@ -26,6 +26,16 @@ pub struct MusicInfo {
     fsizeresults: String,
 }
 
+fn convert_bytes(mut bytes: usize) -> String {
+    let units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    let mut i = 0;
+    while bytes >= 1024 {
+      bytes /= 1024;
+      i += 1;
+    }
+    return format!("{:.2} {}", bytes, units[i]);
+  }
+
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     println!("processing:\n\t {:#?}", x);
     let fu = RusicUtils { apath: x.clone() };
@@ -46,6 +56,14 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     let dirz = RusicUtils::split_base_dir_filename(&fu);
     let base_dir = dirz.0;
     let file_name = dirz.1;
+
+    let fsize = RusicUtils::get_file_size(&fu);
+    let number: usize = fsize.parse().unwrap();
+    // let fsizebytes = number.to_le_bytes();
+    let fsizehuman = convert_bytes(number);
+    println!("fsizehuman: {:#?}", fsizehuman);
+
+
 
     let music_info = MusicInfo {
         rusicid: rusic_utils::get_md5(x.clone()),
