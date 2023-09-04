@@ -13,7 +13,7 @@ pub fn unique_albumids() -> Vec<String> {
         albumids.push(row.unwrap());
     }
 
-    log::info!("albumids: {:?}", albumids.len());
+    // log::info!("albumids: {:?}", albumids.len());
 
     albumids
 }
