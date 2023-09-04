@@ -89,7 +89,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         // artstartswith: art_starts_with.to_string(),
         // albstartswith: alb_starts_with.to_string(),
     };
-    // println!("music_info: {:#?}", music_info);
+    println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
