@@ -227,13 +227,20 @@ pub fn convert_bytes(mut bytes: usize) -> String {
     }
     return format!("{:.2} {}", bytes, units[i]);
 }
-// for media in media_lists.0.clone() {
-//     let rus = rusic_utils::RusicUtils { apath: media.clone() };
-//     let artist_first_letter = rus.artist_starts_with();
-//     let album_first_letter = rus.album_starts_with();
-//     let rusicid = rusic_utils::get_md5(media.clone());
 
-//     println!("artist_first_letter: {:?}\n album_first_letter: {:?}", artist_first_letter, album_first_letter);
-// }
+pub fn mp3_total_size(media_lists: Vec<String>) -> String {
 
-// }
+let mut mp3_total_size = Vec::new();
+    for media in media_lists {
+        let rus = RusicUtils { apath: media.clone() };
+        let fsize = rus.get_file_size();
+        let fusize: usize = fsize.parse().unwrap();
+        mp3_total_size.push(fusize);
+    }
+
+    let sum = mp3_total_size.iter().sum::<usize>();
+    let humansum = convert_bytes(sum);
+    println!("Total size of mp3s: {}", humansum);
+
+    humansum.to_string()
+}
