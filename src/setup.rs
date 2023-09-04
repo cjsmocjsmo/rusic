@@ -59,9 +59,9 @@ fn run_first_letter_threads(alist: Vec<String>) -> bool {
 
             let tx = tx.clone();
             pool.execute(move || {
-                let fl_info =
+                let _fl_info =
                     rusic_utils::gen_first_letter_db(i.clone());
-                tx.send(fl_info).expect("Could not send data");
+                tx.send(i).expect("Could not send data");
             });
 
     }
@@ -70,7 +70,7 @@ fn run_first_letter_threads(alist: Vec<String>) -> bool {
     for t in rx.iter() {
         // Insert this into db
         let ifo = t;
-        println!("Processed Music img {:?} files", ifo);
+        println!("Processed first letter {:?} files", ifo);
     }
 
     true
