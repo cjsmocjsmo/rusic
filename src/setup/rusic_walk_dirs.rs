@@ -60,8 +60,8 @@ pub fn walk_usb_drives(usb_list: Vec<String>) -> (Vec<String>, Vec<String>) {
         for m in media.0 {
             add_media_img_list.push(m);
         };
-        for m in media.1 {
-            add_music_list.push(m);
+        for z in media.1 {
+            add_music_list.push(z);
         };
     }
 
