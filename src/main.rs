@@ -25,8 +25,8 @@ fn main() -> std::io::Result<()> {
     log::info!("Setup completed in: {} seconds", duration.as_secs());
     println!("Setup completed in: {} seconds", duration.as_secs());
 
-    println!("Starting server...");
-    let _server = server::fire_server_main();
+    // println!("Starting server...");
+    // let _server = server::fire_server_main();
 
     Ok(())
 }

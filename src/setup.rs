@@ -17,6 +17,12 @@ pub fn setup() -> String {
     let media_lists = rusic_walk_dirs::scan_all_sources();
 
     let _rmt = run_music_threads(media_lists.0.clone());
+    for media in media_lists.0.clone() {
+        let fu = rusic_utils::RusicUtils { apath: media.clone() };
+        let artist_first_letter = fu.artist_starts_with();
+        let album_first_letter = fu.album_starts_with();
+        println!("artist_first_letter: {:?}\n album_first_letter: {:?}", artist_first_letter, album_first_letter);
+    }
     // let _rmit = run_music_img_threads(media_lists.1.clone());
 
     // let arids = rusic_artist::unique_artistids();

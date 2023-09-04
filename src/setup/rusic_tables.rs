@@ -6,6 +6,8 @@ pub fn create_tables() {
         create_albums_for_artist_table().expect("Unable to create albums for artist table");
     let _cmit = create_music_images_table().expect("Unable to create music images table");
     let _cmt = create_music_table().expect("Unable to create music table");
+    let _caswt = create_startswith_table().expect("Unable to create artiststartswith table");
+
 }
 
 pub fn create_songs_for_album_table() -> Result<()> {
@@ -99,15 +101,25 @@ pub fn create_music_table() -> Result<()> {
     Ok(())
 }
 
-// conn.execute(
-//     "CREATE TABLE IF NOT EXISTS duration (
-//         id INTEGER PRIMARY KEY,
-//         rusicid TEXT NOT NULL,
-//         duration TEXT NOT NULL,
-//         path TEXT NOT NULL
-//     )",
-//     (),
-// )?;
+pub fn create_startswith_table() -> Result<()> {
+    // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db")?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS startswith (
+        id INTEGER PRIMARY KEY,
+        path TEXT NOT NULL,
+        artist TEXT NOT NULL,
+        artstartswith TEXT NOT NULL,
+        album TEXT NOT NULL,
+        albstartswith TEXT NOT NULL
+    )",
+        (),
+    )?;
+
+    Ok(())
+}
+
+
 
 // conn.execute(
 //     "CREATE TABLE IF NOT EXISTS fileinfo (

@@ -73,6 +73,21 @@ impl RusicUtils {
 
         dims
     }
+    pub fn artist_starts_with(&self) -> String {
+        let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
+        let artist = tag.artist().expect(&self.apath);
+        let first_letter = artist.chars().next().unwrap();
+
+        first_letter.to_string()
+    }
+
+    pub fn album_starts_with(&self) -> String {
+        let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
+        let album = tag.album().expect(&self.apath);
+        let first_letter = album.chars().next().unwrap();
+
+        first_letter.to_string()
+    }
 }
 
 pub fn get_md5(z: String) -> String {
@@ -132,14 +147,3 @@ pub fn is_db_check_file_present() -> bool {
     path.exists()
 }
 
-pub fn artist_starts_with(x: String) -> String {
-    let first_letter = x.chars().next().unwrap();
-
-    first_letter.to_string()
-}
-
-pub fn album_starts_with(x: String) -> String {
-    let first_letter = x.chars().next().unwrap();
-
-    first_letter.to_string()
-}
