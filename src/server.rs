@@ -12,13 +12,10 @@ pub async fn fire_server_main() -> std::io::Result<()> {
         App::new()
             .service(server_functions::hello)
             .service(server_functions::echo)
+            .service(server_functions::artistalpha)
+            .service(server_functions::albumalpha)
 
-            // .service(server_functions::action)
-            // .service(server_functions::arnold)
-            // .service(server_functions::brucewillis)
-            // .service(server_functions::cartoons)
-            // .service(server_functions::comedy)
-            // .service(server_functions::xmen)
+
 
             // .service(crate::server::server_functions::wheeloftime)
             .service(fs::Files::new("/thumbnails", img_path.clone()).show_files_listing())

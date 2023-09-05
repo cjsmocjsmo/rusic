@@ -1,12 +1,12 @@
 use crate::setup::rusic_utils;
+use crate::setup::rusic_utils::RusicUtils;
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 use std::clone::Clone;
 use std::env;
-use webp::*;
-// use image::*;
-use std::path::Path;
 use std::fs::remove_file;
+use std::path::Path;
+use webp::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MusicImageInfo {
@@ -24,79 +24,6 @@ pub struct MusicImageInfo {
     fullpath: String,
     thumbpath: String,
     idx: String,
-}
-
-use crate::setup::rusic_utils::RusicUtils;
-
-fn convert_webp_to_jpg(x: String) -> String {
-    let img = image::open(x.clone()).unwrap();
-    let encoder = Encoder::from_image(&img).unwrap();
-    let output_buffer = encoder.encode(90f32);
-
-    let path = Path::new(&x);
-
-    let new_filename = path.with_extension("");
-    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
-
-    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
-
-    let rm_path = Path::new(&x);
-    remove_file(rm_path).expect("unable to remove webp file");
-
-
-    new_filename.clone()
-}
-
-fn convert_jpeg_to_jpg(x: String) -> String {
-    let img = image::open(x.clone()).unwrap();
-    let encoder = Encoder::from_image(&img).unwrap();
-    let output_buffer = encoder.encode(90f32);
-
-    let path = Path::new(&x);
-
-    let new_filename = path.with_extension("");
-    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
-
-    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
-
-    let rm_path = Path::new(&x);
-    remove_file(rm_path).expect("unable to remove webp file");
-
-    new_filename.clone()
-}
-
-fn convert_png_to_jpg(x: String) -> String {
-    let img = image::open(x.clone()).unwrap();
-    let encoder = Encoder::from_image(&img).unwrap();
-    let output_buffer = encoder.encode(90f32);
-
-    let path = Path::new(&x);
-
-    let new_filename = path.with_extension("");
-    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
-
-    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
-    let rm_path = Path::new(&x);
-    remove_file(rm_path).expect("unable to remove webp file");
-
-    new_filename.clone()
-}
-
-fn convert_gif_to_jpg(x: String) -> String {
-    let img = image::open(x.clone()).unwrap();
-    let encoder = Encoder::from_image(&img).unwrap();
-    let output_buffer = encoder.encode(90f32);
-
-    let path = Path::new(&x);
-
-    let new_filename = path.with_extension("");
-    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
-
-    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
-    // let rm_path = Path::new(&x);
-    // remove_file(rm_path).expect("unable to remove webp file");
-
-    new_filename.clone()
 }
 
 //NEED TO PROCESS FOR CONVERT PNG GIF WEBP TO JPG
@@ -255,4 +182,74 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
     )?;
 
     Ok(())
+}
+
+fn convert_webp_to_jpg(x: String) -> String {
+    let img = image::open(x.clone()).unwrap();
+    let encoder = Encoder::from_image(&img).unwrap();
+    let output_buffer = encoder.encode(90f32);
+
+    let path = Path::new(&x);
+
+    let new_filename = path.with_extension("");
+    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
+
+    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
+
+    let rm_path = Path::new(&x);
+    remove_file(rm_path).expect("unable to remove webp file");
+
+    new_filename.clone()
+}
+
+fn convert_jpeg_to_jpg(x: String) -> String {
+    let img = image::open(x.clone()).unwrap();
+    let encoder = Encoder::from_image(&img).unwrap();
+    let output_buffer = encoder.encode(90f32);
+
+    let path = Path::new(&x);
+
+    let new_filename = path.with_extension("");
+    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
+
+    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
+
+    let rm_path = Path::new(&x);
+    remove_file(rm_path).expect("unable to remove webp file");
+
+    new_filename.clone()
+}
+
+fn convert_png_to_jpg(x: String) -> String {
+    let img = image::open(x.clone()).unwrap();
+    let encoder = Encoder::from_image(&img).unwrap();
+    let output_buffer = encoder.encode(90f32);
+
+    let path = Path::new(&x);
+
+    let new_filename = path.with_extension("");
+    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
+
+    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
+    let rm_path = Path::new(&x);
+    remove_file(rm_path).expect("unable to remove webp file");
+
+    new_filename.clone()
+}
+
+fn convert_gif_to_jpg(x: String) -> String {
+    let img = image::open(x.clone()).unwrap();
+    let encoder = Encoder::from_image(&img).unwrap();
+    let output_buffer = encoder.encode(90f32);
+
+    let path = Path::new(&x);
+
+    let new_filename = path.with_extension("");
+    let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
+
+    std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
+    // let rm_path = Path::new(&x);
+    // remove_file(rm_path).expect("unable to remove webp file");
+
+    new_filename.clone()
 }
