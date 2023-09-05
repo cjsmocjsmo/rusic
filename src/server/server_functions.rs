@@ -21,6 +21,7 @@ pub async fn echo(req_body: String) -> impl Responder {
 #[get("/artist/{alpha}")]
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
+    println!("alpha: {}", alpha.clone());
     let op = "artist";
     let artist_info_list = fetch_media_by_alpha(alpha, op);
     let json = serde_json::to_string(&artist_info_list).unwrap();
@@ -39,6 +40,7 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
 }
 
 pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music::MusicInfo> {
+    println!("alpha: {}, {}", alpha.clone(), op.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
