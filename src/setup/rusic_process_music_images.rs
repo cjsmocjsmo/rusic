@@ -40,8 +40,8 @@ fn convert_webp_to_jpg(x: String) -> String {
 
     std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
 
-    // let rm_path = Path::new(&x);
-    // remove_file(rm_path).expect("unable to remove webp file");
+    let rm_path = Path::new(&x);
+    remove_file(rm_path).expect("unable to remove webp file");
 
 
     new_filename.clone()
@@ -59,8 +59,8 @@ fn convert_jpeg_to_jpg(x: String) -> String {
 
     std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
 
-    // let rm_path = Path::new(&x);
-    // remove_file(rm_path).expect("unable to remove webp file");
+    let rm_path = Path::new(&x);
+    remove_file(rm_path).expect("unable to remove webp file");
 
     new_filename.clone()
 }
@@ -76,8 +76,8 @@ fn convert_png_to_jpg(x: String) -> String {
     let new_filename = new_filename.into_os_string().to_str().unwrap().to_owned() + ".jpg";
 
     std::fs::write(new_filename.clone(), &*output_buffer).unwrap();
-    // let rm_path = Path::new(&x);
-    // remove_file(rm_path).expect("unable to remove webp file");
+    let rm_path = Path::new(&x);
+    remove_file(rm_path).expect("unable to remove webp file");
 
     new_filename.clone()
 }
