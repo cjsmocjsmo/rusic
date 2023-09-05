@@ -1,7 +1,7 @@
 use actix_web::{get, post, web, HttpResponse, Responder};
 
 // use actix_web::web::Json;
-use rusqlite::{Connection, Result};
+use rusqlite::Connection;
 use std::env;
 // use serde::Serialize;
 // use anyhow::Error;
