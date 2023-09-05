@@ -27,12 +27,15 @@ pub struct AlbumSongs {
 
 pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let pagination_str = env::var("RUSIC_PAGINATION").expect("RUSIC_PAGINATION not set");
+    let pagination: i32 = pagination_str.parse().unwrap();
     let mut idx = 1;
     let mut pge = 1;
     let mut albums_songs_vec = Vec::new();
+
     for x in xlist {
         idx += 1;
-        if idx == 26 {
+        if idx == pagination {
             pge += 1;
             idx = 1;
         }

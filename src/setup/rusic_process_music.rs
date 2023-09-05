@@ -7,87 +7,57 @@ use crate::setup::rusic_utils;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MusicInfo {
-    rusicid: String,
-    imgurl: String,
-    artist: String,
-    artistid: String,
-    album: String,
-    albumid: String,
-    song: String,
-    basedir: String,
-    filenameresults: String,
-    musicartistresults: String,
-    musicalbumresults: String,
-    durationresults: String,
-    fullpath: String,
-    extension: String,
-    idx: String,
-    page: String,
-    fsizeresults: String,
+    pub rusicid: String,
+    pub imgurl: String,
+    pub artist: String,
+    pub artistid: String,
+    pub album: String,
+    pub albumid: String,
+    pub song: String,
+    pub basedir: String,
+    pub filenameresults: String,
+    pub musicartistresults: String,
+    pub musicalbumresults: String,
+    pub durationresults: String,
+    pub fullpath: String,
+    pub extension: String,
+    pub idx: String,
+    pub page: String,
+    pub fsizeresults: String,
 }
-
-// fn convert_bytes(mut bytes: usize) -> String {
-//     let units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-//     let mut i = 0;
-//     while bytes >= 1024 {
-//       bytes /= 1024;
-//       i += 1;
-//     }
-//     return format!("{:.2} {}", bytes, units[i]);
-//   }
 
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
     println!("processing:\n\t {:#?}", x);
     let fu = RusicUtils { apath: x.clone() };
 
     let tag = RusicUtils::get_tag_info(&fu);
-    let artist = tag.0;
-    let album = tag.1;
-    let song = tag.2;
-
-    // let _art_starts_with = rusic_utils::artist_starts_with(artist.clone());
-    // let alb_starts_with = rusic_utils::album_starts_with(album.clone());
-
 
     let art_alb = RusicUtils::split_artist_album(&fu);
-    let music_artist_results = art_alb.0;
-    let music_album_results = art_alb.1;
 
     let dirz = RusicUtils::split_base_dir_filename(&fu);
-    let base_dir = dirz.0;
-    let file_name = dirz.1;
-
-    // let fsize = RusicUtils::get_file_size(&fu);
-    // let number: usize = fsize.parse().unwrap();
-    // // let fsizebytes = number.to_le_bytes();
-    // let fsizehuman = convert_bytes(number);
-    // println!("fsizehuman: {:#?}", fsizehuman);
-
 
 
     let music_info = MusicInfo {
         rusicid: rusic_utils::get_md5(x.clone()),
         imgurl: create_thumb_path(
-            music_artist_results.clone(),
-            music_album_results.clone(),
+            art_alb.0.clone(),
+            art_alb.1.clone(),
         ),
-        artist: artist.clone(),
-        artistid: rusic_utils::get_md5(artist.clone(),),
-        album: album.clone(),
-        albumid: rusic_utils::get_md5(album.clone()),
-        song: song,
-        basedir: base_dir.clone(),
-        filenameresults: file_name,
-        musicartistresults: music_artist_results.clone(),
-        musicalbumresults: music_album_results.clone(),
+        artist: tag.0.clone(),
+        artistid: rusic_utils::get_md5(tag.0.clone()),
+        album: tag.1.clone(),
+        albumid: rusic_utils::get_md5(tag.1.clone()),
+        song: tag.2,
+        basedir: dirz.0,
+        filenameresults: dirz.1,
+        musicartistresults: art_alb.0.clone(),
+        musicalbumresults: art_alb.1.clone(),
         durationresults: "0".to_string(),
-        fullpath: x.to_string(),
+        fullpath: x.clone(),
         extension: RusicUtils::split_ext(&fu),
-        idx: index.to_string(),
-        page: page.to_string(),
+        idx: index.clone(),
+        page: page.clone(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
-        // artstartswith: art_starts_with.to_string(),
-        // albstartswith: alb_starts_with.to_string(),
     };
     println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
@@ -159,34 +129,4 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
 
     Ok(())
 }
-
-// #[derive(Debug, Clone, Serialize, Deserialize)]
-// pub struct TagInfo {
-//     pub id: String,
-//     pub rusicid: String,
-//     pub filename: String,
-//     pub artist: String,
-//     pub album: String,
-//     pub song: String,
-// }
-
-// pub fn insert_tag_info(xx: Vec<TagInfo>) -> Result<()> {
-//     let conn = Connection::open("./db/rusic.db").unwrap();
-//     for x in xx {
-//         println!("this is x: {:#?}", x);
-
-//         conn.execute(
-//             "INSERT INTO tags (
-//                     rusicid,
-//                     filename,
-//                     artist,
-//                     album,
-//                     song
-//                 )
-//                 VALUES (?1, ?2, ?3, ?4, ?5)",
-//             (&x.rusicid, &x.filename, &x.artist, &x.album, &x.song),
-//         )?;
-//     }
-//     Ok(())
-// }
 
