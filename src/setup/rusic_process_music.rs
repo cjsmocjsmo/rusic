@@ -116,7 +116,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.album,
             &music_info.albumid,
             &music_info.song,
-            &music_info.basedir,
+
             &music_info.filenameresults,
             &music_info.musicartistresults,
             &music_info.musicalbumresults,

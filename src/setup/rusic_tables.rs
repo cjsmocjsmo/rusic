@@ -121,7 +121,6 @@ pub fn create_startswith_table() -> Result<()> {
     Ok(())
 }
 
-
 // conn.execute(
 //     "CREATE TABLE IF NOT EXISTS fileinfo (
 //         id INTEGER PRIMARY KEY,
