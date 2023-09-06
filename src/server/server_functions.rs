@@ -47,11 +47,11 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
     let mut id_list = Vec::new();
     if op == "artist" {
         let mut stmt = conn
-            .prepare("SELECT * FROM startswith WHERE artist_first_letter = ?1")
+            .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?1")
             .unwrap();
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
         while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(4).unwrap();
+            let mediaid: String = row.get(0).unwrap();
             id_list.push(mediaid);
         }
     } else if op == "album" {
@@ -61,7 +61,7 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
 
         while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(4).unwrap();
+            let mediaid: String = row.get(0).unwrap();
             id_list.push(mediaid);
         }
     };
