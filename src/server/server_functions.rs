@@ -77,24 +77,24 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
         let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
         while let Some(row) = rows.next().expect("Unable to get next row") {
             let artist_info = rusic_process_music::MusicInfo {
-
-                rusicid: row.get(0).unwrap(),
-                imgurl: row.get(1).unwrap(),
-                artist: row.get(2).unwrap(),
-                artistid: row.get(3).unwrap(),
-                album: row.get(4).unwrap(),
-                albumid: row.get(5).unwrap(),
-                song: row.get(6).unwrap(),
-                basedir: row.get(7).unwrap(),
-                filenameresults: row.get(8).unwrap(),
-                musicartistresults: row.get(9).unwrap(),
-                musicalbumresults: row.get(10).unwrap(),
-                durationresults: row.get(11).unwrap(),
-                fullpath: row.get(12).unwrap(),
-                extension: row.get(13).unwrap(),
-                idx: row.get(14).unwrap(),
-                page: row.get(15).unwrap(),
-                fsizeresults: row.get(16).unwrap(),
+                // id: row.get(0).unwrap(),
+                rusicid: row.get(1).unwrap(),
+                imgurl: row.get(2).unwrap(),
+                artist: row.get(3).unwrap(),
+                artistid: row.get(4).unwrap(),
+                album: row.get(5).unwrap(),
+                albumid: row.get(6).unwrap(),
+                song: row.get(7).unwrap(),
+                basedir: row.get(8).unwrap(),
+                filenameresults: row.get(9).unwrap(),
+                musicartistresults: row.get(10).unwrap(),
+                musicalbumresults: row.get(11).unwrap(),
+                durationresults: row.get(12).unwrap(),
+                fullpath: row.get(13).unwrap(),
+                extension: row.get(14).unwrap(),
+                idx: row.get(15).unwrap(),
+                page: row.get(16).unwrap(),
+                fsizeresults: row.get(17).unwrap(),
             };
             println!("artist_info: {:?}", artist_info.clone());
 
