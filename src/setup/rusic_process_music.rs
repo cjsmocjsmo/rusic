@@ -14,7 +14,6 @@ pub struct MusicInfo {
     pub album: String,
     pub albumid: String,
     pub song: String,
-    pub basedir: String,
     pub filenameresults: String,
     pub musicartistresults: String,
     pub musicalbumresults: String,
@@ -27,7 +26,7 @@ pub struct MusicInfo {
 }
 
 pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
-    println!("processing:\n\t {:#?}", x);
+    // println!("processing:\n\t {:#?}", x);
     let fu = RusicUtils { apath: x.clone() };
 
     let tag = RusicUtils::get_tag_info(&fu);
@@ -48,7 +47,6 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         album: tag.1.clone(),
         albumid: rusic_utils::get_md5(tag.1.clone()),
         song: tag.2,
-        basedir: dirz.0,
         filenameresults: dirz.1,
         musicartistresults: art_alb.0.clone(),
         musicalbumresults: art_alb.1.clone(),
@@ -59,7 +57,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         page: page.clone(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
     };
-    println!("music_info: {:#?}", music_info);
+    // println!("music_info: {:#?}", music_info);
     let _wm = write_music_to_db(music_info.clone());
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
@@ -96,7 +94,6 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 album,
                 albumid,
                 song,
-                basedir,
                 filenameresults,
                 musicartistresults,
                 musicalbumresults,
@@ -116,7 +113,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.album,
             &music_info.albumid,
             &music_info.song,
-
+            // &music_info.basedir,
             &music_info.filenameresults,
             &music_info.musicartistresults,
             &music_info.musicalbumresults,

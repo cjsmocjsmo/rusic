@@ -85,19 +85,15 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
                 album: row.get(5).unwrap(),
                 albumid: row.get(6).unwrap(),
                 song: row.get(7).unwrap(),
-                basedir: row.get(8).unwrap(),
-                filenameresults: row.get(9).unwrap(),
-                musicartistresults: row.get(10).unwrap(),
-                musicalbumresults: row.get(11).unwrap(),
-                durationresults: row.get(12).unwrap(),
-                fullpath: row.get(13).unwrap(),
-                extension: row.get(14).unwrap(),
-                idx: row.get(15).unwrap(),
-                page: row.get(16).unwrap(),
-                fsizeresults: row.get(17).unwrap(),
-
-
-
+                filenameresults: row.get(8).unwrap(),
+                musicartistresults: row.get(9).unwrap(),
+                musicalbumresults: row.get(10).unwrap(),
+                durationresults: row.get(11).unwrap(),
+                fullpath: row.get(12).unwrap(),
+                extension: row.get(13).unwrap(),
+                idx: row.get(14).unwrap(),
+                page: row.get(15).unwrap(),
+                fsizeresults: row.get(16).unwrap(),
             };
             println!("artist_info: {:?}", artist_info.clone());
 

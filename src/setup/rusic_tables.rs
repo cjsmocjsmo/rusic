@@ -84,7 +84,6 @@ pub fn create_music_table() -> Result<()> {
             album TEXT NOT NULL,
             albumid TEXT NOT NULL,
             song TEXT NOT NULL,
-            basedir TEXT NOT NULL,
             filenameresults TEXT NOT NULL,
             musicartistresults TEXT NOT NULL,
             musicalbumresults TEXT NOT NULL,
