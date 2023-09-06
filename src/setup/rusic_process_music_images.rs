@@ -13,9 +13,9 @@ pub struct MusicImageInfo {
     rusicid: String,
     width: String,
     height: String,
-    basedir: String,
-    filename: String,
-    extension: String,
+    // basedir: String,
+    // filename: String,
+    // extension: String,
     artist: String,
     artistid: String,
     album: String,
@@ -56,9 +56,9 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
     };
     let id = rusic_utils::get_md5(x.clone());
     let dims = RusicUtils::get_dims(&foo2);
-    let bdfn = RusicUtils::split_base_dir_filename(&foo2);
-    let basedir = bdfn.0;
-    let filename = bdfn.1;
+    // let bdfn = RusicUtils::split_base_dir_filename(&foo2);
+    // let basedir = bdfn.0;
+    // let filename = bdfn.1;
     let artalb = RusicUtils::split_artist_album(&foo2);
     let artist1 = artalb.0;
     let album1 = artalb.1;
@@ -67,9 +67,9 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
         let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
         let height_r = newdims.1.to_string();
-        let base_dir = basedir;
-        let file_name = filename;
-        let ext = RusicUtils::split_ext(&foo2);
+        // let base_dir = basedir;
+        // let file_name = filename;
+        // let ext = RusicUtils::split_ext(&foo2);
         let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
         let full_path = &x.to_string();
         let thumb_path = create_music_thumbnail(&x, artist1.clone(), album1.clone());
@@ -78,9 +78,9 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
             rusicid: id,
             width: width_r,
             height: height_r,
-            basedir: base_dir,
-            filename: file_name,
-            extension: ext,
+            // basedir: base_dir,
+            // filename: file_name,
+            // extension: ext,
             artist: artist1.clone(),
             artistid: rusic_utils::get_md5(artist1.clone()),
             album: album1.clone(),
@@ -150,9 +150,6 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
                 rusicid,
                 width,
                 height,
-                basedir,
-                filename,
-                extension,
                 artist,
                 artistid,
                 album,
@@ -162,14 +159,11 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
                 thumbpath,
                 idx
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
         (
             &music_img_info.rusicid,
             &music_img_info.width,
             &music_img_info.height,
-            &music_img_info.basedir,
-            &music_img_info.filename,
-            &music_img_info.extension,
             &music_img_info.artist,
             &music_img_info.artistid,
             &music_img_info.album,
