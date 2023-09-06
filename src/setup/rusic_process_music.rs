@@ -14,10 +14,8 @@ pub struct MusicInfo {
     pub album: String,
     pub albumid: String,
     pub song: String,
-    pub filenameresults: String,
     pub musicartistresults: String,
     pub musicalbumresults: String,
-    pub durationresults: String,
     pub fullpath: String,
     pub extension: String,
     pub idx: String,
@@ -33,7 +31,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
 
     let art_alb = RusicUtils::split_artist_album(&fu);
 
-    let dirz = RusicUtils::split_base_dir_filename(&fu);
+    // let dirz = RusicUtils::split_base_dir_filename(&fu);
 
 
     let music_info = MusicInfo {
@@ -47,10 +45,8 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         album: tag.1.clone(),
         albumid: rusic_utils::get_md5(tag.1.clone()),
         song: tag.2,
-        filenameresults: dirz.1,
         musicartistresults: art_alb.0.clone(),
         musicalbumresults: art_alb.1.clone(),
-        durationresults: "0".to_string(),
         fullpath: x.clone(),
         extension: RusicUtils::split_ext(&fu),
         idx: index.clone(),
@@ -94,17 +90,15 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 album,
                 albumid,
                 song,
-                filenameresults,
                 musicartistresults,
                 musicalbumresults,
-                durationresults,
                 fullpath,
                 extension,
                 idx,
                 page,
                 fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
@@ -113,11 +107,8 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.album,
             &music_info.albumid,
             &music_info.song,
-            // &music_info.basedir,
-            &music_info.filenameresults,
             &music_info.musicartistresults,
             &music_info.musicalbumresults,
-            &music_info.durationresults,
             &music_info.fullpath,
             &music_info.extension,
             &music_info.idx,
