@@ -56,12 +56,12 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
         }
     } else if op == "album" {
         let mut stmt = conn
-            .prepare("SELECT * FROM startswith WHERE album_first_letter = ?1")
+            .prepare("SELECT DISTINCT artistid FROM startswith WHERE album_first_letter = ?1")
             .unwrap();
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
 
         while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(1).unwrap();
+            let mediaid: String = row.get(3).unwrap();
             id_list.push(mediaid);
         }
     };
