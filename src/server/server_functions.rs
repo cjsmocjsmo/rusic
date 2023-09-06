@@ -65,6 +65,7 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
             id_list.push(mediaid);
         }
     };
+    println!("id_list: {:?}", id_list.clone());
 
     //get artist info for each artistid and return json
     let mut artist_info_list = Vec::new();
