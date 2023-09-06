@@ -95,6 +95,9 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
                 idx: row.get(15).unwrap(),
                 page: row.get(16).unwrap(),
                 fsizeresults: row.get(17).unwrap(),
+
+
+
             };
             println!("artist_info: {:?}", artist_info.clone());
 

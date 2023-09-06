@@ -96,6 +96,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 album,
                 albumid,
                 song,
+                basedir,
                 filenameresults,
                 musicartistresults,
                 musicalbumresults,
@@ -106,7 +107,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 page,
                 fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
@@ -115,6 +116,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
             &music_info.album,
             &music_info.albumid,
             &music_info.song,
+            &music_info.basedir,
             &music_info.filenameresults,
             &music_info.musicartistresults,
             &music_info.musicalbumresults,

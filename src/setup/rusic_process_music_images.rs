@@ -124,26 +124,26 @@ fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS music_images (
-            id INTEGER PRIMARY KEY,
-            rusicid TEXT NOT NULL,
-            width TEXT NOT NULL,
-            height TEXT NOT NULL,
-            basedir TEXT NOT NULL,
-            filename TEXT NOT NULL,
-            extension TEXT NOT NULL,
-            artist TEXT NOT NULL,
-            artistid TEXT NOT NULL,
-            album TEXT NOT NULL,
-            albumid TEXT NOT NULL,
-            filesize TEXT NOT NULL,
-            fullpath TEXT NOT NULL,
-            thumbpath TEXT NOT NULL,
-            idx TEXT NOT NULL
-        )",
-        (),
-    )?;
+    // conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS music_images (
+    //         id INTEGER PRIMARY KEY,
+    //         rusicid TEXT NOT NULL,
+    //         width TEXT NOT NULL,
+    //         height TEXT NOT NULL,
+    //         basedir TEXT NOT NULL,
+    //         filename TEXT NOT NULL,
+    //         extension TEXT NOT NULL,
+    //         artist TEXT NOT NULL,
+    //         artistid TEXT NOT NULL,
+    //         album TEXT NOT NULL,
+    //         albumid TEXT NOT NULL,
+    //         filesize TEXT NOT NULL,
+    //         fullpath TEXT NOT NULL,
+    //         thumbpath TEXT NOT NULL,
+    //         idx TEXT NOT NULL
+    //     )",
+    //     (),
+    // )?;
 
     conn.execute(
         "INSERT INTO music_images (
