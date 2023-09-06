@@ -51,7 +51,7 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
             .unwrap();
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
         while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(1).unwrap();
+            let mediaid: String = row.get(4).unwrap();
             id_list.push(mediaid);
         }
     } else if op == "album" {
@@ -61,7 +61,7 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
 
         while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(3).unwrap();
+            let mediaid: String = row.get(4).unwrap();
             id_list.push(mediaid);
         }
     };
