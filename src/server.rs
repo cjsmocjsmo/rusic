@@ -15,8 +15,9 @@ pub async fn fire_server_main() -> std::io::Result<()> {
             .allow_any_method()
             .allow_any_header()
             .max_age(3600);
-            
+
         App::new()
+            .wrap(cors)
             .service(server_functions::hello)
             .service(server_functions::echo)
             .service(server_functions::artistalpha)
