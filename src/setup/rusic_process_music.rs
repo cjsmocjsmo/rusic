@@ -83,6 +83,7 @@ fn create_thumb_path(art: String, alb: String) -> String {
 fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
+    println!("writing to db: {:#?}", music_info);
 
     conn.execute(
         "INSERT INTO music (
@@ -103,7 +104,7 @@ fn write_music_to_db(music_info: MusicInfo) -> Result<()> {
                 page,
                 fsizeresults
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)",
         (
             &music_info.rusicid,
             &music_info.imgurl,
