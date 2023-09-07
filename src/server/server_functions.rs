@@ -40,15 +40,15 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
 }
 
 
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
 pub struct ArtArtidInfo {
     pub rusticid: String,
     pub artist: String,
     pub artistid: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+
+#[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
 pub struct AlbAlbidInfo {
     pub rusticid: String,
     pub album: String,
@@ -102,6 +102,10 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<ArtArtidInfo> {
             artist_info_list.push(artist_info);
         }
     }
+
+    artist_info_list.sort();
+    artist_info_list.dedup();
+
 
     artist_info_list
 }
