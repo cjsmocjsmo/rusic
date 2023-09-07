@@ -1,14 +1,14 @@
+use crate::rusicdb::db_main;
+use crate::types;
 use filesize::PathExt;
 use id3::{Tag, TagLike};
 use image::{self};
 use md5::{Digest, Md5};
-use rusqlite::{Connection, Result};
-use serde::{Deserialize, Serialize};
+use rusqlite::Result;
 use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
-// use std::time::Duration;
 
 #[derive(Debug)]
 pub struct RusicUtils {
@@ -58,7 +58,6 @@ impl RusicUtils {
             Some(b) => b.to_string_lossy().to_string(),
             None => "split_ext did not work".to_string(),
         };
-
         let ext = ".".to_string() + boo.as_str();
 
         ext
@@ -149,25 +148,13 @@ pub fn is_db_check_file_present() -> bool {
     path.exists()
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FirstLetterInfo {
-    pub rusicid: String,
-    pub artist: String,
-    pub album: String,
-    pub artistid: String,
-    pub albumid: String,
-    pub artist_first_letter: String,
-    pub album_first_letter: String,
-}
-
-
 pub fn gen_first_letter_db(media: String) -> Result<()> {
     let rus = RusicUtils {
         apath: media.clone(),
     };
     let tags = rus.get_tag_info();
 
-    let first_letter_info = FirstLetterInfo {
+    let first_letter_info = types::FirstLetterInfo {
         rusicid: get_md5(media.clone()),
         artist: tags.0.clone(),
         album: tags.1.clone(),
@@ -176,31 +163,7 @@ pub fn gen_first_letter_db(media: String) -> Result<()> {
         artist_first_letter: rus.artist_starts_with(),
         album_first_letter: rus.album_starts_with(),
     };
-
-    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
-    let conn = Connection::open(db_path).unwrap();
-
-    conn.execute(
-        "INSERT INTO startswith (
-                rusicid,
-                artist,
-                album,
-                artistid,
-                albumid,
-                artist_first_letter,
-                album_first_letter
-            )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-        (
-            &first_letter_info.rusicid,
-            &first_letter_info.artist,
-            &first_letter_info.album,
-            &first_letter_info.artistid,
-            &first_letter_info.albumid,
-            &first_letter_info.artist_first_letter,
-            &first_letter_info.album_first_letter,
-        ),
-    )?;
+    let _insertfirsletter = db_main::insert_first_letter(first_letter_info).unwrap();
 
     Ok(())
 }

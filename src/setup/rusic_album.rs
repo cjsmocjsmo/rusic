@@ -1,7 +1,7 @@
-use rusqlite::{Connection, Result};
-use serde::{Deserialize, Serialize};
+use rusqlite::Connection;
 use serde_json;
 use std::env;
+use crate::types;
 
 pub fn unique_albumids() -> Vec<String> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -18,14 +18,7 @@ pub fn unique_albumids() -> Vec<String> {
     albumids
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AlbumSongs {
-    pub page: i32,
-    pub albumid: String,
-    pub rusicids: String,
-}
-
-pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
+pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<types::AlbumSongs> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let pagination_str = env::var("RUSIC_PAGINATION").expect("RUSIC_PAGINATION not set");
     let pagination: i32 = pagination_str.parse().unwrap();
@@ -50,7 +43,7 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
             songids.push(row.get(0).unwrap());
         }
         let vstring = serde_json::to_string(&songids).unwrap();
-        let albumsongs = AlbumSongs {
+        let albumsongs = types::AlbumSongs {
             page: pge,
             albumid: x,
             rusicids: vstring,
@@ -59,21 +52,4 @@ pub fn songids_for_albumid(xlist: Vec<String>) -> Vec<AlbumSongs> {
     }
 
     albums_songs_vec
-}
-
-pub fn write_songs_for_album_to_db(albumsongsvec: Vec<AlbumSongs>) -> Result<()> {
-    for alb in albumsongsvec {
-        let conn = Connection::open("./db/rusic.db").unwrap();
-
-        conn.execute(
-            "INSERT INTO songsforalbum (
-                    page,
-                    albumid,
-                    songs
-                )
-                VALUES (?1, ?2, ?3)",
-            (&alb.page, &alb.albumid, &alb.rusicids),
-        )?;
-    }
-    Ok(())
 }

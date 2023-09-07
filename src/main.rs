@@ -4,6 +4,8 @@ use std::time::Instant;
 pub mod envvars;
 pub mod server;
 pub mod setup;
+pub mod rusicdb;
+pub mod types;
 
 fn main() -> std::io::Result<()> {
     let start = Instant::now();

@@ -1,30 +1,13 @@
 use crate::setup::rusic_utils;
 use crate::setup::rusic_utils::RusicUtils;
-use rusqlite::{Connection, Result};
-use serde::{Deserialize, Serialize};
+// use rusqlite::{Connection, Result};
 use std::clone::Clone;
 use std::env;
 use std::fs::remove_file;
 use std::path::Path;
 use webp::*;
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MusicImageInfo {
-    rusicid: String,
-    width: String,
-    height: String,
-    // basedir: String,
-    // filename: String,
-    // extension: String,
-    artist: String,
-    artistid: String,
-    album: String,
-    albumid: String,
-    filesize: String,
-    fullpath: String,
-    thumbpath: String,
-    idx: String,
-}
+use crate::types;
+use crate::rusicdb::db_main;
 
 //NEED TO PROCESS FOR CONVERT PNG GIF WEBP TO JPG
 pub fn process_music_images(x: String, index: i32) -> i32 {
@@ -56,9 +39,6 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
     };
     let id = rusic_utils::get_md5(x.clone());
     let dims = RusicUtils::get_dims(&foo2);
-    // let bdfn = RusicUtils::split_base_dir_filename(&foo2);
-    // let basedir = bdfn.0;
-    // let filename = bdfn.1;
     let artalb = RusicUtils::split_artist_album(&foo2);
     let artist1 = artalb.0;
     let album1 = artalb.1;
@@ -67,20 +47,14 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
         let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
         let height_r = newdims.1.to_string();
-        // let base_dir = basedir;
-        // let file_name = filename;
-        // let ext = RusicUtils::split_ext(&foo2);
         let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
         let full_path = &x.to_string();
         let thumb_path = create_music_thumbnail(&x, artist1.clone(), album1.clone());
 
-        let music_img_info = MusicImageInfo {
+        let music_img_info = types::MusicImageInfo {
             rusicid: id,
             width: width_r,
             height: height_r,
-            // basedir: base_dir,
-            // filename: file_name,
-            // extension: ext,
             artist: artist1.clone(),
             artistid: rusic_utils::get_md5(artist1.clone()),
             album: album1.clone(),
@@ -91,7 +65,7 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
             idx: index.to_string(),
         };
         write_music_img_to_file(music_img_info.clone(), index);
-        write_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
+        db_main::write_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
     };
 
     index
@@ -109,7 +83,7 @@ fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
     out_fname.to_string()
 }
 
-fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
+fn write_music_img_to_file(miinfo: types::MusicImageInfo, index: i32) {
     let mii = serde_json::to_string(&miinfo).unwrap();
     let rusic_music_metadata_path = env::var("RUSIC_NFOS").expect("$RUSIC_NFOS is not set");
     let outpath = format!(
@@ -118,64 +92,6 @@ fn write_music_img_to_file(miinfo: MusicImageInfo, index: i32) {
         &index
     );
     std::fs::write(outpath, mii.clone()).unwrap();
-}
-
-fn write_music_img_to_db(music_img_info: MusicImageInfo) -> Result<()> {
-    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
-    let conn = Connection::open(db_path).unwrap();
-
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS music_images (
-    //         id INTEGER PRIMARY KEY,
-    //         rusicid TEXT NOT NULL,
-    //         width TEXT NOT NULL,
-    //         height TEXT NOT NULL,
-    //         basedir TEXT NOT NULL,
-    //         filename TEXT NOT NULL,
-    //         extension TEXT NOT NULL,
-    //         artist TEXT NOT NULL,
-    //         artistid TEXT NOT NULL,
-    //         album TEXT NOT NULL,
-    //         albumid TEXT NOT NULL,
-    //         filesize TEXT NOT NULL,
-    //         fullpath TEXT NOT NULL,
-    //         thumbpath TEXT NOT NULL,
-    //         idx TEXT NOT NULL
-    //     )",
-    //     (),
-    // )?;
-
-    conn.execute(
-        "INSERT INTO music_images (
-                rusicid,
-                width,
-                height,
-                artist,
-                artistid,
-                album,
-                albumid,
-                filesize,
-                fullpath,
-                thumbpath,
-                idx
-            )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
-        (
-            &music_img_info.rusicid,
-            &music_img_info.width,
-            &music_img_info.height,
-            &music_img_info.artist,
-            &music_img_info.artistid,
-            &music_img_info.album,
-            &music_img_info.albumid,
-            &music_img_info.filesize,
-            &music_img_info.fullpath,
-            &music_img_info.thumbpath,
-            &music_img_info.idx,
-        ),
-    )?;
-
-    Ok(())
 }
 
 fn convert_webp_to_jpg(x: String) -> String {

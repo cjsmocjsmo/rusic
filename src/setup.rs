@@ -3,17 +3,17 @@
 use std::env;
 use std::sync::mpsc::channel;
 use threadpool::ThreadPool;
+use crate::rusicdb;
 
 pub mod rusic_album;
 pub mod rusic_artist;
 pub mod rusic_process_music;
 pub mod rusic_process_music_images;
-pub mod rusic_tables;
 pub mod rusic_utils;
 pub mod rusic_walk_dirs;
 
 pub fn setup() -> String {
-    let _create_tables = rusic_tables::create_tables();
+    let _create_tables = rusicdb::db_tables::create_tables();
 
     let usb_drives = rusic_walk_dirs::scan_for_usb_devices();
 
@@ -41,7 +41,7 @@ pub fn setup() -> String {
 
     let alids = rusic_album::unique_albumids();
     let sids = rusic_album::songids_for_albumid(alids.clone());
-    let insert_sids_result = rusic_album::write_songs_for_album_to_db(sids.clone());
+    let insert_sids_result = rusicdb::db_main::write_songs_for_album_to_db(sids.clone());
     let insert_sids = match insert_sids_result {
         Ok(_) => String::from("Exit 0"),
         Err(_) => String::from("Exit 1"),
