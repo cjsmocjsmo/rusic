@@ -7,6 +7,8 @@ pub fn create_tables() {
     let _cmit = create_music_images_table().expect("Unable to create music images table");
     let _cmt = create_music_table().expect("Unable to create music table");
     let _caswt = create_startswith_table().expect("Unable to create artiststartswith table");
+    let _caait = create_artartid_table().expect("Unable to create artartid table");
+    let _caalbit = create_albalbid_table().expect("Unable to create albalbid table");
 }
 
 pub fn create_songs_for_album_table() -> Result<()> {
@@ -113,20 +115,37 @@ pub fn create_startswith_table() -> Result<()> {
     Ok(())
 }
 
-// conn.execute(
-//     "CREATE TABLE IF NOT EXISTS fileinfo (
-//         id INTEGER PRIMARY KEY,
-//         rusicid TEXT NOT NULL,
-//         filename TEXT NOT NULL,
-//         extension TEXT NOT NULL,
-//         filesize TEXT NOT NULL,
-//         duration TEXT NOT NULL,
-//         idx TEXT NOT NULL,
-//         fullpath TEXT NOT NULL,
-//         basedir TEXT NOT NULL
-//     )",
-//     (),
-// )?;
+pub fn create_artartid_table() -> Result<()> {
+    // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db")?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS artartid (
+        id INTEGER PRIMARY KEY,
+        rusicid TEXT NOT NULL,
+        artist TEXT NOT NULL,
+        artistid TEXT NOT NULL
+    )",
+        (),
+    )?;
+
+    Ok(())
+}
+
+pub fn create_albalbid_table() -> Result<()> {
+    // let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let conn = Connection::open("./db/rusic.db")?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS albalbid (
+        id INTEGER PRIMARY KEY,
+        rusicid TEXT NOT NULL,
+        album TEXT NOT NULL,
+        albumid TEXT NOT NULL
+    )",
+        (),
+    )?;
+
+    Ok(())
+}
 
 // conn.execute(
 //     "CREATE TABLE IF NOT EXISTS artistids (

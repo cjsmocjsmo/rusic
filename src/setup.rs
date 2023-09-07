@@ -32,7 +32,7 @@ pub fn setup() -> String {
     // let _genfirstletter = rusic_utils::gen_first_letter_db(media_lists.0.clone()).unwrap();
 
     let _rmt = run_music_threads(media_lists.0.clone());
-    let _rfl = run_first_letter_threads(media_lists.0.clone());
+    // let _rfl = run_first_letter_threads(media_lists.0.clone());
 
     let human_total_size = rusic_utils::mp3_total_size(media_lists.0.clone());
 
@@ -61,32 +61,32 @@ pub fn setup() -> String {
     // "fuck".to_string()
 }
 
-fn run_first_letter_threads(alist: Vec<String>) -> bool {
-    let pool = ThreadPool::new(num_cpus::get());
-    let (tx, rx) = channel();
+// fn run_first_letter_threads(alist: Vec<String>) -> bool {
+//     let pool = ThreadPool::new(num_cpus::get());
+//     let (tx, rx) = channel();
 
 
-    for i in alist {
+//     for i in alist {
 
 
-            let tx = tx.clone();
-            pool.execute(move || {
-                let _fl_info =
-                    rusic_utils::gen_first_letter_db(i.clone());
-                tx.send(i).expect("Could not send data");
-            });
+//             let tx = tx.clone();
+//             pool.execute(move || {
+//                 let _fl_info =
+//                     rusic_utils::gen_first_letter_db(i.clone());
+//                 tx.send(i).expect("Could not send data");
+//             });
 
-    }
+//     }
 
-    drop(tx);
-    for t in rx.iter() {
-        // Insert this into db
-        let ifo = t;
-        println!("Processed first letter {:?} files", ifo);
-    }
+//     drop(tx);
+//     for t in rx.iter() {
+//         // Insert this into db
+//         let ifo = t;
+//         println!("Processed first letter {:?} files", ifo);
+//     }
 
-    true
-}
+//     true
+// }
 
 fn run_music_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());

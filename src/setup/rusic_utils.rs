@@ -90,16 +90,6 @@ impl RusicUtils {
 
         first_letter.to_string()
     }
-
-    pub fn md5(&self) -> String {
-        let mut hasher2 = Md5::new();
-        hasher2.update(&self.apath);
-        let a_id = hasher2.finalize();
-        let foo = format!("{:x}", a_id);
-
-        foo
-    }
-
 }
 
 pub fn get_md5(z: String) -> String {

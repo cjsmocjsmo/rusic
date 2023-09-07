@@ -3,10 +3,10 @@ use actix_web::{get, post, web, HttpResponse, Responder};
 // use actix_web::web::Json;
 use rusqlite::Connection;
 use std::env;
-// use serde::Serialize;
+use serde::{Deserialize, Serialize};
 // use anyhow::Error;
 
-use crate::setup::rusic_process_music;
+// use crate::setup::rusic_process_music;
 
 #[get("/test")]
 pub async fn hello() -> impl Responder {
@@ -39,7 +39,24 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music::MusicInfo> {
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArtArtidInfo {
+    pub rusticid: String,
+    pub artist: String,
+    pub artistid: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AlbAlbidInfo {
+    pub rusticid: String,
+    pub album: String,
+    pub albumid: String,
+}
+
+
+pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<ArtArtidInfo> {
     println!("alpha: {}, {}", alpha.clone(), op.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -59,7 +76,6 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
             .prepare("SELECT DISTINCT artistid FROM startswith WHERE album_first_letter = ?1")
             .unwrap();
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
-
         while let Some(row) = rows.next().unwrap() {
             let mediaid: String = row.get(0).unwrap();
             id_list.push(mediaid);
@@ -72,24 +88,14 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<rusic_process_music:
     for artid in id_list {
         let conn = Connection::open(db_path.clone()).expect("unable to open db file");
         let mut stmt = conn
-            .prepare("SELECT * FROM music WHERE artistid = ?1")
+            .prepare("SELECT * FROM artartid WHERE artistid = ?1")
             .unwrap();
         let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
         while let Some(row) = rows.next().expect("Unable to get next row") {
-            let artist_info = rusic_process_music::MusicInfo {
-                // id: row.get(0).unwrap(),
-                rusicid: row.get(1).unwrap(),
-                imgurl: row.get(2).unwrap(),
-                artist: row.get(3).unwrap(),
-                artistid: row.get(4).unwrap(),
-                album: row.get(5).unwrap(),
-                albumid: row.get(6).unwrap(),
-                song: row.get(7).unwrap(),
-                fullpath: row.get(8).unwrap(),
-                extension: row.get(9).unwrap(),
-                idx: row.get(10).unwrap(),
-                page: row.get(11).unwrap(),
-                fsizeresults: row.get(12).unwrap(),
+            let artist_info = ArtArtidInfo {
+                rusticid: row.get(1).unwrap(),
+                artist: row.get(2).unwrap(),
+                artistid: row.get(3).unwrap(),
             };
             println!("artist_info: {:?}", artist_info.clone());
 
