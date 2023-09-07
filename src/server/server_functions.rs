@@ -2,8 +2,8 @@ use actix_web::{get, post, web, HttpResponse, Responder};
 
 // use actix_web::web::Json;
 use rusqlite::Connection;
-use std::env;
 use serde::{Deserialize, Serialize};
+use std::env;
 // use anyhow::Error;
 
 // use crate::setup::rusic_process_music;
@@ -39,14 +39,12 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
 pub struct ArtArtidInfo {
     pub rusticid: String,
     pub artist: String,
     pub artistid: String,
 }
-
 
 #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
 pub struct AlbAlbidInfo {
@@ -55,8 +53,7 @@ pub struct AlbAlbidInfo {
     pub albumid: String,
 }
 
-
-pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<ArtArtidInfo> {
+pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<(String, String)> {
     println!("alpha: {}, {}", alpha.clone(), op.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -85,6 +82,7 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<ArtArtidInfo> {
 
     //get artist info for each artistid and return json
     let mut artist_info_list = Vec::new();
+    let mut art_vec = Vec::new();
     for artid in id_list {
         let conn = Connection::open(db_path.clone()).expect("unable to open db file");
         let mut stmt = conn
@@ -97,15 +95,21 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<ArtArtidInfo> {
                 artist: row.get(2).unwrap(),
                 artistid: row.get(3).unwrap(),
             };
-            println!("artist_info: {:?}", artist_info.clone());
 
-            artist_info_list.push(artist_info);
+            art_vec.push(artist_info);
         }
+    }
+
+    for art in art_vec {
+        let foo = art.artist.clone();
+        let bar = art.artistid.clone();
+        let baz = (foo, bar);
+        artist_info_list.push(baz);
     }
 
     artist_info_list.sort();
     artist_info_list.dedup();
-
+    println!("artist_info: {:?}", artist_info_list.clone());
 
     artist_info_list
 }
