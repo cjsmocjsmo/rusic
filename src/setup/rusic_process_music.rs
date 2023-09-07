@@ -48,7 +48,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> MusicInfo {
         page: page.clone(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
     };
-    let _wm = write_music_to_db(music_info.clone());
+    let _wm = write_music_to_db(music_info.clone()).unwrap();
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
     // let artist_starts_with = RusicUtils::artist_starts_with(&fu);
@@ -93,7 +93,7 @@ fn write_alb_albid_to_db(rusid: String, alb: String, albid: String) -> Result<()
                 album,
                 albumid
             )
-            VALUES (?1, ?2)",
+            VALUES (?1, ?2, ?3)",
         (
             &rusid,
             &alb,
