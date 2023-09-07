@@ -13,7 +13,7 @@ pub fn create_tables() {
 }
 
 pub fn create_songs_for_album_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
 
     conn.execute(
@@ -30,7 +30,7 @@ pub fn create_songs_for_album_table() -> Result<()> {
 }
 
 pub fn create_albums_for_artist_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albumsforartist (
@@ -46,7 +46,7 @@ pub fn create_albums_for_artist_table() -> Result<()> {
 }
 
 pub fn create_music_images_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
 
     conn.execute(
@@ -71,7 +71,7 @@ pub fn create_music_images_table() -> Result<()> {
 }
 
 pub fn create_music_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
 
     conn.execute(
@@ -97,7 +97,7 @@ pub fn create_music_table() -> Result<()> {
 }
 
 pub fn create_startswith_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS startswith (
@@ -117,7 +117,7 @@ pub fn create_startswith_table() -> Result<()> {
 }
 
 pub fn create_artartid_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS artartid (
@@ -133,7 +133,7 @@ pub fn create_artartid_table() -> Result<()> {
 }
 
 pub fn create_albalbid_table() -> Result<()> {
-    let db_path = env::var("MTV_DB_PATH").expect("MTV_DB_PATH not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path)?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albalbid (
