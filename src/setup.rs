@@ -23,13 +23,10 @@ pub fn setup() -> String {
     let img_count = media_lists.1.clone().len();
 
 
+//NEED ARTIST COUNT FOR ALPHA
+//NEED ALBUM COUNT FOR ALPHA
 
 
-
-
-
-    // let media_lists = rusic_walk_dirs::scan_all_sources();
-    // let _genfirstletter = rusic_utils::gen_first_letter_db(media_lists.0.clone()).unwrap();
 
     let _rmt = run_music_threads(media_lists.0.clone());
     // let _rfl = run_first_letter_threads(media_lists.0.clone());
