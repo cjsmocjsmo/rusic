@@ -66,7 +66,7 @@ fn write_art_artid_to_db(rusid: String, art: String, artid: String) -> Result<()
     let conn = Connection::open(db_path).unwrap();
 
     conn.execute(
-        "INSERT INTO artists (
+        "INSERT INTO artartid (
                 rusicid,
                 artist,
                 artistid
@@ -88,7 +88,7 @@ fn write_alb_albid_to_db(rusid: String, alb: String, albid: String) -> Result<()
     let conn = Connection::open(db_path).unwrap();
 
     conn.execute(
-        "INSERT INTO albums (
+        "INSERT INTO albalbid (
                 rusicid,
                 album,
                 albumid
