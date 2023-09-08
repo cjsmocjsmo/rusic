@@ -10,6 +10,8 @@ pub fn create_tables() {
     let _caswt = create_startswith_table().expect("Unable to create artiststartswith table");
     let _caait = create_artartid_table().expect("Unable to create artartid table");
     let _caalbit = create_albalbid_table().expect("Unable to create albalbid table");
+    let _caartc = create_artist_count().expect("Unable to create artist count table");
+    let _caalbc = create_album_count().expect("Unable to create album count table");
 }
 
 pub fn create_songs_for_album_table() -> Result<()> {
