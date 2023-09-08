@@ -225,8 +225,10 @@ pub fn artist_album_count_by_alpha() {
     alphabet.push("Z");
 
 
-    for letter in alphabet {
+    for letter in alphabet.clone() {
         let _artist_alpha_count = db_main::post_artist_count_by_alpha(letter.to_string());
+    };
+    for letter in alphabet.clone() {
         let _album_alpha_count = db_main::post_album_count_by_alpha(letter.to_string());
     }
 }
