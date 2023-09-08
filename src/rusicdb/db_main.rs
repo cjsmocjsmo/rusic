@@ -145,7 +145,7 @@ pub fn get_artist_count_by_alpha(alpha: String) -> Result<()> {
         distinct_artistid_list.push(artistid);
     };
     for artistid in distinct_artistid_list {
-        let mut stmt = conn.prepare("SELECT COUNT(artistid) FROM startswith WHERE artist_first_letter = ?")?;
+        let mut stmt = conn.prepare("SELECT COUNT artistid FROM startswith WHERE artist_first_letter = ?")?;
         let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
         while let Some(row) = rows.next().unwrap() {
             let count: i64 = row.get(0).unwrap();
