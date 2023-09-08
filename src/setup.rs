@@ -30,7 +30,7 @@ pub fn setup() -> String {
 
     let _rmt = run_music_threads(media_lists.0.clone());
 
-    // let gen_artist_count_by_alpha = rusic_utils::artist_count_by_alpha()
+    let _gen_artist_count_by_alpha = rusic_utils::artist_count_by_alpha();
 
 
     let human_total_size = rusic_utils::mp3_total_size(media_lists.0.clone());

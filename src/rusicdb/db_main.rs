@@ -133,25 +133,22 @@ pub fn write_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()
 // }
 
 pub fn get_artist_count_by_alpha(alpha: String) -> Result<()> {
-    let mut distinct_artistid_list = Vec::new();
+    let mut distinct_artistid_list_for_alpha = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
     //get distinct artistids from stratswith table
-    let mut stmt = conn.prepare("SELECT DISTINCT artistid FROM startswith")?;
+    let mut stmt = conn.prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?")?;
     let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
         let artistid: String = row.get(0).unwrap();
-        distinct_artistid_list.push(artistid);
+        distinct_artistid_list_for_alpha.push(artistid);
     };
-    for artistid in distinct_artistid_list {
-        let mut stmt = conn.prepare("SELECT COUNT artistid FROM startswith WHERE artist_first_letter = ?")?;
-        let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
-        while let Some(row) = rows.next().unwrap() {
-            let count: i64 = row.get(0).unwrap();
-            println!("ALPHA COUNT {}: {}", alpha, count);
-        };
-    }
+
+    let count = distinct_artistid_list_for_alpha.len().to_string();
+
+    println!("this is alpha count {}: {}", alpha, count);
+
 
 
 
