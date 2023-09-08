@@ -1,6 +1,7 @@
 use crate::types;
 use rusqlite::{Connection, Result};
 use std::env;
+use serde::{Deserialize, Serialize};
 
 pub fn write_music_to_db(music_info: types::MusicInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -124,3 +125,41 @@ pub fn write_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()
 
     Ok(())
 }
+
+// #[derive(Debug, Clone, Serialize, Deserialize)]
+// struct ArtistCount {
+//     artist_first_letter: String,
+//     count: i64,
+// }
+
+pub fn artist_count_by_alpha(alpha: String) -> Result<()> {
+    let mut distinct_artistid_list = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
+
+    //get distinct artistids from stratswith table
+    let mut stmt = conn.prepare("SELECT DISTINCT artistid FROM startswith")?;
+    let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let artistid: String = row.get(0).unwrap();
+        distinct_artistid_list.push(artistid);
+    };
+    for artistid in distinct_artistid_list {
+        let mut stmt = conn.prepare("SELECT COUNT(artistid) FROM startswith WHERE artist_first_letter = ?")?;
+        let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+        while let Some(row) = rows.next().unwrap() {
+            let count: i64 = row.get(0).unwrap();
+            println!("ALPHA COUNT {}: {}", alpha, count);
+        };
+    }
+
+
+
+
+    Ok(())
+    }
+
+
+
+
+

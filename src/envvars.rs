@@ -3,24 +3,8 @@ use std::env;
 pub fn set_env_vars() {
     let usb = env::var("RUSIC_USB");
     if usb.is_err() {
-        env::set_var("RUSIC_USB", "/media/pi/C052-0E64/Music/");
+        env::set_var("RUSIC_USB", "/media/pi/C052-0E64/Music/K");
     };
-    // let usb1 = env::var("RUSIC_USB1");
-    // if usb1.is_err() {
-    //     env::set_var("RUSIC_USB1", "/media/pi/C052-0E64/Music/K");
-    // };
-    // let usb2 = env::var("RUSIC_USB2");
-    // if usb2.is_err() {
-    //     env::set_var("RUSIC_USB2", "None");
-    // };
-    // let usb3 = env::var("RUSIC_USB3");
-    // if usb3.is_err() {
-    //     env::set_var("RUSIC_USB3", "None");
-    // };
-    // let usb4 = env::var("RUSIC_USB4");
-    // if usb4.is_err() {
-    //     env::set_var("RUSIC_USB4", "None");
-    // };
 
     let db_path = env::var("RUSIC_DB_PATH");
     if db_path.is_err() {

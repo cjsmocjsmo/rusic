@@ -1,5 +1,11 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArtistCount {
+    pub artist_first_letter: String,
+    pub count: i64,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbumSongs {
     pub page: i32,

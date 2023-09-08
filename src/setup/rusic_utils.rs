@@ -193,3 +193,39 @@ pub fn mp3_total_size(media_lists: Vec<String>) -> String {
 
     humansum.to_string()
 }
+
+
+pub fn artist_count_by_alpha() {
+    let mut alphabet = Vec::new();
+    alphabet.push("A");
+    alphabet.push("B");
+    alphabet.push("C");
+    alphabet.push("D");
+    alphabet.push("E");
+    alphabet.push("F");
+    alphabet.push("G");
+    alphabet.push("H");
+    alphabet.push("I");
+    alphabet.push("J");
+    alphabet.push("K");
+    alphabet.push("L");
+    alphabet.push("M");
+    alphabet.push("N");
+    alphabet.push("O");
+    alphabet.push("P");
+    alphabet.push("Q");
+    alphabet.push("R");
+    alphabet.push("S");
+    alphabet.push("T");
+    alphabet.push("U");
+    alphabet.push("V");
+    alphabet.push("W");
+    alphabet.push("X");
+    alphabet.push("Y");
+    alphabet.push("Z");
+
+
+    for letter in alphabet {
+        let _artist_count = db_main::artist_count_by_alpha(letter.to_string()).unwrap();
+    }
+}
