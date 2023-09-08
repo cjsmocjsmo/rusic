@@ -132,7 +132,7 @@ pub fn write_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()
 //     count: i64,
 // }
 
-pub fn artist_count_by_alpha(alpha: String) -> Result<()> {
+pub fn get_artist_count_by_alpha(alpha: String) -> Result<()> {
     let mut distinct_artistid_list = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();

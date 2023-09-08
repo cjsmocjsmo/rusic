@@ -226,6 +226,6 @@ pub fn artist_count_by_alpha() {
 
 
     for letter in alphabet {
-        let _artist_count = db_main::artist_count_by_alpha(letter.to_string()).unwrap();
+        let _artist_count = db_main::get_artist_count_by_alpha(letter.to_string()).unwrap();
     }
 }
