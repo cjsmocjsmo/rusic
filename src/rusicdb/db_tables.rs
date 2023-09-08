@@ -148,6 +148,38 @@ pub fn create_albalbid_table() -> Result<()> {
     Ok(())
 }
 
+pub fn create_artist_count() -> Result<()> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path)?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS artistcount (
+        id INTEGER PRIMARY KEY,
+        alpha TEXT NOT NULL,
+        count INTEGER NOT NULL
+    )",
+        (),
+    )?;
+
+    Ok(())
+
+ }
+
+ pub fn create_album_count() -> Result<()> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path)?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS albumcount (
+        id INTEGER PRIMARY KEY,
+        alpha TEXT NOT NULL,
+        count INTEGER NOT NULL
+    )",
+        (),
+    )?;
+
+    Ok(())
+
+ }
+
 // conn.execute(
 //     "CREATE TABLE IF NOT EXISTS artistids (
 //         id INTEGER PRIMARY KEY,

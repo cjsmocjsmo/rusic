@@ -137,7 +137,7 @@ pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
-    //get distinct artistids from stratswith table
+
     let mut stmt = conn
         .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?")
         .unwrap();
@@ -149,9 +149,28 @@ pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
 
     let count = distinct_artistid_list_for_alpha.len().to_string();
 
-    let alphacount = (alpha, count);
+    let alphacount = (alpha.clone(), count.clone());
 
     println!("this is artist alpha count {:#?}", alphacount.clone());
+
+    let foo = types::ArtistCount {
+        artist_first_letter: alpha.clone(),
+        count: count.clone().parse::<i64>().unwrap(),
+    };
+
+    conn.execute(
+        "INSERT INTO artistcount (
+                alpha,
+                count
+            )
+            VALUES (?1, ?2)",
+        (
+            &foo.artist_first_letter,
+            &foo.count,
+        ),
+    ).unwrap();
+
+
 
     //PUT ALPHA COUNT INTO DB
 
@@ -163,7 +182,7 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
-    //get distinct artistids from stratswith table
+
     let mut stmt = conn
         .prepare("SELECT DISTINCT albumid FROM startswith WHERE album_first_letter = ?")
         .unwrap();
@@ -175,9 +194,25 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
 
     let count = distinct_albumid_list_for_alpha.len().to_string();
 
-    let alphacount = (alpha, count);
+    let alphacount = (alpha.clone(), count.clone());
 
     println!("this is album alpha count {:#?}", alphacount.clone());
+    let fu = types::AlbumCount {
+        album_first_letter: alpha.clone(),
+        count: count.clone().parse::<i64>().unwrap(),
+    };
+
+    conn.execute(
+        "INSERT INTO albumcount (
+                alpha,
+                count
+            )
+            VALUES (?1, ?2)",
+        (
+            &fu.album_first_letter,
+            &fu.count,
+        ),
+    ).unwrap();
 
     //PUT ALPHA COUNT INTO DB
 
