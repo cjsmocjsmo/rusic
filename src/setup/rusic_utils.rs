@@ -195,7 +195,7 @@ pub fn mp3_total_size(media_lists: Vec<String>) -> String {
 }
 
 
-pub fn artist_count_by_alpha() {
+pub fn artist_album_count_by_alpha() {
     let mut alphabet = Vec::new();
     alphabet.push("A");
     alphabet.push("B");
@@ -226,6 +226,7 @@ pub fn artist_count_by_alpha() {
 
 
     for letter in alphabet {
-        let _artist_count = db_main::get_artist_count_by_alpha(letter.to_string()).unwrap();
+        let _artist_alpha_count = db_main::post_artist_count_by_alpha(letter.to_string());
+        let _album_alpha_count = db_main::post_album_count_by_alpha(letter.to_string());
     }
 }

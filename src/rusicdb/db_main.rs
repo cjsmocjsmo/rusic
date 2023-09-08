@@ -1,7 +1,7 @@
 use crate::types;
 use rusqlite::{Connection, Result};
 use std::env;
-use serde::{Deserialize, Serialize};
+// use serde::{Deserialize, Serialize};
 
 pub fn write_music_to_db(music_info: types::MusicInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -132,31 +132,54 @@ pub fn write_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()
 //     count: i64,
 // }
 
-pub fn get_artist_count_by_alpha(alpha: String) -> Result<()> {
+pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
     let mut distinct_artistid_list_for_alpha = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
     //get distinct artistids from stratswith table
-    let mut stmt = conn.prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?")?;
+    let mut stmt = conn
+        .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?")
+        .unwrap();
     let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
         let artistid: String = row.get(0).unwrap();
         distinct_artistid_list_for_alpha.push(artistid);
-    };
+    }
 
     let count = distinct_artistid_list_for_alpha.len().to_string();
 
-    println!("this is alpha count {}: {}", alpha, count);
+    let alphacount = (alpha, count);
 
+    println!("this is artist alpha count {:#?}", alphacount.clone());
 
+    //PUT ALPHA COUNT INTO DB
 
+    alphacount
+}
 
+pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
+    let mut distinct_albumid_list_for_alpha = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
 
-    Ok(())
+    //get distinct artistids from stratswith table
+    let mut stmt = conn
+        .prepare("SELECT DISTINCT albumid FROM startswith WHERE album_first_letter = ?")
+        .unwrap();
+    let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let albumid: String = row.get(0).unwrap();
+        distinct_albumid_list_for_alpha.push(albumid);
     }
 
+    let count = distinct_albumid_list_for_alpha.len().to_string();
 
+    let alphacount = (alpha, count);
 
+    println!("this is album alpha count {:#?}", alphacount.clone());
 
+    //PUT ALPHA COUNT INTO DB
 
+    alphacount
+}
