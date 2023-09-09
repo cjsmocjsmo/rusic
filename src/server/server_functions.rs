@@ -12,18 +12,11 @@ pub async fn hello() -> impl Responder {
     HttpResponse::Ok().body("Rusic Web Server is running!")
 }
 
-#[post("/echo")]
-pub async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
-
 #[get("/artistcount")]
 pub async fn artistcount() -> impl Responder {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-    let mut stmt = conn
-        .prepare("SELECT * FROM artistcount;")
-        .unwrap();
+    let mut stmt = conn.prepare("SELECT * FROM artistcount;").unwrap();
     let mut rows = stmt.query([]).expect("Unable to query db");
     let mut artist_count_vec = Vec::new();
     while let Some(row) = rows.next().unwrap() {
@@ -32,7 +25,7 @@ pub async fn artistcount() -> impl Responder {
             count: row.get(2).unwrap(),
         };
         artist_count_vec.push(artist_count);
-    };
+    }
 
     println!("artist_count_vec: {:?}", artist_count_vec.clone());
 
@@ -45,9 +38,7 @@ pub async fn artistcount() -> impl Responder {
 pub async fn albumcount() -> impl Responder {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-    let mut stmt = conn
-        .prepare("SELECT * FROM albumcount;")
-        .unwrap();
+    let mut stmt = conn.prepare("SELECT * FROM albumcount;").unwrap();
     let mut rows = stmt.query([]).expect("Unable to query db");
     let mut album_count_vec = Vec::new();
     while let Some(row) = rows.next().unwrap() {
@@ -84,20 +75,6 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-// #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
-// pub struct ArtArtidInfo {
-//     pub rusticid: String,
-//     pub artist: String,
-//     pub artistid: String,
-// }
-
-// #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
-// pub struct AlbAlbidInfo {
-//     pub rusticid: String,
-//     pub album: String,
-//     pub albumid: String,
-// }
-
 fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
@@ -105,15 +82,14 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
     let mut id_list = Vec::new();
 
-        let mut stmt = conn
-            .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?1")
-            .unwrap();
-        let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
-        while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(0).unwrap();
-            id_list.push(mediaid);
-        }
-
+    let mut stmt = conn
+        .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let mediaid: String = row.get(0).unwrap();
+        id_list.push(mediaid);
+    }
 
     println!("id_list: {:?}", id_list.clone());
 
@@ -151,7 +127,6 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     artist_info_list
 }
 
-
 pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
@@ -159,45 +134,45 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
     let mut id_list = Vec::new();
     let mut stmt = conn
-            .prepare("SELECT DISTINCT albumid FROM startswith WHERE album_first_letter = ?1")
-            .unwrap();
-        let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
-        while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(0).unwrap();
-            id_list.push(mediaid);
-        }
-        println!("id_list: {:?}", id_list.clone());
-
-        //get artist info for each artistid and return json
-        let mut album_info_list = Vec::new();
-        let mut alb_vec = Vec::new();
-        for albid in id_list {
-            let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-            let mut stmt = conn
-                .prepare("SELECT * FROM albalbid WHERE albumid = ?1")
-                .unwrap();
-            let mut rows = stmt.query(&[&albid]).expect("Unable to query db");
-            while let Some(row) = rows.next().expect("Unable to get next row") {
-                let album_info = types::AlbAlbidInfo {
-                    rusticid: row.get(1).unwrap(),
-                    album: row.get(2).unwrap(),
-                    albumid: row.get(3).unwrap(),
-                };
-
-                alb_vec.push(album_info);
-            }
-        }
-
-        for alb in alb_vec {
-            let foo = alb.album.clone();
-            let bar = alb.albumid.clone();
-            let baz = (foo, bar);
-            album_info_list.push(baz);
-        }
-
-        album_info_list.sort();
-        album_info_list.dedup();
-        println!("artist_info: {:?}", album_info_list.clone());
-
-        album_info_list
+        .prepare("SELECT DISTINCT albumid FROM startswith WHERE album_first_letter = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let mediaid: String = row.get(0).unwrap();
+        id_list.push(mediaid);
     }
+    println!("id_list: {:?}", id_list.clone());
+
+    //get artist info for each artistid and return json
+    let mut album_info_list = Vec::new();
+    let mut alb_vec = Vec::new();
+    for albid in id_list {
+        let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+        let mut stmt = conn
+            .prepare("SELECT * FROM albalbid WHERE albumid = ?1")
+            .unwrap();
+        let mut rows = stmt.query(&[&albid]).expect("Unable to query db");
+        while let Some(row) = rows.next().expect("Unable to get next row") {
+            let album_info = types::AlbAlbidInfo {
+                rusticid: row.get(1).unwrap(),
+                album: row.get(2).unwrap(),
+                albumid: row.get(3).unwrap(),
+            };
+
+            alb_vec.push(album_info);
+        }
+    }
+
+    for alb in alb_vec {
+        let foo = alb.album.clone();
+        let bar = alb.albumid.clone();
+        let baz = (foo, bar);
+        album_info_list.push(baz);
+    }
+
+    album_info_list.sort();
+    album_info_list.dedup();
+    println!("artist_info: {:?}", album_info_list.clone());
+
+    album_info_list
+}
