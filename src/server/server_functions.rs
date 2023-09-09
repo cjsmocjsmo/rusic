@@ -28,8 +28,8 @@ pub async fn artistcount() -> impl Responder {
     let mut artist_count_vec = Vec::new();
     while let Some(row) = rows.next().unwrap() {
         let artist_count = types::ArtistCount {
-            alpha: row.get(0).unwrap(),
-            count: row.get(1).unwrap(),
+            alpha: row.get(1).unwrap(),
+            count: row.get(2).unwrap(),
         };
         artist_count_vec.push(artist_count);
     };
@@ -52,8 +52,8 @@ pub async fn albumcount() -> impl Responder {
     let mut album_count_vec = Vec::new();
     while let Some(row) = rows.next().unwrap() {
         let album_count = types::AlbumCount {
-            alpha: row.get(0).unwrap(),
-            count: row.get(1).unwrap(),
+            alpha: row.get(1).unwrap(),
+            count: row.get(2).unwrap(),
         };
         album_count_vec.push(album_count);
     }
