@@ -17,6 +17,48 @@ pub async fn echo(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(req_body)
 }
 
+#[get("/artistcount}")]
+pub async fn artistcount() -> impl Responder {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT * FROM artistcount;")
+        .unwrap();
+    let mut rows = stmt.query([]).expect("Unable to query db");
+    let mut artist_count_vec = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        let artist_count = types::ArtistCount {
+            artist_first_letter: row.get(0).unwrap(),
+            count: row.get(1).unwrap(),
+        };
+        artist_count_vec.push(artist_count);
+    }
+    let json = serde_json::to_string(&artist_count_vec).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
+#[get("/albumcount}")]
+pub async fn albumcount() -> impl Responder {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT * FROM albumcount;")
+        .unwrap();
+    let mut rows = stmt.query([]).expect("Unable to query db");
+    let mut album_count_vec = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        let album_count = types::AlbumCount {
+            album_first_letter: row.get(0).unwrap(),
+            count: row.get(1).unwrap(),
+        };
+        album_count_vec.push(album_count);
+    }
+    let json = serde_json::to_string(&album_count_vec).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
 #[get("/artist/{alpha}")]
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
