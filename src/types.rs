@@ -26,6 +26,21 @@ pub struct ArtistAlbums {
     pub albums: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
+pub struct ArtArtidInfo {
+    pub rusticid: String,
+    pub artist: String,
+    pub artistid: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
+pub struct AlbAlbidInfo {
+    pub rusticid: String,
+    pub album: String,
+    pub albumid: String,
+}
+
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MusicImageInfo {
     pub rusicid: String,

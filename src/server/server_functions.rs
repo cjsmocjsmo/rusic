@@ -2,11 +2,10 @@ use actix_web::{get, post, web, HttpResponse, Responder};
 
 // use actix_web::web::Json;
 use rusqlite::Connection;
-use serde::{Deserialize, Serialize};
+// use serde::{Deserialize, Serialize};
 use std::env;
 // use anyhow::Error;
-
-// use crate::setup::rusic_process_music;
+use crate::types;
 
 #[get("/test")]
 pub async fn hello() -> impl Responder {
@@ -22,8 +21,7 @@ pub async fn echo(req_body: String) -> impl Responder {
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
     println!("alpha: {}", alpha.clone());
-    let op = "artist";
-    let artist_info_list = fetch_media_by_alpha(alpha, op);
+    let artist_info_list = fetch_artist_count_by_alpha(alpha);
     let json = serde_json::to_string(&artist_info_list).unwrap();
 
     HttpResponse::Ok().body(json)
@@ -32,34 +30,33 @@ pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
 #[get("/album/{alpha}")]
 pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
-    let op = "album";
-    let album_info_list = fetch_media_by_alpha(alpha, op);
+    let album_info_list = fetch_album_count_by_alpha(alpha);
     let json = serde_json::to_string(&album_info_list).unwrap();
 
     HttpResponse::Ok().body(json)
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
-pub struct ArtArtidInfo {
-    pub rusticid: String,
-    pub artist: String,
-    pub artistid: String,
-}
+// #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
+// pub struct ArtArtidInfo {
+//     pub rusticid: String,
+//     pub artist: String,
+//     pub artistid: String,
+// }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
-pub struct AlbAlbidInfo {
-    pub rusticid: String,
-    pub album: String,
-    pub albumid: String,
-}
+// #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
+// pub struct AlbAlbidInfo {
+//     pub rusticid: String,
+//     pub album: String,
+//     pub albumid: String,
+// }
 
-pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<(String, String)> {
-    println!("alpha: {}, {}", alpha.clone(), op.clone());
+pub fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
+    println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
     let mut id_list = Vec::new();
-    if op == "artist" {
+
         let mut stmt = conn
             .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?1")
             .unwrap();
@@ -68,16 +65,8 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<(String, String)> {
             let mediaid: String = row.get(0).unwrap();
             id_list.push(mediaid);
         }
-    } else if op == "album" {
-        let mut stmt = conn
-            .prepare("SELECT DISTINCT artistid FROM startswith WHERE album_first_letter = ?1")
-            .unwrap();
-        let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
-        while let Some(row) = rows.next().unwrap() {
-            let mediaid: String = row.get(0).unwrap();
-            id_list.push(mediaid);
-        }
-    };
+
+
     println!("id_list: {:?}", id_list.clone());
 
     //get artist info for each artistid and return json
@@ -90,7 +79,7 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<(String, String)> {
             .unwrap();
         let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
         while let Some(row) = rows.next().expect("Unable to get next row") {
-            let artist_info = ArtArtidInfo {
+            let artist_info = types::ArtArtidInfo {
                 rusticid: row.get(1).unwrap(),
                 artist: row.get(2).unwrap(),
                 artistid: row.get(3).unwrap(),
@@ -113,3 +102,54 @@ pub fn fetch_media_by_alpha(alpha: String, op: &str) -> Vec<(String, String)> {
 
     artist_info_list
 }
+
+
+pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
+    println!("alpha: {}", alpha.clone());
+    //get artistid from startswith db
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut id_list = Vec::new();
+    let mut stmt = conn
+            .prepare("SELECT DISTINCT albumid FROM startswith WHERE album_first_letter = ?1")
+            .unwrap();
+        let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+        while let Some(row) = rows.next().unwrap() {
+            let mediaid: String = row.get(0).unwrap();
+            id_list.push(mediaid);
+        }
+        println!("id_list: {:?}", id_list.clone());
+
+        //get artist info for each artistid and return json
+        let mut album_info_list = Vec::new();
+        let mut alb_vec = Vec::new();
+        for albid in id_list {
+            let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+            let mut stmt = conn
+                .prepare("SELECT * FROM albalbid WHERE albumid = ?1")
+                .unwrap();
+            let mut rows = stmt.query(&[&albid]).expect("Unable to query db");
+            while let Some(row) = rows.next().expect("Unable to get next row") {
+                let album_info = types::AlbAlbidInfo {
+                    rusticid: row.get(1).unwrap(),
+                    album: row.get(2).unwrap(),
+                    albumid: row.get(3).unwrap(),
+                };
+
+                alb_vec.push(album_info);
+            }
+        }
+
+        for alb in alb_vec {
+            let foo = alb.album.clone();
+            let bar = alb.albumid.clone();
+            let baz = (foo, bar);
+            album_info_list.push(baz);
+        }
+
+        album_info_list.sort();
+        album_info_list.dedup();
+        println!("artist_info: {:?}", album_info_list.clone());
+
+        album_info_list
+    }
