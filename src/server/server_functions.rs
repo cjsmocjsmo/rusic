@@ -32,7 +32,10 @@ pub async fn artistcount() -> impl Responder {
             count: row.get(1).unwrap(),
         };
         artist_count_vec.push(artist_count);
-    }
+    };
+
+    println!("artist_count_vec: {:?}", artist_count_vec.clone());
+
     let json = serde_json::to_string(&artist_count_vec).unwrap();
 
     HttpResponse::Ok().body(json)
@@ -54,6 +57,9 @@ pub async fn albumcount() -> impl Responder {
         };
         album_count_vec.push(album_count);
     }
+
+    println!("album_count_vec: {:?}", album_count_vec.clone());
+
     let json = serde_json::to_string(&album_count_vec).unwrap();
 
     HttpResponse::Ok().body(json)
