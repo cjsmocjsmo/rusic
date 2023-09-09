@@ -2,13 +2,13 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ArtistCount {
-    pub artist_first_letter: String,
+    pub alpha: String,
     pub count: i64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AlbumCount {
-    pub album_first_letter: String,
+    pub alpha: String,
     pub count: i64,
 }
 

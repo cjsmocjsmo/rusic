@@ -154,7 +154,7 @@ pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
     println!("this is artist alpha count {:#?}", alphacount.clone());
 
     let foo = types::ArtistCount {
-        artist_first_letter: alpha.clone(),
+        alpha: alpha.clone(),
         count: count.clone().parse::<i64>().unwrap(),
     };
 
@@ -165,7 +165,7 @@ pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
             )
             VALUES (?1, ?2)",
         (
-            &foo.artist_first_letter,
+            &foo.alpha,
             &foo.count,
         ),
     ).unwrap();
@@ -198,7 +198,7 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
 
     println!("this is album alpha count {:#?}", alphacount.clone());
     let fu = types::AlbumCount {
-        album_first_letter: alpha.clone(),
+        alpha: alpha.clone(),
         count: count.clone().parse::<i64>().unwrap(),
     };
 
@@ -209,7 +209,7 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
             )
             VALUES (?1, ?2)",
         (
-            &fu.album_first_letter,
+            &fu.alpha,
             &fu.count,
         ),
     ).unwrap();
