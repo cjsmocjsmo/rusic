@@ -17,7 +17,7 @@ pub async fn echo(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(req_body)
 }
 
-#[get("/artistcount}")]
+#[get("/artistcount")]
 pub async fn artistcount() -> impl Responder {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
@@ -41,7 +41,7 @@ pub async fn artistcount() -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-#[get("/albumcount}")]
+#[get("/albumcount")]
 pub async fn albumcount() -> impl Responder {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
