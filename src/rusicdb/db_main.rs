@@ -6,7 +6,7 @@ use std::env;
 pub fn write_music_to_db(music_info: types::MusicInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
-    println!("writing to db: {:#?}", music_info);
+    println!("writing to db: {:#?}", music_info.rusicid.clone());
 
     conn.execute(
         "INSERT INTO music (
