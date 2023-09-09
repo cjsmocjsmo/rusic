@@ -65,7 +65,7 @@ pub async fn albumcount() -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-#[get("/artist/{alpha}")]
+#[get("/artistforalpha/{alpha}")]
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
     println!("alpha: {}", alpha.clone());
@@ -75,7 +75,7 @@ pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-#[get("/album/{alpha}")]
+#[get("/albumforalpha/{alpha}")]
 pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
     let album_info_list = fetch_album_count_by_alpha(alpha);
@@ -98,7 +98,7 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
 //     pub albumid: String,
 // }
 
-pub fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
+fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
