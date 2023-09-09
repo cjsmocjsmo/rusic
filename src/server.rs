@@ -20,6 +20,8 @@ pub async fn fire_server_main() -> std::io::Result<()> {
             .wrap(cors)
             .service(server_functions::hello)
             .service(server_functions::echo)
+            .service(server_functions::artistcount)
+            .service(server_functions::albumcount)
             .service(server_functions::artistalpha)
             .service(server_functions::albumalpha)
 
