@@ -141,7 +141,7 @@ pub fn create_albalbid_table() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS albalbid (
         id INTEGER PRIMARY KEY,
         rusicid TEXT NOT NULL,
-        album TEXT NOT NULL,
+        imageurl TEXT NOT NULL,
         albumid TEXT NOT NULL
     )",
         (),

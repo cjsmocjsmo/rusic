@@ -16,10 +16,11 @@ pub fn process_mp3s(x: String, index: String, page: String) -> types::MusicInfo 
     let tag_album = tag.1.clone();
     let artist_id = rusic_utils::get_md5(tag.0.clone());
     let album_id = rusic_utils::get_md5(tag.1.clone());
+    let img_url = create_thumb_path(art_alb.0.clone(), art_alb.1.clone());
 
     let music_info = types::MusicInfo {
         rusicid: rusic_id.clone(),
-        imgurl: create_thumb_path(art_alb.0.clone(), art_alb.1.clone()),
+        imgurl: img_url.clone(),
         artist: tag_artist.clone(),
         artistid: artist_id.clone(),
         album: tag_album.clone(),
@@ -40,7 +41,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> types::MusicInfo 
             .unwrap();
     println!("artist_id: {}", artist_id.clone());
     let _insert_alb_albid =
-        db_album::write_alb_albid_to_db(rusic_id.clone(), tag_album.clone(), album_id.clone())
+        db_album::write_alb_albid_to_db(rusic_id.clone(), img_url.clone(), album_id.clone())
             .unwrap();
 
     music_info.clone()

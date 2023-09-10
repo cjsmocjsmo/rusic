@@ -1,4 +1,4 @@
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, web, HttpResponse, Responder};
 
 // use actix_web::web::Json;
 use rusqlite::Connection;
@@ -155,7 +155,7 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
         while let Some(row) = rows.next().expect("Unable to get next row") {
             let album_info = types::AlbAlbidInfo {
                 rusticid: row.get(1).unwrap(),
-                album: row.get(2).unwrap(),
+                imageurl: row.get(2).unwrap(),
                 albumid: row.get(3).unwrap(),
             };
 
@@ -164,7 +164,7 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     }
 
     for alb in alb_vec {
-        let foo = alb.album.clone();
+        let foo = alb.imageurl.clone();
         let bar = alb.albumid.clone();
         let baz = (foo, bar);
         album_info_list.push(baz);

@@ -36,7 +36,7 @@ pub struct ArtArtidInfo {
 #[derive(Debug, Clone, Serialize, Deserialize, Ord, PartialOrd, PartialEq, Eq)]
 pub struct AlbAlbidInfo {
     pub rusticid: String,
-    pub album: String,
+    pub imageurl: String,
     pub albumid: String,
 }
 
