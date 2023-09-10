@@ -94,7 +94,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     println!("id_list: {:?}", id_list.clone());
 
     //get artist info for each artistid and return json
-    // let mut artist_info_list = Vec::new();
+    let mut artist_info_list = Vec::new();
     let mut art_vec = Vec::new();
     for artid in id_list {
         let conn = Connection::open(db_path.clone()).expect("unable to open db file");
@@ -113,23 +113,33 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
         }
     }
 
-    // for art in art_vec {
-    //     let foo = art.artist.clone();
-    //     let bar = art.artistid.clone();
-    //     let baz = (foo, bar);
-    //     artist_info_list.push(baz);
-    // }
+    for art in art_vec {
+        let foo = art.artist.clone();
+        let bar = art.artistid.clone();
+        let baz = (foo, bar);
+        artist_info_list.push(baz);
+    }
 
-    // artist_info_list.sort();
-    // artist_info_list.dedup();
-    // println!("artist_info: {:?}", artist_info_list.clone());
+    artist_info_list.sort();
+    artist_info_list.dedup();
 
-    // artist_info_list
+    let new_artist_info_list = Vec::new();
+    let mut count = 0;
+    for artist in artist_info_list.clone() {
+        count += 1;
+        let stringcount = count.to_string();
+        let artistinfo = types::ArtArtidInfo {
+            rusticid: stringcount.clone(),
+            artist: artist.1.clone(),
+            artistid: count.to_string(),
+        };
+        new_artist_info_list.clone().push(artistinfo);
+    }
 
-    art_vec.sort();
-    art_vec.dedup();
+    println!("new_artist_info: {:?}", new_artist_info_list.clone());
 
-    art_vec
+
+    new_artist_info_list
 }
 
 pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
