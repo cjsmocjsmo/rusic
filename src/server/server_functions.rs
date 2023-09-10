@@ -5,7 +5,7 @@ use rusqlite::Connection;
 // use serde::{Deserialize, Serialize};
 use std::env;
 // use anyhow::Error;
-use crate::types::{self, ArtArtidInfo};
+use crate::types;
 
 #[get("/test")]
 pub async fn hello() -> impl Responder {
@@ -75,7 +75,7 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
+fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
