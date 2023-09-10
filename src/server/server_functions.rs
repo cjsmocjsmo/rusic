@@ -5,7 +5,7 @@ use rusqlite::Connection;
 // use serde::{Deserialize, Serialize};
 use std::env;
 // use anyhow::Error;
-use crate::types;
+use crate::types::{self, ArtArtidInfo};
 
 #[get("/test")]
 pub async fn hello() -> impl Responder {
@@ -75,7 +75,7 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
+fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -94,7 +94,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
     println!("id_list: {:?}", id_list.clone());
 
     //get artist info for each artistid and return json
-    let mut artist_info_list = Vec::new();
+    // let mut artist_info_list = Vec::new();
     let mut art_vec = Vec::new();
     for artid in id_list {
         let conn = Connection::open(db_path.clone()).expect("unable to open db file");
@@ -113,18 +113,23 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<(String, String)> {
         }
     }
 
-    for art in art_vec {
-        let foo = art.artist.clone();
-        let bar = art.artistid.clone();
-        let baz = (foo, bar);
-        artist_info_list.push(baz);
-    }
+    // for art in art_vec {
+    //     let foo = art.artist.clone();
+    //     let bar = art.artistid.clone();
+    //     let baz = (foo, bar);
+    //     artist_info_list.push(baz);
+    // }
 
-    artist_info_list.sort();
-    artist_info_list.dedup();
-    println!("artist_info: {:?}", artist_info_list.clone());
+    // artist_info_list.sort();
+    // artist_info_list.dedup();
+    // println!("artist_info: {:?}", artist_info_list.clone());
 
-    artist_info_list
+    // artist_info_list
+
+    art_vec.sort();
+    art_vec.dedup();
+
+    art_vec
 }
 
 pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
