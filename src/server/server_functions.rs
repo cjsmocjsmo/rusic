@@ -20,6 +20,7 @@ pub async fn artistcount() -> impl Responder {
     let mut rows = stmt.query([]).expect("Unable to query db");
     let mut artist_count_vec = Vec::new();
     while let Some(row) = rows.next().unwrap() {
+
         let artist_count = types::ArtistCount {
             alpha: row.get(1).unwrap(),
             count: row.get(2).unwrap(),
@@ -29,9 +30,10 @@ pub async fn artistcount() -> impl Responder {
 
     println!("artist_count_vec: {:?}", artist_count_vec.clone());
 
-    let json = serde_json::to_string(&artist_count_vec).unwrap();
+    // let json = serde_json::to_string(&artist_count_vec).unwrap();
+    let frag  = crate::server::fragments::frag_artiscount(artist_count_vec);
 
-    HttpResponse::Ok().body(json)
+    HttpResponse::Ok().body(frag)
 }
 
 #[get("/albumcount")]

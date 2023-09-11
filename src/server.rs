@@ -4,6 +4,7 @@ use actix_cors::Cors;
 use std::env;
 
 pub mod server_functions;
+pub mod fragments;
 
 #[actix_web::main]
 pub async fn fire_server_main() -> std::io::Result<()> {
