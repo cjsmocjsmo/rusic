@@ -2,16 +2,20 @@ use crate::types;
 
 pub fn frag_artiscount(xx: Vec<types::ArtistCount>) -> String {
     let mut master = Vec::new();
+    let foo = "<div><ul class='alphaList'>".to_string();
+    master.push(foo);
     for x in xx {
         let mut frag = String::new();
-        frag.push_str("<div><ul class='alphaList'><div class='alpha'>");
-        frag.push_str(&("<a href='/artist/".to_owned() + x.alpha.as_str() + "'>"));
+        frag.push_str(&("<div class='alpha'><a href='/artist/".to_owned() + x.alpha.as_str() + "'>"));
         frag.push_str(&("<h1>".to_owned() + x.alpha.as_str() + "</h1>"));
         frag.push_str(&("<h3>".to_owned() + x.count.to_string().as_str() + "</h3>"));
-        frag.push_str("</a></div></ul></div>");
+        frag.push_str("</a></div>");
         master.push(frag);
 
-    }
+    };
+
+    let bar = "</ul></div>".to_string();
+    master.push(bar);
 
     let master_string = master.join("");
 
