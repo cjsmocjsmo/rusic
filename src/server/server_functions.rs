@@ -31,11 +31,11 @@ pub async fn artistcount() -> impl Responder {
     println!("artist_count_vec: {:?}", artist_count_vec.clone());
 
     // THIS IS NEED BY SVELTE DONT DELETE
-    // let json = serde_json::to_string(&artist_count_vec).unwrap();
-    // HttpResponse::Ok().body(frag)
-
-    let frag  = crate::server::fragments::frag_artiscount(artist_count_vec);
+    let json = serde_json::to_string(&artist_count_vec).unwrap();
     HttpResponse::Ok().body(frag)
+
+    // let frag  = crate::server::fragments::frag_artiscount(artist_count_vec);
+    // HttpResponse::Ok().body(frag)
 }
 
 #[get("/albumcount")]
@@ -56,12 +56,12 @@ pub async fn albumcount() -> impl Responder {
     println!("album_count_vec: {:?}", album_count_vec.clone());
 
     // THIS IS NEED BY SVELTE DONT DELETE
-    // let json = serde_json::to_string(&album_count_vec).unwrap();
-    // HttpResponse::Ok().body(json)
+    let json = serde_json::to_string(&album_count_vec).unwrap();
+    HttpResponse::Ok().body(json)
 
-    let frag  = crate::server::fragments::frag_albumcount(album_count_vec);
-    HttpResponse::Ok().body(frag)
-}
+//     let frag  = crate::server::fragments::frag_albumcount(album_count_vec);
+//     HttpResponse::Ok().body(frag)
+// }
 
 #[get("/artistforalpha/{alpha}")]
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
@@ -82,7 +82,7 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
+fn fetch_artist_count_by_alpha(alpha: String) -> String {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -143,10 +143,14 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
         new_artist_info_list.clone().push(artistinfo);
     }
 
+
+    // THIS IS NEED BY SVELTE DONT DELETE
     println!("new_artist_info: {:?}", new_artist_info_list.clone());
-
-
     new_artist_info_list
+
+
+    // let frag  = crate::server::fragments::frag_artist_for_alpha(new_artist_info_list);
+    // frag
 }
 
 pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {

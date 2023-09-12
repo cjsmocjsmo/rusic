@@ -22,6 +22,26 @@ pub fn frag_artiscount(xx: Vec<types::ArtistCount>) -> String {
     master_string
 }
 
+pub fn frag_artist_for_alpha(xx: Vec<types::ArtArtidInfo>) -> String {
+    let mut master = Vec::new();
+    let start = "<div>".to_owned();
+    master.push(start);
+    for x in xx {
+        let mut frag = String::new();
+        frag.push_str("<button    >");
+        frag.push_str(&x.artist);
+        frag.push_str("</button>");
+        master.push(frag);
+    };
+    let end = "</div>".to_string();
+    master.push(end);
+
+    let master_string = master.join("");
+
+
+    master_string
+}
+
 pub fn frag_albumcount(xx: Vec<types::AlbumCount>) -> String {
     let mut master = Vec::new();
     let foo = "<div><ul class='alphaList'>".to_string();
@@ -43,3 +63,5 @@ pub fn frag_albumcount(xx: Vec<types::AlbumCount>) -> String {
 
     master_string
 }
+
+
