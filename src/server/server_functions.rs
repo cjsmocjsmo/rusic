@@ -134,7 +134,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
 
     // println!("artist_info: {:#?}", artist_info_list.clone());
 
-    let new_artist_info_list = Vec::new();
+    let mut new_artist_info_list = Vec::new();
     let mut count = 0;
     for artist in artist_info_list.clone() {
         count += 1;
@@ -148,7 +148,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
             artistid: artist.1.to_string(),
         };
         println!("artistinfo: {:#?}", artistinfo.clone());
-        new_artist_info_list.clone().push(artistinfo);
+        new_artist_info_list.push(artistinfo);
     };
 
 
