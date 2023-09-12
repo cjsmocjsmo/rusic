@@ -7,7 +7,7 @@ pub mod server_functions;
 pub mod fragments;
 
 #[actix_web::main]
-pub async fn fire_server_main() -> std::io::Result<()> {
+pub async fn rusic_server_main() -> std::io::Result<()> {
     let img_path = env::var("RUSIC_THUMBS").unwrap();
 
     HttpServer::new(move || {

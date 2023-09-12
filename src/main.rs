@@ -22,7 +22,7 @@ fn main() -> std::io::Result<()> {
     println!("Setup completed in: {} seconds", duration.as_secs());
 
     println!("Starting server...");
-    let _server = server::fire_server_main();
+    let _server = server::rusic_server_main();
 
     Ok(())
 }
