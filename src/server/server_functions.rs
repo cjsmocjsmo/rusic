@@ -82,6 +82,53 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
+#[get("/albforart/{artistid}")]
+pub async fn albforart(a: web::Path<String>) -> impl Responder {
+    let artistid = a.into_inner();
+    let alb_for_art = fetch_albforart(artistid);
+    let json = serde_json::to_string(&alb_for_art).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
+fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
+    let mut albumidvec = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT distinct albumid FROM music WHERE artistid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let albumid: String = row.get(6).unwrap();
+        println!("albumid: {}", albumid.clone());
+        albumidvec.push(albumid);
+    };
+
+    println!("albumidvec: {:#?}", albumidvec.clone());
+
+    let mut album_info_list = Vec::new();
+    for albumid in albumidvec {
+        let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+        let mut stmt = conn
+            .prepare("SELECT * FROM albalbid WHERE albumid = ?1")
+            .unwrap();
+        let mut rows = stmt.query(&[&albumid]).expect("Unable to query db");
+        while let Some(row) = rows.next().expect("Unable to get next row") {
+
+            let album_info = types::AlbAlbidInfo {
+                rusticid: row.get(1).unwrap(),
+                imageurl: row.get(2).unwrap(),
+                albumid: row.get(3).unwrap(),
+            };
+
+            album_info_list.push(album_info);
+        }
+    }
+
+    album_info_list
+}
+
 fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
@@ -120,8 +167,6 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
         }
     };
 
-    // print!("art_vec: {:#?}", art_vec.clone());
-
     for art in art_vec {
         let foo = art.artist.clone();
         let bar = art.artistid.clone();
@@ -132,22 +177,17 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     artist_info_list.sort();
     artist_info_list.dedup();
 
-    // println!("artist_info: {:#?}", artist_info_list.clone());
-
     let mut new_artist_info_list = Vec::new();
     let mut count = 0;
     for artist in artist_info_list.clone() {
         count += 1;
         let stringcount = count.to_string();
 
-        println!("artist: {:#?}", artist.1.clone());
-
         let artistinfo = types::ArtArtidInfo {
             rusticid: stringcount.clone(),
             artist: artist.0.clone(),
             artistid: artist.1.to_string(),
         };
-        println!("artistinfo: {:#?}", artistinfo.clone());
         new_artist_info_list.push(artistinfo);
     };
 
