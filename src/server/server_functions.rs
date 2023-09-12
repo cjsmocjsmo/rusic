@@ -100,28 +100,11 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
         .unwrap();
     let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
-        let album_info = types::MusicInfo{
-            rusicid: row.get(0).unwrap(),
-            imgurl: row.get(1).unwrap(),
-            artist: row.get(2).unwrap(),
-            artistid: row.get(3).unwrap(),
-            album: row.get(4).unwrap(),
-            albumid: row.get(5).unwrap(),
-            song: row.get(6).unwrap(),
-            fullpath: row.get(7).unwrap(),
-            extension: row.get(8).unwrap(),
-            idx: row.get(9).unwrap(),
-            page: row.get(10).unwrap(),
-            fsizeresults: row.get(11).unwrap(),
-        };
+        let album_id: String = row.get(0).unwrap();
+        albumidvec.push(album_id);
+    }
 
-        println!("album_info: {:#?}", album_info.clone());
-        albumidvec.push(album_info.albumid.clone());
-    };
-
-    println!("albumidvec: {:#?}", albumidvec.clone());
-
-    let mut album_info_list = Vec::new();
+    let mut albumid_vec_final = Vec::new();
     for albumid in albumidvec {
         let conn = Connection::open(db_path.clone()).expect("unable to open db file");
         let mut stmt = conn
@@ -129,18 +112,41 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
             .unwrap();
         let mut rows = stmt.query(&[&albumid]).expect("Unable to query db");
         while let Some(row) = rows.next().expect("Unable to get next row") {
-
             let album_info = types::AlbAlbidInfo {
                 rusticid: row.get(1).unwrap(),
                 imageurl: row.get(2).unwrap(),
                 albumid: row.get(3).unwrap(),
             };
 
-            album_info_list.push(album_info);
-        };
+            println!("album_info: {:#?}", album_info.clone());
+            albumid_vec_final.push(album_info.clone());
+        }
     };
 
-    album_info_list
+
+
+    // println!("albumidvec: {:#?}", albumidvec.clone());
+
+    // let mut album_info_list = Vec::new();
+    // for albumid in albumidvec {
+    //     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    //     let mut stmt = conn
+    //         .prepare("SELECT * FROM albalbid WHERE albumid = ?1")
+    //         .unwrap();
+    //     let mut rows = stmt.query(&[&albumid]).expect("Unable to query db");
+    //     while let Some(row) = rows.next().expect("Unable to get next row") {
+
+    //         let album_info = types::AlbAlbidInfo {
+    //             rusticid: row.get(1).unwrap(),
+    //             imageurl: row.get(2).unwrap(),
+    //             albumid: row.get(3).unwrap(),
+    //         };
+
+    //         album_info_list.push(album_info);
+    //     };
+    // };
+
+    albumid_vec_final
 }
 
 fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
