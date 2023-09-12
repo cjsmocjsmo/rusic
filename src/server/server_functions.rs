@@ -100,9 +100,23 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
         .unwrap();
     let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
-        let albumid: String = row.get(6).unwrap();
-        println!("albumid: {}", albumid.clone());
-        albumidvec.push(albumid);
+        let album_info = types::MusicInfo{
+            rusicid: row.get(1).unwrap(),
+            imgurl: row.get(2).unwrap(),
+            artist: row.get(3).unwrap(),
+            artistid: row.get(4).unwrap(),
+            album: row.get(5).unwrap(),
+            albumid: row.get(6).unwrap(),
+            song: row.get(7).unwrap(),
+            fullpath: row.get(8).unwrap(),
+            extension: row.get(9).unwrap(),
+            idx: row.get(10).unwrap(),
+            page: row.get(11).unwrap(),
+            fsizeresults: row.get(12).unwrap(),
+        };
+
+        println!("album_info: {:#?}", album_info.clone());
+        albumidvec.push(album_info.albumid.clone());
     };
 
     println!("albumidvec: {:#?}", albumidvec.clone());
@@ -123,8 +137,8 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
             };
 
             album_info_list.push(album_info);
-        }
-    }
+        };
+    };
 
     album_info_list
 }
