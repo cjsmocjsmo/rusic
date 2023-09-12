@@ -120,7 +120,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
         }
     };
 
-    print!("art_vec: {:?}", art_vec.clone());
+    print!("art_vec: {:#?}", art_vec.clone());
 
     for art in art_vec {
         let foo = art.artist.clone();
@@ -132,7 +132,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     artist_info_list.sort();
     artist_info_list.dedup();
 
-    println!("artist_info: {:?}", artist_info_list.clone());
+    println!("artist_info: {:#?}", artist_info_list.clone());
 
     let new_artist_info_list = Vec::new();
     let mut count = 0;
@@ -145,11 +145,11 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
             artistid: count.to_string(),
         };
         new_artist_info_list.clone().push(artistinfo);
-    }
+    };
 
 
     // THIS IS NEED BY SVELTE DONT DELETE
-    println!("new_artist_info: {:?}", new_artist_info_list.clone());
+    println!("new_artist_info: {:#?}", new_artist_info_list.clone());
     new_artist_info_list
 
 
