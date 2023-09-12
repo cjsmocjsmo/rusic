@@ -101,18 +101,18 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
     let mut rows = stmt.query(&[&artid]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
         let album_info = types::MusicInfo{
-            rusicid: row.get(1).unwrap(),
-            imgurl: row.get(2).unwrap(),
-            artist: row.get(3).unwrap(),
-            artistid: row.get(4).unwrap(),
-            album: row.get(5).unwrap(),
-            albumid: row.get(6).unwrap(),
-            song: row.get(7).unwrap(),
-            fullpath: row.get(8).unwrap(),
-            extension: row.get(9).unwrap(),
-            idx: row.get(10).unwrap(),
-            page: row.get(11).unwrap(),
-            fsizeresults: row.get(12).unwrap(),
+            rusicid: row.get(0).unwrap(),
+            imgurl: row.get(1).unwrap(),
+            artist: row.get(2).unwrap(),
+            artistid: row.get(3).unwrap(),
+            album: row.get(4).unwrap(),
+            albumid: row.get(5).unwrap(),
+            song: row.get(6).unwrap(),
+            fullpath: row.get(7).unwrap(),
+            extension: row.get(8).unwrap(),
+            idx: row.get(9).unwrap(),
+            page: row.get(10).unwrap(),
+            fsizeresults: row.get(11).unwrap(),
         };
 
         println!("album_info: {:#?}", album_info.clone());
