@@ -32,7 +32,7 @@ pub async fn artistcount() -> impl Responder {
 
     // THIS IS NEED BY SVELTE DONT DELETE
     let json = serde_json::to_string(&artist_count_vec).unwrap();
-    HttpResponse::Ok().body(frag)
+    HttpResponse::Ok().body(json)
 
     // let frag  = crate::server::fragments::frag_artiscount(artist_count_vec);
     // HttpResponse::Ok().body(frag)
@@ -61,7 +61,7 @@ pub async fn albumcount() -> impl Responder {
 
 //     let frag  = crate::server::fragments::frag_albumcount(album_count_vec);
 //     HttpResponse::Ok().body(frag)
-// }
+}
 
 #[get("/artistforalpha/{alpha}")]
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
@@ -82,7 +82,7 @@ pub async fn albumalpha(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
-fn fetch_artist_count_by_alpha(alpha: String) -> String {
+fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
