@@ -33,7 +33,7 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             // .service(fs::Files::new("/thumbnails", img_path.clone()).show_files_listing())
             .service(fs::Files::new("/thumbnails", img_path.clone()))
             //symlink usb drives to /usr/share/rusic/rusic/Music
-            .service(fs::Files::new("/Music", "/usr/share/rusic/rusic/Music".to_string()).show_files_listing())
+            .service(fs::Files::new("/Music", "/usr/share/rusic/rusic/Music/Music".to_string()).show_files_listing())
         }
     )
     .bind(("192.168.0.26", 8080))?
