@@ -24,7 +24,8 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             .service(server_functions::albumcount)
             .service(server_functions::artistalpha)
             .service(server_functions::albumalpha)
-            .service(server_functions:: albforart)
+            .service(server_functions::albforart)
+            .service(server_functions::songsforalbum)
 
 
 

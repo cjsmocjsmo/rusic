@@ -91,6 +91,47 @@ pub async fn albforart(a: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body(json)
 }
 
+#[get("/songsforalbum/{albumid}")]
+pub async fn songsforalbum(a: web::Path<String>) -> impl Responder {
+    let albumid = a.into_inner();
+    let songs_for_album = fetch_songs_for_album(albumid);
+    let json = serde_json::to_string(&songs_for_album).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
+fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
+    let mut song_vec = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT * FROM music WHERE albumid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&x]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let song_info = types::MusicInfo {
+            rusicid: row.get(0).unwrap(),
+            imgurl: row.get(1).unwrap(),
+            artist: row.get(2).unwrap(),
+            artistid: row.get(3).unwrap(),
+            album: row.get(4).unwrap(),
+            albumid: row.get(5).unwrap(),
+            song: row.get(6).unwrap(),
+            fullpath: row.get(7).unwrap(),
+            extension: row.get(8).unwrap(),
+            idx: row.get(9).unwrap(),
+            page: row.get(10).unwrap(),
+            fsizeresults: row.get(11).unwrap(),
+        };
+        song_vec.push(song_info);
+
+    };
+
+    song_vec
+}
+
+
+
 fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
     let mut albumidvec = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
