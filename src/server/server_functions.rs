@@ -110,18 +110,18 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
     let mut rows = stmt.query(&[&x]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
         let song_info = types::MusicInfo {
-            rusicid: row.get(0).unwrap(),
-            imgurl: row.get(1).unwrap(),
-            artist: row.get(2).unwrap(),
-            artistid: row.get(3).unwrap(),
-            album: row.get(4).unwrap(),
-            albumid: row.get(5).unwrap(),
-            song: row.get(6).unwrap(),
-            fullpath: row.get(7).unwrap(),
-            extension: row.get(8).unwrap(),
-            idx: row.get(9).unwrap(),
-            page: row.get(10).unwrap(),
-            fsizeresults: row.get(11).unwrap(),
+            rusicid: row.get(1).unwrap(),
+            imgurl: row.get(2).unwrap(),
+            artist: row.get(3).unwrap(),
+            artistid: row.get(4).unwrap(),
+            album: row.get(5).unwrap(),
+            albumid: row.get(6).unwrap(),
+            song: row.get(7).unwrap(),
+            fullpath: row.get(8).unwrap(),
+            extension: row.get(9).unwrap(),
+            idx: row.get(10).unwrap(),
+            page: row.get(11).unwrap(),
+            fsizeresults: row.get(12).unwrap(),
         };
         song_vec.push(song_info);
 
@@ -133,6 +133,7 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
 
 
 fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
+    println!("artid: {}", artid.clone());
     let mut albumidvec = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
@@ -144,6 +145,8 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
         let album_id: String = row.get(0).unwrap();
         albumidvec.push(album_id);
     }
+
+    println!("albumidvec: {:#?}", albumidvec.clone());
 
     let mut album_info_list = Vec::new();
     let mut album_info_vec = Vec::new();
