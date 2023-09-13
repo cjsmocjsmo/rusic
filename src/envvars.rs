@@ -3,6 +3,7 @@ use std::env;
 pub fn set_env_vars() {
     let usb = env::var("RUSIC_USB");
     if usb.is_err() {
+        // env::set_var("RUSIC_USB", "/media/pi/C052-0E64/Music/K");
         env::set_var("RUSIC_USB", "/media/pi/C052-0E64/Music/K");
     };
 
