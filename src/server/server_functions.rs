@@ -104,7 +104,8 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
         albumidvec.push(album_id);
     }
 
-    let mut albumid_vec_final = Vec::new();
+    let mut album_info_list = Vec::new();
+    let mut album_info_vec = Vec::new();
     for albumid in albumidvec {
         let conn = Connection::open(db_path.clone()).expect("unable to open db file");
         let mut stmt = conn
@@ -119,34 +120,40 @@ fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
             };
 
             println!("album_info: {:#?}", album_info.clone());
-            albumid_vec_final.push(album_info.clone());
+            album_info_vec.push(album_info.clone());
         }
     };
 
+    for alb in album_info_vec {
+        let foo = alb.imageurl.clone();
+        let bar = alb.albumid.clone();
+        let baz = (foo, bar);
+        album_info_list.push(baz);
+    }
 
+    album_info_list.sort();
+    album_info_list.dedup();
 
-    // println!("albumidvec: {:#?}", albumidvec.clone());
+    println!("album_info: {:?}", album_info_list.clone());
 
-    // let mut album_info_list = Vec::new();
-    // for albumid in albumidvec {
-    //     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-    //     let mut stmt = conn
-    //         .prepare("SELECT * FROM albalbid WHERE albumid = ?1")
-    //         .unwrap();
-    //     let mut rows = stmt.query(&[&albumid]).expect("Unable to query db");
-    //     while let Some(row) = rows.next().expect("Unable to get next row") {
+    let mut new_album_info_list = Vec::new();
+    let mut count = 0;
+    for album in album_info_list.clone() {
+        count += 1;
+        let stringcount = count.to_string();
 
-    //         let album_info = types::AlbAlbidInfo {
-    //             rusticid: row.get(1).unwrap(),
-    //             imageurl: row.get(2).unwrap(),
-    //             albumid: row.get(3).unwrap(),
-    //         };
+        let albuminfo = types::AlbAlbidInfo {
+            rusticid: stringcount.clone(),
+            imageurl: album.0.clone(),
+            albumid: album.1.to_string(),
+        };
+        new_album_info_list.push(albuminfo);
+    };
 
-    //         album_info_list.push(album_info);
-    //     };
-    // };
+    println!("new_album_info_list: {:#?}", new_album_info_list.clone());
 
-    albumid_vec_final
+    new_album_info_list
+
 }
 
 fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
