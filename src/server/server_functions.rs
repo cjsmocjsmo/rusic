@@ -142,13 +142,13 @@ fn split_path(path: String) -> String {
         let foo = component.as_os_str().to_str().unwrap();
         components_vec.push(foo.to_string());
     };
-    components_vec.drain(0..3);
+    components_vec.drain(0..4);
 
     let ffile = components_vec.join("/");
 
     let http_addr = env::var("RUSIC_HTTP_ADDR").expect("RUSIC_HTTP_ADDR not set");
     let http_port = env::var("RUSIC_PORT").expect("RUSIC_PORT not set");
-    let http_addr_port = http_addr + &http_port + &ffile;
+    let http_addr_port = http_addr + &http_port + "/" + &ffile;
     // let http_addr_port_file = http_addr_port;
 
     http_addr_port
