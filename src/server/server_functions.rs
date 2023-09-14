@@ -1,4 +1,5 @@
 use actix_web::{get, web, HttpResponse, Responder};
+use std::path::Path;
 
 // use actix_web::web::Json;
 use rusqlite::Connection;
@@ -109,6 +110,9 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
         .unwrap();
     let mut rows = stmt.query(&[&x]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
+        let fpath: String = row.get(8).unwrap();
+        let fupath = split_path(fpath);
+
         let song_info = types::MusicInfo {
             rusicid: row.get(1).unwrap(),
             imgurl: row.get(2).unwrap(),
@@ -117,7 +121,7 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
             album: row.get(5).unwrap(),
             albumid: row.get(6).unwrap(),
             song: row.get(7).unwrap(),
-            fullpath: row.get(8).unwrap(),
+            fullpath: fupath,
             extension: row.get(9).unwrap(),
             idx: row.get(10).unwrap(),
             page: row.get(11).unwrap(),
@@ -130,7 +134,25 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
     song_vec
 }
 
+fn split_path(path: String) -> String {
+    let path = Path::new(&path);
+    let components = path.components();
+    let mut components_vec = Vec::new();
+    for component in components {
+        let foo = component.as_os_str().to_str().unwrap();
+        components_vec.push(foo.to_string());
+    };
+    components_vec.drain(0..3);
 
+    let ffile = components_vec.join("/");
+
+    let http_addr = env::var("RUSIC_HTTP_ADDR").expect("RUSIC_HTTP_ADDR not set");
+    let http_port = env::var("RUSIC_PORT").expect("RUSIC_PORT not set");
+    let http_addr_port = http_addr + &http_port + &ffile;
+    // let http_addr_port_file = http_addr_port;
+
+    http_addr_port
+  }
 
 fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
     println!("artid: {}", artid.clone());

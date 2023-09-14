@@ -32,7 +32,6 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             // .service(crate::server::server_functions::wheeloftime)
             // .service(fs::Files::new("/thumbnails", img_path.clone()).show_files_listing())
             .service(fs::Files::new("/thumbnails", img_path.clone()))
-
             .service(fs::Files::new("/Music", "/usr/share/rusic/rusic/Music".to_string()).show_files_listing())
         }
     )
