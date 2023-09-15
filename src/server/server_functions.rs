@@ -294,7 +294,7 @@ fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     // frag
 }
 
-pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
+pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
     println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
@@ -328,18 +328,33 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<(String, String)> {
 
             alb_vec.push(album_info);
         }
-    }
+    };
 
     for alb in alb_vec {
         let foo = alb.imageurl.clone();
         let bar = alb.albumid.clone();
         let baz = (foo, bar);
         album_info_list.push(baz);
-    }
+    };
 
     album_info_list.sort();
     album_info_list.dedup();
-    println!("artist_info: {:?}", album_info_list.clone());
 
-    album_info_list
+    let mut new_album_info_list = Vec::new();
+    let mut count = 0;
+    for album in album_info_list.clone() {
+        count += 1;
+        let stringcount = count.to_string();
+
+        let albuminfo = types::AlbAlbidInfo {
+            rusticid: stringcount.clone(),
+            imageurl: album.0.clone(),
+            albumid: album.1.to_string(),
+        };
+        new_album_info_list.push(albuminfo);
+    };
+
+    println!("artist_info: {:?}", new_album_info_list.clone());
+
+    new_album_info_list
 }
