@@ -113,16 +113,20 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
         let fpath: String = row.get(8).unwrap();
         let fupath = split_path(fpath);
 
+        let albumidd: String = row.get(6).unwrap();
+        let new_page_path = "/songsforalbum/".to_string() + &albumidd;
+        let _crap: String = row.get(9).unwrap();
+
         let song_info = types::MusicInfo {
             rusicid: row.get(1).unwrap(),
             imgurl: row.get(2).unwrap(),
             artist: row.get(3).unwrap(),
             artistid: row.get(4).unwrap(),
             album: row.get(5).unwrap(),
-            albumid: row.get(6).unwrap(),
+            albumid: albumidd,
             song: row.get(7).unwrap(),
             fullpath: fupath,
-            extension: row.get(9).unwrap(),
+            extension: new_page_path,
             idx: row.get(10).unwrap(),
             page: row.get(11).unwrap(),
             fsizeresults: row.get(12).unwrap(),
