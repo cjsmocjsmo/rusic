@@ -113,20 +113,16 @@ fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
         let fpath: String = row.get(8).unwrap();
         let fupath = split_path(fpath);
 
-        let albumidd: String = row.get(6).unwrap();
-        let new_page_path = "/songsforalbum/".to_string() + &albumidd;
-        let _crap: String = row.get(9).unwrap();
-
         let song_info = types::MusicInfo {
             rusicid: row.get(1).unwrap(),
             imgurl: row.get(2).unwrap(),
             artist: row.get(3).unwrap(),
             artistid: row.get(4).unwrap(),
             album: row.get(5).unwrap(),
-            albumid: albumidd,
+            albumid: row.get(6).unwrap(),
             song: row.get(7).unwrap(),
             fullpath: fupath,
-            extension: new_page_path,
+            extension: row.get(9).unwrap(),
             idx: row.get(10).unwrap(),
             page: row.get(11).unwrap(),
             fsizeresults: row.get(12).unwrap(),
@@ -348,10 +344,10 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
     let mut count = 0;
     for album in album_info_list.clone() {
         count += 1;
-        let stringcount = count.to_string();
+        let albpath = "songsforalbum/".to_string() + &album.1.to_string();
 
         let albuminfo = types::AlbAlbidInfo {
-            rusticid: stringcount.clone(),
+            rusticid: albpath.clone(),
             imageurl: album.0.clone(),
             albumid: album.1.to_string(),
         };
