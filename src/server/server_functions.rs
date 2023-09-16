@@ -344,7 +344,7 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
     let mut count = 0;
     for album in album_info_list.clone() {
         count += 1;
-        let albpath = "songsforalbum/".to_string() + &album.1.to_string();
+        let albpath = "/songsforalbum/".to_string() + &album.1.to_string();
 
         let albuminfo = types::AlbAlbidInfo {
             rusticid: albpath.clone(),
