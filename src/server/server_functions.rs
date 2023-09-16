@@ -114,10 +114,9 @@ pub async fn createemptyplaylist(x: web::Path<String>) -> impl Responder {
 }
 
 #[get("/createrandomplaylist/{playlistname}/{offset}")]
-pub async fn createrandomplaylist(x: web::Path<String>, ofset: web::Path<String>) -> impl Responder {
-    let x = x.into_inner();
-    let offset = ofset.into_inner();
-    let random_playlist = create_random_playlist(x.clone(), offset.clone());
+pub async fn createrandomplaylist(x: web::Path<(String, String)>) -> impl Responder {
+    let (playlistname, offset) = x.into_inner();
+    let random_playlist = create_random_playlist(playlistname.clone(), offset.clone());
     let json = serde_json::to_string(&random_playlist).unwrap();
 
     HttpResponse::Ok().body(json)
