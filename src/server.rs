@@ -26,6 +26,8 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             .service(server_functions::albumalpha)
             .service(server_functions::albforart)
             .service(server_functions::songsforalbum)
+            .service(server_functions::createemptyplaylist)
+            .service(server_functions::createrandomplaylist)
 
 
 

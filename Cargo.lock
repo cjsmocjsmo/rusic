@@ -1533,6 +1533,7 @@ dependencies = [
  "md-5",
  "mp3-duration",
  "num_cpus",
+ "rand",
  "rusqlite",
  "serde",
  "serde_json",

@@ -32,7 +32,7 @@ pub fn process_mp3s(x: String, index: String, page: String) -> types::MusicInfo 
         page: page.clone(),
         fsizeresults: RusicUtils::get_file_size(&fu).to_string(),
     };
-    let _wm = db_main::write_music_to_db(music_info.clone()).unwrap();
+    let _wm = db_main::post_music_to_db(music_info.clone()).unwrap();
     let _wnfo = write_music_nfos_to_file(music_info.clone(), index.clone());
 
     let _insert_first_letter = rusic_utils::gen_first_letter_db(x.clone()).unwrap();

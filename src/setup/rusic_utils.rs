@@ -163,7 +163,7 @@ pub fn gen_first_letter_db(media: String) -> Result<()> {
         artist_first_letter: rus.artist_starts_with(),
         album_first_letter: rus.album_starts_with(),
     };
-    let _insertfirsletter = db_main::insert_first_letter(first_letter_info).unwrap();
+    let _insertfirsletter = db_main::post_first_letter(first_letter_info).unwrap();
 
     Ok(())
 }

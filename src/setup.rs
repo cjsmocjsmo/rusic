@@ -4,6 +4,7 @@ use std::env;
 use std::sync::mpsc::channel;
 use threadpool::ThreadPool;
 use crate::rusicdb;
+use crate::types;
 
 pub mod rusic_album;
 pub mod rusic_artist;
@@ -43,12 +44,25 @@ pub fn setup() -> String {
 
     let alids = rusic_album::unique_albumids();
     let sids = rusic_album::songids_for_albumid(alids.clone());
-    let insert_sids_result = rusicdb::db_main::write_songs_for_album_to_db(sids.clone());
+    let insert_sids_result = rusicdb::db_main::post_songs_for_album_to_db(sids.clone());
     let insert_sids = match insert_sids_result {
-        Ok(_) => String::from("Exit 0"),
-        Err(_) => String::from("Exit 1"),
+        Ok(_) => String::from("Exit 0 insert_sids"),
+        Err(_) => String::from("Exit 1 insert_sids"),
     };
     let _gen_db_check_file = rusic_utils::gen_db_check_file();
+
+    let stats = types::Stats {
+        artistcount: "0".to_string(),
+        albumcount: "0".to_string(),
+        songcount: mp3_count.to_string(),
+        imagecount: img_count.to_string(),
+    };
+    let insert_stats_results = rusicdb::db_main::post_stats_to_db(stats.clone());
+    let insert_stats = match insert_stats_results {
+        Ok(_) => String::from("Exit 0 insert_stats"),
+        Err(_) => String::from("Exit 1 insert_stats"),
+    };
+    println!("this is stats {:?}", insert_stats);
     println!("this is image count {:?}", img_count);
     println!("this is mp3 count {:?}", mp3_count);
     println!("\n\nFound {:?} USB devices", usb_drives.len());

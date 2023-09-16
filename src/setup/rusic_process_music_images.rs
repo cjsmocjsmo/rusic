@@ -65,7 +65,7 @@ pub fn process_music_images(x: String, index: i32) -> i32 {
             idx: index.to_string(),
         };
         write_music_img_to_file(music_img_info.clone(), index);
-        db_main::write_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
+        db_main::post_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")
     };
 
     index

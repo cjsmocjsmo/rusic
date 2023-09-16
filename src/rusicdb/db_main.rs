@@ -3,7 +3,53 @@ use rusqlite::{Connection, Result};
 use std::env;
 // use serde::{Deserialize, Serialize};
 
-pub fn write_music_to_db(music_info: types::MusicInfo) -> Result<()> {
+pub fn post_playlist_to_db(pl: types::PlayList) -> Result<()> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
+
+    conn.execute(
+        "INSERT INTO playlist (
+                rusicid,
+                name,
+                songs,
+                numsongs
+            )
+            VALUES (?1, ?2, ?3, ?4)",
+        (
+            &pl.rusicid,
+            &pl.name,
+            &pl.songs,
+            &pl.numsongs,
+        ),
+    )?;
+
+    Ok(())
+}
+
+pub fn post_stats_to_db(stats: types::Stats) -> Result<()> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
+
+    conn.execute(
+        "INSERT INTO stats (
+                artistcount,
+                albumcount,
+                songcount,
+                imagecount
+            )
+            VALUES (?1, ?2, ?3, ?4)",
+        (
+            &stats.artistcount,
+            &stats.albumcount,
+            &stats.songcount,
+            &stats.imagecount,
+        ),
+    )?;
+
+    Ok(())
+}
+
+pub fn post_music_to_db(music_info: types::MusicInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
     println!("writing to db: {:#?}", music_info.rusicid.clone());
@@ -43,7 +89,7 @@ pub fn write_music_to_db(music_info: types::MusicInfo) -> Result<()> {
     Ok(())
 }
 
-pub fn write_songs_for_album_to_db(albumsongsvec: Vec<types::AlbumSongs>) -> Result<()> {
+pub fn post_songs_for_album_to_db(albumsongsvec: Vec<types::AlbumSongs>) -> Result<()> {
     for alb in albumsongsvec {
         let conn = Connection::open("./db/rusic.db").unwrap();
 
@@ -60,7 +106,7 @@ pub fn write_songs_for_album_to_db(albumsongsvec: Vec<types::AlbumSongs>) -> Res
     Ok(())
 }
 
-pub fn insert_first_letter(first_letter_info: types::FirstLetterInfo) -> Result<()> {
+pub fn post_first_letter(first_letter_info: types::FirstLetterInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
@@ -89,7 +135,7 @@ pub fn insert_first_letter(first_letter_info: types::FirstLetterInfo) -> Result<
     Ok(())
 }
 
-pub fn write_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()> {
+pub fn post_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 

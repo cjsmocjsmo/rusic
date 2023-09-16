@@ -82,3 +82,19 @@ pub struct FirstLetterInfo {
     pub artist_first_letter: String,
     pub album_first_letter: String,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PlayList {
+    pub rusicid: String,
+    pub name: String,
+    pub songs: String,
+    pub numsongs: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Stats {
+    pub artistcount: String,
+    pub albumcount: String,
+    pub songcount: String,
+    pub imagecount: String,
+}

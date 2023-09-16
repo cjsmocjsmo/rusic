@@ -7,6 +7,9 @@ use rusqlite::Connection;
 use std::env;
 // use anyhow::Error;
 use crate::types;
+use crate::setup::rusic_utils::get_md5;
+use crate::rusicdb;
+use rand::Rng;
 
 #[get("/test")]
 pub async fn hello() -> impl Responder {
@@ -99,6 +102,84 @@ pub async fn songsforalbum(a: web::Path<String>) -> impl Responder {
     let json = serde_json::to_string(&songs_for_album).unwrap();
 
     HttpResponse::Ok().body(json)
+}
+
+#[get("/createemptyplaylist/{playlistname}")]
+pub async fn createemptyplaylist(x: web::Path<String>) -> impl Responder {
+    let x = x.into_inner();
+    let empty_playlist = create_empty_playlist(x.clone());
+    let json = serde_json::to_string(&empty_playlist).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
+#[get("/createrandomplaylist/{playlistname}/{offset}")]
+pub async fn createrandomplaylist(x: web::Path<String>, ofset: web::Path<String>) -> impl Responder {
+    let x = x.into_inner();
+    let offset = ofset.into_inner();
+    let random_playlist = create_random_playlist(x.clone(), offset.clone());
+    let json = serde_json::to_string(&random_playlist).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
+fn create_empty_playlist(x: String) -> bool {
+    let plinfo = types::PlayList {
+        rusicid: get_md5(x.clone()),
+        name: x.clone(),
+        songs: "None".to_string(),
+        numsongs: "0".to_string(),
+    };
+
+    let _insert_pl = rusicdb::db_main::post_playlist_to_db(plinfo);
+
+    true
+}
+
+fn create_random_playlist(x: String, offset: String) -> bool {
+    // let offset = env::var("RUSIC_PAGINATION").expect("RUSIC_PAGINATION not set");
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+
+    let mut stmt = conn
+        .prepare("SELECT songcount FROM stats ?1")
+        .unwrap();
+
+    let mut song_count: String = "0".to_string();
+    let mut rows = stmt.query(&[&offset]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        song_count = row.get(0).unwrap();
+    };
+    let song_count_i64 = song_count.parse::<i64>().unwrap();
+    let offset_i64 = offset.parse::<i64>().unwrap();
+
+    let mut random_numbers = Vec::new();
+    let mut rng = rand::thread_rng();
+    for _ in 0..offset_i64 {
+        random_numbers.push(rng.gen_range(0..song_count_i64));
+    };
+
+    let mut random_idx_numbers = Vec::new();
+    for random in random_numbers {
+        let randy = random.to_string();
+        random_idx_numbers.push(randy);
+    };
+
+    let idx_json = serde_json::to_string(&random_idx_numbers).unwrap();
+
+
+
+
+    let plinfo = types::PlayList {
+        rusicid: get_md5(x.clone()),
+        name: x.clone(),
+        songs: idx_json.clone(),
+        numsongs: offset.clone(),
+    };
+
+    let _insert_pl = rusicdb::db_main::post_playlist_to_db(plinfo).unwrap();
+
+    true
 }
 
 fn fetch_songs_for_album(x: String) -> Vec<types::MusicInfo> {
@@ -341,9 +422,9 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
     album_info_list.dedup();
 
     let mut new_album_info_list = Vec::new();
-    let mut count = 0;
+    // let mut count = 0;
     for album in album_info_list.clone() {
-        count += 1;
+        // count += 1;
         let albpath = "/songsforalbum/".to_string() + &album.1.to_string();
 
         let albuminfo = types::AlbAlbidInfo {
@@ -354,7 +435,7 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
         new_album_info_list.push(albuminfo);
     };
 
-    println!("artist_info: {:?}", new_album_info_list.clone());
+    println!("new_album_info_list: {:?}", new_album_info_list.clone());
 
     new_album_info_list
 }
