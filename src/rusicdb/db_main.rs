@@ -8,7 +8,7 @@ pub fn post_playlist_to_db(pl: types::PlayList) -> Result<()> {
     let conn = Connection::open(db_path).unwrap();
 
     conn.execute(
-        "INSERT INTO playlist (
+        "INSERT INTO playlists (
                 rusicid,
                 name,
                 songs,
