@@ -124,12 +124,15 @@ pub async fn createrandomplaylist(x: web::Path<String>, ofset: web::Path<String>
 }
 
 fn create_empty_playlist(x: String) -> bool {
+    println!("x: {}", x.clone());
     let plinfo = types::PlayList {
         rusicid: get_md5(x.clone()),
         name: x.clone(),
         songs: "None".to_string(),
         numsongs: "0".to_string(),
     };
+
+    println!("plinfo: {:#?}", plinfo.clone());
 
     let _insert_pl = rusicdb::db_main::post_playlist_to_db(plinfo);
 
