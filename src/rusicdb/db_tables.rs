@@ -56,7 +56,7 @@ pub fn create_music_images_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music_images (
             id INTEGER PRIMARY KEY,
-            rusicid TEXT NOT NULL,
+            rusicid TEXT NOT NULL UNIQUE,
             width TEXT NOT NULL,
             height TEXT NOT NULL,
             artist TEXT NOT NULL,
@@ -81,7 +81,7 @@ pub fn create_music_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS music (
             id INTEGER PRIMARY KEY,
-            rusicid TEXT NOT NULL,
+            rusicid TEXT NOT NULL UNIQUE,
             imgurl TEXT NOT NULL,
             artist TEXT NOT NULL,
             artistid TEXT NOT NULL,
@@ -106,7 +106,7 @@ pub fn create_startswith_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS startswith (
         id INTEGER PRIMARY KEY,
-        rusicid TEXT NOT NULL,
+        rusicid TEXT NOT NULL UNIQUE,
         artist TEXT NOT NULL,
         artistid TEXT NOT NULL,
         album TEXT NOT NULL,
@@ -126,7 +126,7 @@ pub fn create_artartid_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS artartid (
         id INTEGER PRIMARY KEY,
-        rusicid TEXT NOT NULL,
+        rusicid TEXT NOT NULL UNIQUE,
         artist TEXT NOT NULL,
         artistid TEXT NOT NULL
     )",
@@ -142,7 +142,7 @@ pub fn create_albalbid_table() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albalbid (
         id INTEGER PRIMARY KEY,
-        rusicid TEXT NOT NULL,
+        rusicid TEXT NOT NULL UNIQUE,
         imageurl TEXT NOT NULL,
         albumid TEXT NOT NULL
     )",
@@ -188,8 +188,8 @@ pub fn create_playlist() -> Result<()> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS playlists (
         id INTEGER PRIMARY KEY,
-        rusicid TEXT NOT NULL,
-        name TEXT NOT NULL,
+        rusicid TEXT NOT NULL UNIQUE,
+        name TEXT NOT NULL UNIQUE,
         songs TEXT NOT NULL,
         numsongs TEXT NOT NULL
     )",
