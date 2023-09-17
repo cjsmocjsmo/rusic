@@ -148,7 +148,7 @@ fn create_random_playlist(x: String, offset: String) -> bool {
         .unwrap();
 
     let mut song_count: String = "0".to_string();
-    let mut rows = stmt.query(&[&offset]).expect("Unable to query db");
+    let mut rows = stmt.query([]).expect("Unable to query db");
     while let Some(row) = rows.next().unwrap() {
         song_count = row.get(0).unwrap();
     };
