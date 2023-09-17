@@ -144,7 +144,7 @@ fn create_random_playlist(x: String, offset: String) -> bool {
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
 
     let mut stmt = conn
-        .prepare("SELECT songcount FROM stats ?1")
+        .prepare("SELECT songcount FROM stats")
         .unwrap();
 
     let mut song_count: String = "0".to_string();
