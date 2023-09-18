@@ -81,8 +81,8 @@ fn create_music_thumbnail(x: &String, art: String, alb: String) -> (String, Stri
     let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
     let out_fname = rusic_music_metadata_path + &new_fname;
 
-    let server_addr = env::var("RUSIC_SERVER_ADDR").expect("$RUSIC_SERVER_ADDR is not set");
-    let server_port = env::var("RUSIC_SERVER_PORT").expect("$RUSIC_SERVER_PORT is not set");
+    let server_addr = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_SERVER_ADDR is not set");
+    let server_port = env::var("RUSIC_PORT").expect("$RUSIC_SERVER_PORT is not set");
     let http_path = server_addr + ":" + &server_port + "/thumbs/" + &new_fname;
     let img = image::open(x).expect("ooooh fuck it didnt open");
     let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
