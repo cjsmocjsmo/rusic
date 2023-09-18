@@ -66,7 +66,8 @@ pub fn create_music_images_table() -> Result<()> {
             filesize TEXT NOT NULL,
             fullpath TEXT NOT NULL,
             thumbpath TEXT NOT NULL,
-            idx TEXT NOT NULL
+            idx TEXT NOT NULL,
+            page TEXT NOT NULL
         )",
         (),
     )?;

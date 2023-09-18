@@ -145,14 +145,29 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
     let pool = ThreadPool::new(num_cpus::get());
     let (tx, rx) = channel();
 
-    let mut img_index = 0;
+    let mut index = 0;
+    let mut page = 1;
+    let mut page_count = 0;
+
+    let ofs = env::var("RUSIC_PAGINATION").unwrap();
+    let offset: u32 = ofs.trim().parse().expect("offset conversion failed");
+
     for i in alist {
-        img_index = img_index + 1;
+        index = index + 1;
+        if page_count < offset {
+            page_count = page_count + 1;
+            page = page;
+        } else {
+            page_count = 1;
+            page = page + 1;
+        }
+
+
         if i.contains("Music") {
             let tx = tx.clone();
             pool.execute(move || {
                 let img_info =
-                    rusic_process_music_images::process_music_images(i.clone(), img_index);
+                    rusic_process_music_images::process_music_images(i.clone(), index, page.clone().to_string());
                 tx.send(img_info).expect("Could not send data");
             });
         }

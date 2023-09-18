@@ -54,6 +54,7 @@ pub struct MusicImageInfo {
     pub fullpath: String,
     pub thumbpath: String,
     pub idx: String,
+    pub page: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
