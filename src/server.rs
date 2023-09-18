@@ -29,6 +29,7 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             .service(server_functions::createemptyplaylist)
             .service(server_functions::createrandomplaylist)
             .service(server_functions::allplaylists)
+            .service(server_functions::randomcoverart)
 
 
             // .service(crate::server::server_functions::wheeloftime)

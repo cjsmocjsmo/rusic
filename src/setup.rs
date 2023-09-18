@@ -149,12 +149,12 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
     let mut page = 1;
     let mut page_count = 0;
 
-    let ofs = env::var("RUSIC_PAGINATION").unwrap();
-    let offset: u32 = ofs.trim().parse().expect("offset conversion failed");
+    // let ofs = env::var("RUSIC_PAGINATION").unwrap();
+    // let offset: u32 = ofs.trim().parse().expect("offset conversion failed");
 
     for i in alist {
         index = index + 1;
-        if page_count < offset {
+        if page_count < 6 {
             page_count = page_count + 1;
             page = page;
         } else {
