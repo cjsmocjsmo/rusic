@@ -83,7 +83,7 @@ fn create_music_thumbnail(x: &String, art: String, alb: String) -> (String, Stri
 
     let server_addr = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_SERVER_ADDR is not set");
     let server_port = env::var("RUSIC_PORT").expect("$RUSIC_SERVER_PORT is not set");
-    let http_path = server_addr + ":" + &server_port + "/thumbs/" + &new_fname;
+    let http_path = server_addr + ":" + &server_port + "/thumbs" + &new_fname;
     let img = image::open(x).expect("ooooh fuck it didnt open");
     let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
     thumbnail
