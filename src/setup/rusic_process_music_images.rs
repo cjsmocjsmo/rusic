@@ -49,7 +49,9 @@ pub fn process_music_images(x: String, index: i32, pageg: i32) -> i32 {
         let height_r = newdims.1.to_string();
         let fsize_results = RusicUtils::get_file_size(&foo2).to_string();
         let full_path = &x.to_string();
-        let thumb_path = create_music_thumbnail(&x, artist1.clone(), album1.clone());
+        let tpath = create_music_thumbnail(&x, artist1.clone(), album1.clone());
+        let thumb_path = tpath.0;
+        let http_thumb_path = tpath.1;
 
         let music_img_info = types::MusicImageInfo {
             rusicid: id,
@@ -64,6 +66,7 @@ pub fn process_music_images(x: String, index: i32, pageg: i32) -> i32 {
             thumbpath: thumb_path,
             idx: index.to_string(),
             page: pageg.to_string(),
+            httpthumbpath: http_thumb_path,
         };
         println!("this is music_img_info {:#?}", music_img_info);
         write_music_img_to_file(music_img_info.clone(), index);
@@ -73,16 +76,21 @@ pub fn process_music_images(x: String, index: i32, pageg: i32) -> i32 {
     index
 }
 
-fn create_music_thumbnail(x: &String, art: String, alb: String) -> String {
+fn create_music_thumbnail(x: &String, art: String, alb: String) -> (String, String) {
     let rusic_music_metadata_path = env::var("RUSIC_THUMBS").expect("$RUSIC_THUMBS is not set");
     let new_fname = "/".to_string() + art.as_str() + "_-_" + alb.as_str() + ".jpg";
     let out_fname = rusic_music_metadata_path + &new_fname;
+
+    let server_addr = env::var("RUSIC_SERVER_ADDR").expect("$RUSIC_SERVER_ADDR is not set");
+    let server_port = env::var("RUSIC_SERVER_PORT").expect("$RUSIC_SERVER_PORT is not set");
+    let http_path = server_addr + ":" + &server_port + "/thumbs/" + &new_fname;
     let img = image::open(x).expect("ooooh fuck it didnt open");
     let thumbnail = img.resize(200, 200, image::imageops::FilterType::Lanczos3);
     thumbnail
         .save(out_fname.clone())
         .expect("Saving image failed");
-    out_fname.to_string()
+
+    (out_fname.to_string(), http_path)
 }
 
 fn write_music_img_to_file(miinfo: types::MusicImageInfo, index: i32) {

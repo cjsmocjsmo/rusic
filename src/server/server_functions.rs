@@ -12,40 +12,33 @@ pub async fn hello() -> impl Responder {
 pub async fn randomcoverart() -> impl Responder {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-    let mut stmt = conn
-        .prepare("SELECT DISTINCT page FROM music_images;")
-        .unwrap();
-    let mut rows = stmt.query([]).expect("Unable to query db");
 
-    let mut pages_vec = Vec::new();
-    while let Some(row) = rows.next().unwrap() {
-        let page: String = row.get(0).unwrap();
-        pages_vec.push(page);
-    }
-    let mut stmt2 = conn
-        .prepare("SELECT * FROM music_images WHERE page = ?1;")
+    let mut stmt = conn
+        .prepare("SELECT * FROM music_images ORDER BY RANDOM() LIMIT 5;")
         .unwrap();
+
+    let mut rows = stmt.query([]).expect("Unable to query db");
     let mut random_cover_art_vec = Vec::new();
-    for page in pages_vec {
-        let mut rows2 = stmt2.query(&[&page]).expect("Unable to query db");
-        while let Some(row) = rows2.next().unwrap() {
-            let music_image_info = types::MusicImageInfo {
-                rusicid: row.get(1).unwrap(),
-                width: row.get(2).unwrap(),
-                height: row.get(3).unwrap(),
-                artist: row.get(4).unwrap(),
-                artistid: row.get(5).unwrap(),
-                album: row.get(6).unwrap(),
-                albumid: row.get(7).unwrap(),
-                filesize: row.get(8).unwrap(),
-                fullpath: row.get(9).unwrap(),
-                thumbpath: row.get(10).unwrap(),
-                idx: row.get(11).unwrap(),
-                page: row.get(12).unwrap(),
-            };
-            random_cover_art_vec.push(music_image_info);
-        }
-    }
+    while let Some(row) = rows.next().unwrap() {
+        let random_cover_art = types::MusicImageInfo {
+            rusicid: row.get(1).unwrap(),
+            width: row.get(2).unwrap(),
+            height: row.get(3).unwrap(),
+            artist: row.get(4).unwrap(),
+            artistid: row.get(5).unwrap(),
+            album: row.get(6).unwrap(),
+            albumid: row.get(7).unwrap(),
+            filesize: row.get(8).unwrap(),
+            fullpath: row.get(9).unwrap(),
+            thumbpath: row.get(10).unwrap(),
+            idx: row.get(11).unwrap(),
+            page: row.get(12).unwrap(),
+            httpthumbpath: row.get(13).unwrap(),
+        };
+        println!("random_cover_art: {:?}", random_cover_art.clone());
+
+        random_cover_art_vec.push(random_cover_art);
+    };
 
     println!("random_cover_art_vec: {:?}", random_cover_art_vec.clone());
     let json = serde_json::to_string(&random_cover_art_vec).unwrap();
