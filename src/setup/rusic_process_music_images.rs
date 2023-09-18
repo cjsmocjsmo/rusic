@@ -10,7 +10,7 @@ use crate::types;
 use crate::rusicdb::db_main;
 
 //NEED TO PROCESS FOR CONVERT PNG GIF WEBP TO JPG
-pub fn process_music_images(x: String, index: i32, page: String) -> i32 {
+pub fn process_music_images(x: String, index: i32, page: i32) -> i32 {
     let mut needs_to_be_processed = Vec::new();
     if x.ends_with("webp") {
         println!(".webp found converting to jpg: {:?}", x);
@@ -63,7 +63,7 @@ pub fn process_music_images(x: String, index: i32, page: String) -> i32 {
             fullpath: full_path.to_string(),
             thumbpath: thumb_path,
             idx: index.to_string(),
-            page: page.clone(),
+            page: page.clone().to_string(),
         };
         write_music_img_to_file(music_img_info.clone(), index);
         db_main::post_music_img_to_db(music_img_info.clone()).expect("music image db insertion failed")

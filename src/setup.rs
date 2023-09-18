@@ -167,7 +167,7 @@ fn run_music_img_threads(alist: Vec<String>) -> bool {
             let tx = tx.clone();
             pool.execute(move || {
                 let img_info =
-                    rusic_process_music_images::process_music_images(i.clone(), index, page.clone().to_string());
+                    rusic_process_music_images::process_music_images(i.clone(), index, page);
                 tx.send(img_info).expect("Could not send data");
             });
         }
