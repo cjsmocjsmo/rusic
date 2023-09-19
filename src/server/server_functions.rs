@@ -35,7 +35,6 @@ pub async fn randomcoverart() -> impl Responder {
             page: row.get(12).unwrap(),
             httpthumbpath: row.get(13).unwrap(),
         };
-        println!("random_cover_art: {:?}", random_cover_art.clone());
 
         random_cover_art_vec.push(random_cover_art);
     };
