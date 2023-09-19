@@ -152,9 +152,10 @@ pub fn post_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()>
                 fullpath,
                 thumbpath,
                 idx,
-                page
+                page,
+                httpthumbpath
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)",
         (
             &music_img_info.rusicid,
             &music_img_info.width,
@@ -168,6 +169,7 @@ pub fn post_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()>
             &music_img_info.thumbpath,
             &music_img_info.idx,
             &music_img_info.page,
+            &music_img_info.httpthumbpath,
         ),
     )?;
 
