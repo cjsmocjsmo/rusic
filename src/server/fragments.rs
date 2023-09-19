@@ -326,3 +326,13 @@ pub fn fetch_all_playlists() -> Vec<types::PlayList> {
 
     pl_vec
 }
+
+pub fn delete_playlist(x: String) -> bool {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+
+    let mut stmt = conn.prepare("DELETE FROM playlists WHERE rusicid = ?1").unwrap();
+    let _rows = stmt.execute(&[&x]).expect("Unable to query db");
+
+    true
+}

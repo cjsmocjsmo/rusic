@@ -149,3 +149,13 @@ pub async fn allplaylists() -> impl Responder {
 
     HttpResponse::Ok().body(json)
 }
+
+#[get("/deleteplaylist/{playlistid}")]
+
+pub async fn deleteplaylist(x: web::Path<String>) -> impl Responder {
+    let x = x.into_inner();
+    let delete_playlist = fragments::delete_playlist(x.clone());
+    let json = serde_json::to_string(&delete_playlist).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
