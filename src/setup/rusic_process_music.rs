@@ -59,7 +59,7 @@ fn write_music_nfos_to_file(mfo: types::MusicInfo, index: String) {
 fn create_thumb_path(art: String, alb: String) -> String {
     let myhttpd = env::var("RUSIC_HTTP_ADDR").expect("$RUSIC_HTTP_ADDR is not set");
     let myport = env::var("RUSIC_PORT").expect("$RUSIC_PORT is not set");
-    let newpath = myhttpd + &myport + "/thumbnails/" + &art + "_-_" + &alb + ".jpg";
+    let newpath = myhttpd + &myport + "/thumbs/" + &art + "_-_" + &alb + ".jpg";
 
     newpath
 }
