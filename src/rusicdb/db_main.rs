@@ -117,18 +117,22 @@ pub fn post_first_letter(first_letter_info: types::FirstLetterInfo) -> Result<()
                 album,
                 artistid,
                 albumid,
+                song,
                 artist_first_letter,
-                album_first_letter
+                album_first_letter,
+                song_first_letter
             )
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
         (
             &first_letter_info.rusicid,
             &first_letter_info.artist,
             &first_letter_info.album,
             &first_letter_info.artistid,
             &first_letter_info.albumid,
+            &first_letter_info.song,
             &first_letter_info.artist_first_letter,
             &first_letter_info.album_first_letter,
+            &first_letter_info.song_first_letter,
         ),
     )?;
 
@@ -231,8 +235,6 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
     let mut distinct_albumid_list_for_alpha = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
-
-
     let mut stmt = conn
         .prepare("SELECT DISTINCT albumid FROM startswith WHERE album_first_letter = ?")
         .unwrap();
@@ -241,11 +243,8 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
         let albumid: String = row.get(0).unwrap();
         distinct_albumid_list_for_alpha.push(albumid);
     }
-
     let count = distinct_albumid_list_for_alpha.len().to_string();
-
     let alphacount = (alpha.clone(), count.clone());
-
     println!("this is album alpha count {:#?}", alphacount.clone());
     let fu = types::AlbumCount {
         alpha: alpha.clone(),
@@ -264,7 +263,40 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
         ),
     ).unwrap();
 
-    //PUT ALPHA COUNT INTO DB
+    alphacount
+}
+
+pub fn post_song_count_by_alpha(alpha: String) -> (String, String) {
+    let mut distinct_albumid_list_for_alpha = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
+    let mut stmt = conn
+        .prepare("SELECT DISTINCT rusicid FROM startswith WHERE song_first_letter = ?")
+        .unwrap();
+    let mut rows = stmt.query(&[&alpha]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let rusicid: String = row.get(0).unwrap();
+        distinct_albumid_list_for_alpha.push(rusicid);
+    }
+    let count = distinct_albumid_list_for_alpha.len().to_string();
+    let alphacount = (alpha.clone(), count.clone());
+    println!("this is album alpha count {:#?}", alphacount.clone());
+    let fu = types::AlbumCount {
+        alpha: alpha.clone(),
+        count: count.clone().parse::<i64>().unwrap(),
+    };
+
+    conn.execute(
+        "INSERT INTO albumcount (
+                alpha,
+                count
+            )
+            VALUES (?1, ?2)",
+        (
+            &fu.alpha,
+            &fu.count,
+        ),
+    ).unwrap();
 
     alphacount
 }

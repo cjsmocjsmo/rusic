@@ -12,6 +12,12 @@ pub struct AlbumCount {
     pub count: i64,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SongCount {
+    pub alpha: String,
+    pub count: i64,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AlbumSongs {
     pub page: i32,
@@ -81,8 +87,10 @@ pub struct FirstLetterInfo {
     pub album: String,
     pub artistid: String,
     pub albumid: String,
+    pub song: String,
     pub artist_first_letter: String,
     pub album_first_letter: String,
+    pub song_first_letter: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

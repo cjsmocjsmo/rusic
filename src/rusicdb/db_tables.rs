@@ -113,8 +113,10 @@ pub fn create_startswith_table() -> Result<()> {
         artistid TEXT NOT NULL,
         album TEXT NOT NULL,
         albumid TEXT NOT NULL,
+        song TEXT NOT NULL,
         artist_first_letter TEXT NOT NULL,
-        album_first_letter TEXT NOT NULL
+        album_first_letter TEXT NOT NULL,
+        song_first_letter TEXT NOT NULL
     )",
         (),
     )?;
@@ -174,6 +176,21 @@ pub fn create_album_count() -> Result<()> {
     let conn = Connection::open(db_path)?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS albumcount (
+        id INTEGER PRIMARY KEY,
+        alpha TEXT NOT NULL,
+        count INTEGER NOT NULL
+    )",
+        (),
+    )?;
+
+    Ok(())
+}
+
+pub fn create_song_count() -> Result<()> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path)?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS songcount (
         id INTEGER PRIMARY KEY,
         alpha TEXT NOT NULL,
         count INTEGER NOT NULL

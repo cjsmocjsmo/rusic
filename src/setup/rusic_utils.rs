@@ -89,6 +89,14 @@ impl RusicUtils {
 
         first_letter.to_string()
     }
+
+    pub fn song_starts_with(&self) -> String {
+        let tag = Tag::read_from_path(&self.apath).expect(&self.apath);
+        let song = tag.title().expect(&self.apath);
+        let first_letter = song.chars().next().unwrap();
+
+        first_letter.to_string()
+    }
 }
 
 pub fn get_md5(z: String) -> String {
@@ -158,10 +166,12 @@ pub fn gen_first_letter_db(media: String) -> Result<()> {
         rusicid: get_md5(media.clone()),
         artist: tags.0.clone(),
         album: tags.1.clone(),
+        song: tags.2.clone(),
         artistid: get_md5(tags.0.clone()),
         albumid: get_md5(tags.1.clone()),
         artist_first_letter: rus.artist_starts_with(),
         album_first_letter: rus.album_starts_with(),
+        song_first_letter: rus.song_starts_with(),
     };
     let _insertfirsletter = db_main::post_first_letter(first_letter_info).unwrap();
 
@@ -227,8 +237,7 @@ pub fn artist_album_count_by_alpha() {
 
     for letter in alphabet.clone() {
         let _artist_alpha_count = db_main::post_artist_count_by_alpha(letter.to_string());
-    };
-    for letter in alphabet.clone() {
         let _album_alpha_count = db_main::post_album_count_by_alpha(letter.to_string());
-    }
+        let _song_alpha_count = db_main::post_song_count_by_alpha(letter.to_string());
+    };
 }
