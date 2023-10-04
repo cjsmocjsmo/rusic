@@ -186,7 +186,7 @@ pub fn post_music_img_to_db(music_img_info: types::MusicImageInfo) -> Result<()>
 //     count: i64,
 // }
 
-pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
+pub fn post_artist_count_by_alpha(alpha: String) {
     let mut distinct_artistid_list_for_alpha = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
@@ -223,15 +223,9 @@ pub fn post_artist_count_by_alpha(alpha: String) -> (String, String) {
             &foo.count,
         ),
     ).unwrap();
-
-
-
-    //PUT ALPHA COUNT INTO DB
-
-    alphacount
 }
 
-pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
+pub fn post_album_count_by_alpha(alpha: String) {
     let mut distinct_albumid_list_for_alpha = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
@@ -262,8 +256,6 @@ pub fn post_album_count_by_alpha(alpha: String) -> (String, String) {
             &fu.count,
         ),
     ).unwrap();
-
-    alphacount
 }
 
 pub fn post_song_count_by_alpha(alpha: String) -> (String, String) {
