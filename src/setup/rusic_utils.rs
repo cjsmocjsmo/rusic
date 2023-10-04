@@ -237,7 +237,11 @@ pub fn artist_album_count_by_alpha() {
 
     for letter in alphabet.clone() {
         let _artist_alpha_count = db_main::post_artist_count_by_alpha(letter.to_string());
-        let _album_alpha_count = db_main::post_album_count_by_alpha(letter.to_string());
-        let _song_alpha_count = db_main::post_song_count_by_alpha(letter.to_string());
+    };
+    for letter2 in alphabet.clone() {
+        let _album_alpha_count = db_main::post_album_count_by_alpha(letter2.to_string());
+    };
+    for letter3 in alphabet.clone() {
+        let _song_alpha_count = db_main::post_song_count_by_alpha(letter3.to_string());
     };
 }
