@@ -12,6 +12,7 @@ pub fn create_tables() {
     let _caalbit = create_albalbid_table().expect("Unable to create albalbid table");
     let _caartc = create_artist_count().expect("Unable to create artist count table");
     let _caalbc = create_album_count().expect("Unable to create album count table");
+    let _casongc = create_song_count().expect("Unable to create song count table");
     let _cpl = create_playlist().expect("Unable to create playlist table");
     let _cstats = create_stats().expect("Unable to create stats table");
 }
