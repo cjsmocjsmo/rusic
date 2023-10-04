@@ -273,13 +273,13 @@ pub fn post_song_count_by_alpha(alpha: String) -> (String, String) {
     let count = distinct_albumid_list_for_alpha.len().to_string();
     let alphacount = (alpha.clone(), count.clone());
     println!("this is album alpha count {:#?}", alphacount.clone());
-    let fu = types::AlbumCount {
+    let fu = types::SongCount {
         alpha: alpha.clone(),
         count: count.clone().parse::<i64>().unwrap(),
     };
 
     conn.execute(
-        "INSERT INTO albumcount (
+        "INSERT INTO songcount (
                 alpha,
                 count
             )
