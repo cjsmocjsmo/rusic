@@ -14,6 +14,8 @@ pub fn process_mp3s(x: String, index: String, page: String) -> types::MusicInfo 
     let tag = RusicUtils::get_tag_info(&fu);
     let tag_artist = tag.0.clone();
     let tag_album = tag.1.clone();
+    println!("tag_artist: {}", tag_artist.clone());
+    println!("tag_album: {}", tag_album.clone());
     let artist_id = rusic_utils::get_md5(tag.0.clone());
     let album_id = rusic_utils::get_md5(tag.1.clone());
     let img_url = create_thumb_path(art_alb.0.clone(), art_alb.1.clone());
