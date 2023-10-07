@@ -35,11 +35,13 @@ impl RusicUtils {
         let basedirpath2 = basedirpath.parent().unwrap();
         let bdp3 = Path::new(&basedirpath2);
         let artist = bdp3.file_name().unwrap();
+        let album_string = album.to_string_lossy().to_string();
+        let artist_string = artist.to_string_lossy().to_string();
 
-        (
-            artist.to_string_lossy().to_string(),
-            album.to_string_lossy().to_string(),
-        )
+        let album_final = album_string.replace("_", " ");
+        let artist_final = artist_string.replace("_", " ");
+
+        ( artist_final, album_final )
     }
 
     pub fn get_tag_info(&self) -> (String, String, String) {
