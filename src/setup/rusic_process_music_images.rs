@@ -43,6 +43,9 @@ pub fn process_music_images(x: String, index: i32, pageg: i32) -> i32 {
     let artist1 = artalb.0;
     let album1 = artalb.1;
 
+    println!("\n this is artist1 it should have no underscores \n\t: {} \n", artist1);
+    println!("\n this is album1 it should have no underscores \n\t: {} \n", album1);
+
     if dims != (0, 0) {
         let newdims = crate::setup::rusic_utils::normalize_music_image(dims);
         let width_r = newdims.0.to_string();
