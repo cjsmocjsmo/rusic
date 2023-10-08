@@ -339,7 +339,7 @@ pub fn delete_playlist(x: String) -> bool {
     true
 }
 
-pub fn add_song_to_my_likes(rid: String) -> bool {
+pub fn get_mylikes_oldsongs() -> String {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
     let mylikes = "mylikes".to_string();
@@ -349,8 +349,6 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
     let mut rows = stmt.query(&[&mylikes]).expect("Unable to query db");
 
     let mut oldsongs = String::new();
-    let mut oldnumsongs = String::new();
-    let mut n_o_n_e = false;
     while let Some(row) = rows.next().unwrap() {
         let oldplinfo = types::PlayList {
             rusicid: row.get(1).unwrap(),
@@ -358,30 +356,41 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
             songs: row.get(3).unwrap(),
             numsongs: row.get(4).unwrap(),
         };
-        if oldplinfo.songs == "None" {
-            n_o_n_e = true;
-        }
         oldsongs = oldplinfo.songs;
-        oldnumsongs = oldplinfo.numsongs;
-
-        println!("oldsongs: {}", oldsongs.clone());
-        println!("oldnumsongs: {}", oldnumsongs.clone());
     }
 
-    if n_o_n_e {
+    oldsongs
+}
+
+pub fn update_mylikes(songs: String, numsongs: String, name: String) -> bool {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+
+    let mut stmt = conn
+        .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
+        .unwrap();
+    let _rows = stmt
+        .query(&[&songs, &numsongs, &name])
+        .expect("Unable to query db");
+
+    true
+}
+
+pub fn add_song_to_my_likes(rid: String) -> bool {
+    let oldsongs = get_mylikes_oldsongs();
+    println!("oldsongs: {}", oldsongs.clone());
+
+
+    if oldsongs == "None" {
+
         let newsongvec = vec![rid.clone()];
         let newsongvec_json = serde_json::to_string(&newsongvec).unwrap();
         let numsongs = "1".to_string();
         println!("newsongvec_json: {}", newsongvec_json.clone());
         println!("numsongs: {}", numsongs.clone());
-        let mut stmt = conn
-            .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
-            .unwrap();
-        let _rows = stmt
-            .query(&[&newsongvec_json, &numsongs, &mylikes])
-            .expect("Unable to query db");
+        let update_mylikes_result = update_mylikes(newsongvec_json.clone(), numsongs.clone(), "mylikes".to_string());
 
-        return true;
+        return update_mylikes_result;
     } else {
         let mut oldsongvec: Vec<String> = serde_json::from_str(&oldsongs).unwrap();
         oldsongvec.push(rid.clone());
@@ -391,13 +400,8 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
         let newnumsongs = newnumsongs_i64.to_string();
         println!("newsongvec_json: {}", newsongvec_json.clone());
         println!("newnumsongs: {}", newnumsongs.clone());
-        let mut stmt = conn
-            .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
-            .unwrap();
-        let _rows = stmt
-            .query(&[&newsongvec_json, &newnumsongs, &mylikes])
-            .expect("Unable to query db");
+        let update_mylikes_result = update_mylikes(newsongvec_json.clone(), newnumsongs.clone(), "mylikes".to_string());
 
-        return true;
+        return update_mylikes_result;
     };
 }
