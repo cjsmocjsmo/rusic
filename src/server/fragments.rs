@@ -350,7 +350,7 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
 
     let mut oldsongs = String::new();
     let mut oldnumsongs = String::new();
-    let mut NONE = false;
+    let mut n_o_n_e = false;
     while let Some(row) = rows.next().unwrap() {
         let oldplinfo = types::PlayList {
             rusicid: row.get(1).unwrap(),
@@ -359,16 +359,21 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
             numsongs: row.get(4).unwrap(),
         };
         if oldplinfo.songs == "None" {
-            NONE = true;
+            n_o_n_e = true;
         }
         oldsongs = oldplinfo.songs;
         oldnumsongs = oldplinfo.numsongs;
+
+        println!("oldsongs: {}", oldsongs.clone());
+        println!("oldnumsongs: {}", oldnumsongs.clone());
     }
 
-    if NONE {
+    if n_o_n_e {
         let newsongvec = vec![rid.clone()];
         let newsongvec_json = serde_json::to_string(&newsongvec).unwrap();
         let numsongs = "1".to_string();
+        println!("newsongvec_json: {}", newsongvec_json.clone());
+        println!("numsongs: {}", numsongs.clone());
         let mut stmt = conn
             .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
             .unwrap();
@@ -384,6 +389,8 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
         let oldnumsongs_i64 = oldnumsongs.parse::<i64>().unwrap();
         let newnumsongs_i64 = oldnumsongs_i64 + 1;
         let newnumsongs = newnumsongs_i64.to_string();
+        println!("newsongvec_json: {}", newsongvec_json.clone());
+        println!("newnumsongs: {}", newnumsongs.clone());
         let mut stmt = conn
             .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
             .unwrap();
