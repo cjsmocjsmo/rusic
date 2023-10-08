@@ -4,6 +4,7 @@ use std::env;
 use std::sync::mpsc::channel;
 use threadpool::ThreadPool;
 use crate::rusicdb;
+use crate::server::fragments;
 use crate::types;
 
 pub mod rusic_album;
@@ -62,6 +63,7 @@ pub fn setup() -> String {
         Ok(_) => String::from("Exit 0 insert_stats"),
         Err(_) => String::from("Exit 1 insert_stats"),
     };
+    let _foo = fragments::create_empty_playlist("mylikes".to_string());
     println!("this is stats {:?}", insert_stats);
     println!("this is image count {:?}", img_count);
     println!("this is mp3 count {:?}", mp3_count);
