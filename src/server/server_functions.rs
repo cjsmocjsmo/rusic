@@ -151,11 +151,19 @@ pub async fn allplaylists() -> impl Responder {
 }
 
 #[get("/deleteplaylist/{playlistid}")]
-
 pub async fn deleteplaylist(x: web::Path<String>) -> impl Responder {
     let x = x.into_inner();
     let delete_playlist = fragments::delete_playlist(x.clone());
     let json = serde_json::to_string(&delete_playlist).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
+
+#[get("addsongtomylikes/{rusicid}")]
+pub async fn addsongtomylikes(x: web::Path<String>) -> impl Responder {
+    let x = x.into_inner();
+    let add_song_to_my_likes = fragments::add_song_to_my_likes(x.clone());
+    let json = serde_json::to_string(&add_song_to_my_likes).unwrap();
 
     HttpResponse::Ok().body(json)
 }
