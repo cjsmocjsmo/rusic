@@ -64,6 +64,7 @@ pub fn setup() -> String {
         Err(_) => String::from("Exit 1 insert_stats"),
     };
     let _foo = fragments::create_empty_playlist("mylikes".to_string());
+    println!("mylikes has been created");
     println!("this is stats {:?}", insert_stats);
     println!("this is image count {:?}", img_count);
     println!("this is mp3 count {:?}", mp3_count);
