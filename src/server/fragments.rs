@@ -339,7 +339,7 @@ pub fn delete_playlist(x: String) -> bool {
     true
 }
 
-pub fn get_mylikes_oldsongs() -> String {
+pub fn get_mylikes_oldsongs() -> (String, String) {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
     let mylikes = "mylikes".to_string();
@@ -349,6 +349,7 @@ pub fn get_mylikes_oldsongs() -> String {
     let mut rows = stmt.query(&[&mylikes]).expect("Unable to query db");
 
     let mut oldsongs = String::new();
+    let mut oldnumsongs = String::new();
     while let Some(row) = rows.next().unwrap() {
         let oldplinfo = types::PlayList {
             rusicid: row.get(1).unwrap(),
@@ -357,9 +358,10 @@ pub fn get_mylikes_oldsongs() -> String {
             numsongs: row.get(4).unwrap(),
         };
         oldsongs = oldplinfo.songs;
+        oldnumsongs = oldplinfo.numsongs;
     }
 
-    oldsongs
+    (oldsongs, oldnumsongs)
 }
 
 pub fn update_mylikes(songs: String, numsongs: String, name: String) -> bool {
@@ -377,7 +379,9 @@ pub fn update_mylikes(songs: String, numsongs: String, name: String) -> bool {
 }
 
 pub fn add_song_to_my_likes(rid: String) -> bool {
-    let oldsongs = get_mylikes_oldsongs();
+    let old = get_mylikes_oldsongs();
+    let oldsongs = old.0;
+    let oldnumsongs = old.1;
     println!("oldsongs: {}", oldsongs.clone());
 
 
