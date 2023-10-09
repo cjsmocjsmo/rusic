@@ -339,60 +339,20 @@ pub fn delete_playlist(x: String) -> bool {
     true
 }
 
-// pub fn get_mylikes_oldsongs() -> (String, String) {
-//     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
-//     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-//     let mylikes = "mylikes".to_string();
-//     let mut stmt = conn
-//         .prepare("SELECT * FROM playlists WHERE name = ?1")
-//         .unwrap();
-//     let mut rows = stmt.query(&[&mylikes]).expect("Unable to query db");
-
-//     let mut oldsongs = String::new();
-//     let mut oldnumsongs = String::new();
-//     while let Some(row) = rows.next().unwrap() {
-//         let oldplinfo = types::PlayList {
-//             rusicid: row.get(1).unwrap(),
-//             name: row.get(2).unwrap(),
-//             songs: row.get(3).unwrap(),
-//             numsongs: row.get(4).unwrap(),
-//         };
-//         oldsongs = oldplinfo.songs;
-//         oldnumsongs = oldplinfo.numsongs;
-//     }
-
-//     (oldsongs, oldnumsongs)
-// }
-
-// pub fn update_mylikes(songs: String, numsongs: String, name: String) -> bool {
-//     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
-//     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
-
-//     let mut stmt = conn
-//         .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
-//         .unwrap();
-//     let _rows = stmt
-//         .execute(&[&songs, &numsongs, &name])
-//         .expect("Unable to query db");
-
-//     true
-// }
-
 pub fn add_song_to_my_likes(rid: String) -> bool {
     let old = rusicdb::db_playlist::get_mylikes_oldsongs();
     let oldsongs = old.0;
     let oldnumsongs = old.1;
-    println!("oldsongs: {}", oldsongs.clone());
-
 
     if oldsongs == "None" {
-
         let newsongvec = vec![rid.clone()];
         let newsongvec_json = serde_json::to_string(&newsongvec).unwrap();
         let numsongs = "1".to_string();
-        println!("newsongvec_json: {}", newsongvec_json.clone());
-        println!("numsongs: {}", numsongs.clone());
-        let update_mylikes_result = rusicdb::db_playlist::update_mylikes(newsongvec_json.clone(), numsongs.clone(), "mylikes".to_string());
+        let update_mylikes_result = rusicdb::db_playlist::update_mylikes(
+            newsongvec_json.clone(),
+            numsongs.clone(),
+            "mylikes".to_string(),
+        );
 
         return update_mylikes_result;
     } else {
@@ -402,9 +362,11 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
         let oldnumsongs_i64 = oldnumsongs.parse::<i64>().unwrap();
         let newnumsongs_i64 = oldnumsongs_i64 + 1;
         let newnumsongs = newnumsongs_i64.to_string();
-        println!("newsongvec_json: {}", newsongvec_json.clone());
-        println!("newnumsongs: {}", newnumsongs.clone());
-        let update_mylikes_result = rusicdb::db_playlist::update_mylikes(newsongvec_json.clone(), newnumsongs.clone(), "mylikes".to_string());
+        let update_mylikes_result = rusicdb::db_playlist::update_mylikes(
+            newsongvec_json.clone(),
+            newnumsongs.clone(),
+            "mylikes".to_string(),
+        );
 
         return update_mylikes_result;
     };
