@@ -372,7 +372,7 @@ pub fn update_mylikes(songs: String, numsongs: String, name: String) -> bool {
         .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE name = ?3")
         .unwrap();
     let _rows = stmt
-        .query(&[&songs, &numsongs, &name])
+        .execute(&[&songs, &numsongs, &name])
         .expect("Unable to query db");
 
     true
