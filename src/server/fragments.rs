@@ -416,6 +416,8 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
     let oldies = get_playlist_oldsongs(playlistid.clone());
     let oldsongs = oldies.0;
     let oldnumsongs = oldies.1;
+    println!("oldsongs: {}", oldsongs.clone());
+    println!("oldnumsongs: {}", oldnumsongs.clone());
 
     if oldsongs == "None" {
         let newsongvec = vec![songid.clone()];
@@ -426,6 +428,7 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
             newsongvec_json.clone(),
             numsongs.clone(),
         );
+        println!("update_playlist_result: {}", update_playlist_result.clone());
 
         return update_playlist_result;
     } else {
@@ -437,6 +440,7 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
         let newnumsongs = newnumsongs_i64.to_string();
         let update_playlist_result =
             update_playlist(playlistid.clone(), newsongvec_json.clone(), newnumsongs.clone());
+        println!("update_playlist_result: {}", update_playlist_result.clone());
 
         return update_playlist_result;
     };

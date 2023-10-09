@@ -171,6 +171,8 @@ pub async fn addsongtomylikes(x: web::Path<String>) -> impl Responder {
 #[get("addsongtoplaylist/{playlistid}/{songid}")]
 pub async fn addsongtoplaylist(x: web::Path<(String, String)>) -> impl Responder {
     let (playlistid, songid) = x.into_inner();
+    println!("playlistid: {}", playlistid.clone());
+    println!("songid: {}", songid.clone());
     let add_song_to_playlist = fragments::add_song_to_playlist(playlistid.clone(), songid.clone());
     let json = serde_json::to_string(&add_song_to_playlist).unwrap();
 
