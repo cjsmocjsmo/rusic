@@ -32,6 +32,7 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             .service(server_functions::randomcoverart)
             .service(server_functions::deleteplaylist)
             .service(server_functions::addsongtomylikes)
+            .service(server_functions::addsongtoplaylist)
 
             // .service(crate::server::server_functions::wheeloftime)
             // .service(fs::Files::new("/thumbnails", img_path.clone()).show_files_listing())

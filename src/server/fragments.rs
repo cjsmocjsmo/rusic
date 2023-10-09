@@ -371,3 +371,73 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
         return update_mylikes_result;
     };
 }
+
+pub fn get_playlist_oldsongs(playlistid: String) -> (String, String) {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    // let mylikes = "mylikes".to_string();
+    let mut stmt = conn
+        .prepare("SELECT * FROM playlists WHERE rusicid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&playlistid]).expect("Unable to query db");
+
+    let mut oldsongs = String::new();
+    let mut oldnumsongs = String::new();
+    while let Some(row) = rows.next().unwrap() {
+        let oldplinfo = types::PlayList {
+            rusicid: row.get(1).unwrap(),
+            name: row.get(2).unwrap(),
+            songs: row.get(3).unwrap(),
+            numsongs: row.get(4).unwrap(),
+        };
+        oldsongs = oldplinfo.songs;
+        oldnumsongs = oldplinfo.numsongs;
+
+    }
+
+    (oldsongs, oldnumsongs)
+}
+
+pub fn update_playlist(playlistid: String, songs: String, numsongs: String) -> bool {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+
+    let mut stmt = conn
+        .prepare("UPDATE playlists SET songs = ?1, numsongs = ?2 WHERE rusicid = ?3")
+        .unwrap();
+    let _rows = stmt
+        .execute(&[&songs, &numsongs, &playlistid])
+        .expect("Unable to query db");
+
+    true
+}
+
+pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
+    let oldies = get_playlist_oldsongs(playlistid.clone());
+    let oldsongs = oldies.0;
+    let oldnumsongs = oldies.1;
+
+    if oldsongs == "None" {
+        let newsongvec = vec![songid.clone()];
+        let newsongvec_json = serde_json::to_string(&newsongvec).unwrap();
+        let numsongs = "1".to_string();
+        let update_playlist_result = update_playlist(
+            playlistid.clone(),
+            newsongvec_json.clone(),
+            numsongs.clone(),
+        );
+
+        return update_playlist_result;
+    } else {
+        let mut oldsongvec: Vec<String> = serde_json::from_str(&oldsongs).unwrap();
+        oldsongvec.push(songid.clone());
+        let newsongvec_json = serde_json::to_string(&oldsongvec).unwrap();
+        let oldnumsongs_i64 = oldnumsongs.parse::<i64>().unwrap();
+        let newnumsongs_i64 = oldnumsongs_i64 + 1;
+        let newnumsongs = newnumsongs_i64.to_string();
+        let update_playlist_result =
+            update_playlist(playlistid.clone(), newsongvec_json.clone(), newnumsongs.clone());
+
+        return update_playlist_result;
+    };
+}
