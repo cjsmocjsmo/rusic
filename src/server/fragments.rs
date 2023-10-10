@@ -22,7 +22,7 @@ pub fn create_empty_playlist(x: String) -> bool {
     true
 }
 
-pub fn create_random_playlist(x: String, offset: String) -> bool {
+fn get_rand_idx_vec(offset: String) -> Vec<String> {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
 
@@ -48,12 +48,34 @@ pub fn create_random_playlist(x: String, offset: String) -> bool {
         random_idx_numbers.push(randy);
     }
 
-    let idx_json = serde_json::to_string(&random_idx_numbers).unwrap();
+    random_idx_numbers
+}
+
+pub fn create_random_playlist(x: String, offset: String) -> bool {
+    let randidxvec = get_rand_idx_vec(offset.clone());
+    let mut new_song_rusicid_vec = Vec::new();
+    for idx in randidxvec {
+        let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+        let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+
+        let mut stmt = conn
+            .prepare("SELECT rusicid FROM music WHERE idx = ?1")
+            .unwrap();
+        let mut newsongsidvec = Vec::new();
+        let mut rows = stmt.query(&[&idx]).expect("Unable to query db");
+        while let Some(row) = rows.next().unwrap() {
+            let song_rusicid: String = row.get(0).unwrap();
+            newsongsidvec.push(song_rusicid);
+        };
+        new_song_rusicid_vec.push(newsongsidvec);
+    };
+
+    let rusicid_json = serde_json::to_string(&new_song_rusicid_vec).unwrap();
 
     let plinfo = types::PlayList {
         rusicid: get_md5(x.clone()),
         name: x.clone(),
-        songs: idx_json.clone(),
+        songs: rusicid_json.clone(),
         numsongs: offset.clone(),
     };
 
@@ -392,7 +414,6 @@ pub fn get_playlist_oldsongs(playlistid: String) -> (String, String) {
         };
         oldsongs = oldplinfo.songs;
         oldnumsongs = oldplinfo.numsongs;
-
     }
 
     (oldsongs, oldnumsongs)
@@ -438,8 +459,11 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
         let oldnumsongs_i64 = oldnumsongs.parse::<i64>().unwrap();
         let newnumsongs_i64 = oldnumsongs_i64 + 1;
         let newnumsongs = newnumsongs_i64.to_string();
-        let update_playlist_result =
-            update_playlist(playlistid.clone(), newsongvec_json.clone(), newnumsongs.clone());
+        let update_playlist_result = update_playlist(
+            playlistid.clone(),
+            newsongvec_json.clone(),
+            newnumsongs.clone(),
+        );
         println!("update_playlist_result: {}", update_playlist_result.clone());
 
         return update_playlist_result;
