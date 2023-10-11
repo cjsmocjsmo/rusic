@@ -7,16 +7,12 @@ use std::env;
 use std::path::Path;
 
 pub fn create_empty_playlist(x: String) -> bool {
-    println!("x: {}", x.clone());
     let plinfo = types::PlayList {
         rusicid: get_md5(x.clone()),
         name: x.clone(),
         songs: "None".to_string(),
         numsongs: "0".to_string(),
     };
-
-    println!("plinfo: {:#?}", plinfo.clone());
-
     let _insert_pl = rusicdb::db_main::post_playlist_to_db(plinfo);
 
     true
@@ -136,7 +132,6 @@ pub fn split_path(path: String) -> String {
 }
 
 pub fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
-    println!("artid: {}", artid.clone());
     let mut albumidvec = Vec::new();
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
@@ -148,8 +143,6 @@ pub fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
         let album_id: String = row.get(0).unwrap();
         albumidvec.push(album_id);
     }
-
-    println!("albumidvec: {:#?}", albumidvec.clone());
 
     let mut album_info_list = Vec::new();
     let mut album_info_vec = Vec::new();
@@ -165,8 +158,6 @@ pub fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
                 imageurl: row.get(2).unwrap(),
                 albumid: row.get(3).unwrap(),
             };
-
-            println!("album_info: {:#?}", album_info.clone());
             album_info_vec.push(album_info.clone());
         }
     }
@@ -181,8 +172,6 @@ pub fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
     album_info_list.sort();
     album_info_list.dedup();
 
-    println!("album_info: {:?}", album_info_list.clone());
-
     let mut new_album_info_list = Vec::new();
     let mut count = 0;
     for album in album_info_list.clone() {
@@ -195,15 +184,12 @@ pub fn fetch_albforart(artid: String) -> Vec<types::AlbAlbidInfo> {
             albumid: album.1.to_string(),
         };
         new_album_info_list.push(albuminfo);
-    }
-
-    println!("new_album_info_list: {:#?}", new_album_info_list.clone());
+    };
 
     new_album_info_list
 }
 
 pub fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
-    println!("alpha: {}", alpha.clone());
     //get artistid from startswith db
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
@@ -216,9 +202,7 @@ pub fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
     while let Some(row) = rows.next().unwrap() {
         let mediaid: String = row.get(0).unwrap();
         id_list.push(mediaid);
-    }
-
-    println!("id_list: {:?}", id_list.clone());
+    };
 
     let mut artist_info_list = Vec::new();
     let mut art_vec = Vec::new();
@@ -263,13 +247,10 @@ pub fn fetch_artist_count_by_alpha(alpha: String) -> Vec<types::ArtArtidInfo> {
         new_artist_info_list.push(artistinfo);
     }
 
-    println!("new_artist_info: {:#?}", new_artist_info_list.clone());
-
     new_artist_info_list
 }
 
 pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
-    println!("alpha: {}", alpha.clone());
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
     let mut id_list = Vec::new();
@@ -281,7 +262,6 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
         let mediaid: String = row.get(0).unwrap();
         id_list.push(mediaid);
     }
-    println!("id_list: {:?}", id_list.clone());
 
     let mut album_info_list = Vec::new();
     let mut alb_vec = Vec::new();
@@ -323,9 +303,7 @@ pub fn fetch_album_count_by_alpha(alpha: String) -> Vec<types::AlbAlbidInfo> {
             albumid: album.1.to_string(),
         };
         new_album_info_list.push(albuminfo);
-    }
-
-    println!("new_album_info_list: {:?}", new_album_info_list.clone());
+    };
 
     new_album_info_list
 }
@@ -437,8 +415,6 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
     let oldies = get_playlist_oldsongs(playlistid.clone());
     let oldsongs = oldies.0;
     let oldnumsongs = oldies.1;
-    println!("oldsongs: {}", oldsongs.clone());
-    println!("oldnumsongs: {}", oldnumsongs.clone());
 
     if oldsongs == "None" {
         let newsongvec = vec![songid.clone()];
@@ -449,7 +425,6 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
             newsongvec_json.clone(),
             numsongs.clone(),
         );
-        println!("update_playlist_result: {}", update_playlist_result.clone());
 
         return update_playlist_result;
     } else {
@@ -464,7 +439,6 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
             newsongvec_json.clone(),
             newnumsongs.clone(),
         );
-        println!("update_playlist_result: {}", update_playlist_result.clone());
 
         return update_playlist_result;
     };
@@ -514,7 +488,6 @@ fn fetch_song_by_rusicid(rusicid: String) -> types::MusicInfo {
             page: row.get(11).unwrap(),
             fsizeresults: row.get(12).unwrap(),
         };
-        println!("song_info: {:#?}", song_info.clone());
         mfovec.push(song_info);
     }
 
@@ -531,15 +504,9 @@ pub fn get_playlist_data(playlistid: String) -> Vec<types::MusicInfo> {
 
     let mut songs_info_vec = Vec::new();
     for rid in plsongs.clone() {
-        println!("this is rid: {:#?}", rid.clone());
         let song_info = fetch_song_by_rusicid(rid.clone());
         songs_info_vec.push(song_info);
     };
-    println!("pl_raw_songs: {:#?}", songs_info_vec.clone());
-
-
-
-    // println!("songs_info_vec: {:?}", songs_info_vec.clone());
 
     songs_info_vec
 }
