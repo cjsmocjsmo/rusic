@@ -527,12 +527,12 @@ pub fn get_playlist_data(playlistid: String) -> Vec<types::MusicInfo> {
     for pl in pl_raw_data {
         pl_raw_songs = pl.songs;
     }
-    let plsongs: Vec<Vec<String>> = serde_json::from_str(&pl_raw_songs).unwrap();
+    let plsongs: Vec<String> = serde_json::from_str(&pl_raw_songs).unwrap();
 
     let mut songs_info_vec = Vec::new();
     for rid in plsongs.clone() {
         println!("this is rid: {:#?}", rid.clone());
-        let song_info = fetch_song_by_rusicid(rid[0].clone());
+        let song_info = fetch_song_by_rusicid(rid.clone());
         songs_info_vec.push(song_info);
     };
     println!("pl_raw_songs: {:#?}", songs_info_vec.clone());
