@@ -516,7 +516,7 @@ fn fetch_song_by_rusicid(rusicid: String) -> types::MusicInfo {
         };
         println!("song_info: {:#?}", song_info.clone());
         mfovec.push(song_info);
-    };
+    }
 
     mfovec[0].clone()
 }
@@ -528,22 +528,24 @@ pub fn get_playlist_data(playlistid: String) -> bool {
     for pl in pl_raw_data {
         pl_name = pl.name;
         pl_raw_songs = pl.songs;
-
-    };
+    }
     let plsongs: Vec<Vec<String>> = serde_json::from_str(&pl_raw_songs).unwrap();
-    println!("pl_name: {}", pl_name.clone());
-    println!("pl_raw_songs: {}", pl_raw_songs.clone());
 
+
+    let mut songs_info_vec = Vec::new();
     for rid in plsongs.clone() {
         println!("this is rid: {:#?}", rid.clone());
-    }
+        let song_info = fetch_song_by_rusicid(rid[0].clone());
+        songs_info_vec.push(song_info);
+    };
+    println!("pl_name: {}", pl_name.clone());
+    println!("pl_raw_songs: {:#?}", songs_info_vec.clone());
 
     // let songs_rusicid_vec: Vec<String> = serde_json::from_str(&pl_raw_songs).unwrap();
     // println!("songs_rusicid_vec: {:?}", songs_rusicid_vec.clone());
-    // let mut songs_info_vec = Vec::new();
+
     // for rusicid in pl_raw_data {
-    //     let song_info = fetch_song_by_rusicid(rusicid);
-    //     songs_info_vec.push(song_info);
+
     // };
 
     // println!("songs_info_vec: {:?}", songs_info_vec.clone());
@@ -551,5 +553,4 @@ pub fn get_playlist_data(playlistid: String) -> bool {
     // songs_info_vec
 
     true
-
 }
