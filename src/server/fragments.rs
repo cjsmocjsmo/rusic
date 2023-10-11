@@ -510,3 +510,29 @@ pub fn get_playlist_data(playlistid: String) -> Vec<types::MusicInfo> {
 
     songs_info_vec
 }
+
+pub fn del_song_from_playlist(playlistid: String, songid: String) -> bool {
+    let oldies = get_playlist_oldsongs(playlistid.clone());
+    let oldsongs = oldies.0;
+    let oldnumsongs = oldies.1;
+
+    let oldsongvec: Vec<String> = serde_json::from_str(&oldsongs).unwrap();
+    let mut newoldsongvec = Vec::new();
+    for song in oldsongvec.clone() {
+        if song != songid.clone() {
+            newoldsongvec.push(song);
+        }
+    }
+
+    let newoldsongvec_json = serde_json::to_string(&newoldsongvec).unwrap();
+    let oldnumsongs_i64 = oldnumsongs.parse::<i64>().unwrap();
+    let newnumsongs_i64 = oldnumsongs_i64 - 1;
+    let newnumsongs = newnumsongs_i64.to_string();
+    let update_playlist_result = update_playlist(
+        playlistid.clone(),
+        newoldsongvec_json.clone(),
+        newnumsongs.clone(),
+    );
+
+    return update_playlist_result;
+}
