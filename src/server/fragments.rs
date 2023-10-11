@@ -397,7 +397,7 @@ pub fn get_playlist_oldsongs(playlistid: String) -> (String, String) {
     (oldsongs, oldnumsongs)
 }
 
-pub fn update_playlist(playlistid: String, songs: String, numsongs: String) -> bool {
+pub fn update_playlist(playlistid: String, songs: String, numsongs: String) -> String {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path.clone()).expect("unable to open db file");
 
@@ -408,10 +408,10 @@ pub fn update_playlist(playlistid: String, songs: String, numsongs: String) -> b
         .execute(&[&songs, &numsongs, &playlistid])
         .expect("Unable to query db");
 
-    true
+    songs
 }
 
-pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
+pub fn add_song_to_playlist(playlistid: String, songid: String) -> String {
     let oldies = get_playlist_oldsongs(playlistid.clone());
     let oldsongs = oldies.0;
     let oldnumsongs = oldies.1;
@@ -511,7 +511,7 @@ pub fn get_playlist_data(playlistid: String) -> Vec<types::MusicInfo> {
     songs_info_vec
 }
 
-pub fn del_song_from_playlist(playlistid: String, songid: String) -> bool {
+pub fn del_song_from_playlist(playlistid: String, songid: String) -> String {
     let oldies = get_playlist_oldsongs(playlistid.clone());
     let oldsongs = oldies.0;
     let oldnumsongs = oldies.1;
