@@ -61,13 +61,13 @@ pub fn create_random_playlist(x: String, offset: String) -> bool {
         let mut stmt = conn
             .prepare("SELECT rusicid FROM music WHERE idx = ?1")
             .unwrap();
-        let mut newsongsidvec = Vec::new();
+        let mut newsongsid = String::new();
         let mut rows = stmt.query(&[&idx]).expect("Unable to query db");
         while let Some(row) = rows.next().unwrap() {
             let song_rusicid: String = row.get(0).unwrap();
-            newsongsidvec.push(song_rusicid);
+            newsongsid = song_rusicid;
         }
-        new_song_rusicid_vec.push(newsongsidvec);
+        new_song_rusicid_vec.push(newsongsid);
     }
 
     let rusicid_json = serde_json::to_string(&new_song_rusicid_vec).unwrap();
