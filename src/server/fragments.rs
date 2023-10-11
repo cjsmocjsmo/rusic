@@ -66,9 +66,9 @@ pub fn create_random_playlist(x: String, offset: String) -> bool {
         while let Some(row) = rows.next().unwrap() {
             let song_rusicid: String = row.get(0).unwrap();
             newsongsidvec.push(song_rusicid);
-        };
+        }
         new_song_rusicid_vec.push(newsongsidvec);
-    };
+    }
 
     let rusicid_json = serde_json::to_string(&new_song_rusicid_vec).unwrap();
 
@@ -468,4 +468,77 @@ pub fn add_song_to_playlist(playlistid: String, songid: String) -> bool {
 
         return update_playlist_result;
     };
+}
+
+fn playlist_raw_data(plid: String) -> Vec<types::PlayList> {
+    let mut newdbvec = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT * FROM playlists WHERE rusicid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&plid]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let oldplinfo = types::PlayList {
+            rusicid: row.get(1).unwrap(),
+            name: row.get(2).unwrap(),
+            songs: row.get(3).unwrap(),
+            numsongs: row.get(4).unwrap(),
+        };
+        newdbvec.push(oldplinfo);
+    }
+
+    newdbvec
+}
+
+fn fetch_song_by_rusicid(rusicid: String) -> types::MusicInfo {
+    let mut mfovec = Vec::new();
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path.clone()).expect("unable to open db file");
+    let mut stmt = conn
+        .prepare("SELECT * FROM music WHERE rusicid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&rusicid]).expect("Unable to query db");
+    while let Some(row) = rows.next().unwrap() {
+        let song_info = types::MusicInfo {
+            rusicid: row.get(1).unwrap(),
+            imgurl: row.get(2).unwrap(),
+            artist: row.get(3).unwrap(),
+            artistid: row.get(4).unwrap(),
+            album: row.get(5).unwrap(),
+            albumid: row.get(6).unwrap(),
+            song: row.get(7).unwrap(),
+            fullpath: row.get(8).unwrap(),
+            extension: row.get(9).unwrap(),
+            idx: row.get(10).unwrap(),
+            page: row.get(11).unwrap(),
+            fsizeresults: row.get(12).unwrap(),
+        };
+        println!("song_info: {:#?}", song_info.clone());
+        mfovec.push(song_info);
+    };
+
+    mfovec[0].clone()
+}
+
+pub fn get_playlist_data(playlistid: String) -> Vec<types::MusicInfo> {
+    let mut pl_name = String::new();
+    let mut pl_raw_songs = String::new();
+    let pl_raw_data = playlist_raw_data(playlistid.clone());
+    for pl in pl_raw_data {
+        pl_name = pl.name;
+        pl_raw_songs = pl.songs;
+    }
+    let songs_rusicid_vec: Vec<String> = serde_json::from_str(&pl_raw_songs).unwrap();
+    println!("songs_rusicid_vec: {:?}", songs_rusicid_vec.clone());
+    let mut songs_info_vec = Vec::new();
+    for rusicid in songs_rusicid_vec {
+        let song_info = fetch_song_by_rusicid(rusicid);
+        songs_info_vec.push(song_info);
+    };
+
+    println!("songs_info_vec: {:?}", songs_info_vec.clone());
+
+    songs_info_vec
+
 }

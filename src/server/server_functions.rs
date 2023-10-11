@@ -178,3 +178,12 @@ pub async fn addsongtoplaylist(x: web::Path<(String, String)>) -> impl Responder
 
     HttpResponse::Ok().body(json)
 }
+
+#[get("getplaylistdata/{playlistid}")]
+pub async fn getplaylistdata(x: web::Path<String>) -> impl Responder {
+    let playlistid = x.into_inner();
+    let get_playlist_data = fragments::get_playlist_data(playlistid.clone());
+    let json = serde_json::to_string(&get_playlist_data).unwrap();
+
+    HttpResponse::Ok().body(json)
+}
