@@ -39,7 +39,6 @@ pub fn process_mp3s(x: String, index: String, page: String) -> types::MusicInfo 
     let _insert_art_artid =
         db_artist::write_art_artid_to_db(rusic_id.clone(), tag_artist.clone(), artist_id.clone())
             .unwrap();
-    // println!("artist_id: {}", artist_id.clone());
     let _insert_alb_albid =
         db_album::write_alb_albid_to_db(rusic_id.clone(), img_url.clone(), album_id.clone())
             .unwrap();

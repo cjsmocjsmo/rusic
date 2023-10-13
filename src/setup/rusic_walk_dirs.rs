@@ -80,8 +80,7 @@ pub fn scan_for_usb_devices() -> Vec<String> {
             let dname = dir_name.to_string();
             usb_devices.push(dname);
         }
-    }
-    println!("Found USB device: {:?}", usb_devices);
+    };
 
     usb_devices
 }

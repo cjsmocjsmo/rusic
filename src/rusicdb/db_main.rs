@@ -15,12 +15,7 @@ pub fn post_playlist_to_db(pl: types::PlayList) -> Result<()> {
                 numsongs
             )
             VALUES (?1, ?2, ?3, ?4)",
-        (
-            &pl.rusicid,
-            &pl.name,
-            &pl.songs,
-            &pl.numsongs,
-        ),
+        (&pl.rusicid, &pl.name, &pl.songs, &pl.numsongs),
     )?;
 
     Ok(())
@@ -191,7 +186,6 @@ pub fn post_artist_count_by_alpha(alpha: String) {
     let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
     let conn = Connection::open(db_path).unwrap();
 
-
     let mut stmt = conn
         .prepare("SELECT DISTINCT artistid FROM startswith WHERE artist_first_letter = ?")
         .unwrap();
@@ -202,10 +196,6 @@ pub fn post_artist_count_by_alpha(alpha: String) {
     }
 
     let count = distinct_artistid_list_for_alpha.len().to_string();
-
-    let alphacount = (alpha.clone(), count.clone());
-
-    println!("this is artist alpha count {:#?}", alphacount.clone());
 
     let foo = types::ArtistCount {
         alpha: alpha.clone(),
@@ -218,11 +208,9 @@ pub fn post_artist_count_by_alpha(alpha: String) {
                 count
             )
             VALUES (?1, ?2)",
-        (
-            &foo.alpha,
-            &foo.count,
-        ),
-    ).unwrap();
+        (&foo.alpha, &foo.count),
+    )
+    .unwrap();
 }
 
 pub fn post_album_count_by_alpha(alpha: String) {
@@ -238,8 +226,6 @@ pub fn post_album_count_by_alpha(alpha: String) {
         distinct_albumid_list_for_alpha.push(albumid);
     }
     let count = distinct_albumid_list_for_alpha.len().to_string();
-    let alphacount = (alpha.clone(), count.clone());
-    println!("this is album alpha count {:#?}", alphacount.clone());
     let fu = types::AlbumCount {
         alpha: alpha.clone(),
         count: count.clone().parse::<i64>().unwrap(),
@@ -251,11 +237,9 @@ pub fn post_album_count_by_alpha(alpha: String) {
                 count
             )
             VALUES (?1, ?2)",
-        (
-            &fu.alpha,
-            &fu.count,
-        ),
-    ).unwrap();
+        (&fu.alpha, &fu.count),
+    )
+    .unwrap();
 }
 
 pub fn post_song_count_by_alpha(alpha: String) -> (String, String) {
@@ -272,7 +256,6 @@ pub fn post_song_count_by_alpha(alpha: String) -> (String, String) {
     }
     let count = distinct_albumid_list_for_alpha.len().to_string();
     let alphacount = (alpha.clone(), count.clone());
-    println!("this is album alpha count {:#?}", alphacount.clone());
     let fu = types::SongCount {
         alpha: alpha.clone(),
         count: count.clone().parse::<i64>().unwrap(),
@@ -284,11 +267,9 @@ pub fn post_song_count_by_alpha(alpha: String) -> (String, String) {
                 count
             )
             VALUES (?1, ?2)",
-        (
-            &fu.alpha,
-            &fu.count,
-        ),
-    ).unwrap();
+        (&fu.alpha, &fu.count),
+    )
+    .unwrap();
 
     alphacount
 }

@@ -38,8 +38,6 @@ pub async fn randomcoverart() -> impl Responder {
 
         random_cover_art_vec.push(random_cover_art);
     };
-
-    println!("random_cover_art_vec: {:?}", random_cover_art_vec.clone());
     let json = serde_json::to_string(&random_cover_art_vec).unwrap();
 
     HttpResponse::Ok().body(json)
@@ -58,9 +56,7 @@ pub async fn artistcount() -> impl Responder {
             count: row.get(2).unwrap(),
         };
         artist_count_vec.push(artist_count);
-    }
-
-    println!("artist_count_vec: {:?}", artist_count_vec.clone());
+    };
     let json = serde_json::to_string(&artist_count_vec).unwrap();
 
     HttpResponse::Ok().body(json)
@@ -79,9 +75,7 @@ pub async fn albumcount() -> impl Responder {
             count: row.get(2).unwrap(),
         };
         album_count_vec.push(album_count);
-    }
-
-    println!("album_count_vec: {:?}", album_count_vec.clone());
+    };
     let json = serde_json::to_string(&album_count_vec).unwrap();
 
     HttpResponse::Ok().body(json)
@@ -90,7 +84,6 @@ pub async fn albumcount() -> impl Responder {
 #[get("/artistforalpha/{alpha}")]
 pub async fn artistalpha(a: web::Path<String>) -> impl Responder {
     let alpha = a.into_inner();
-    println!("alpha: {}", alpha.clone());
     let artist_info_list = fragments::fetch_artist_count_by_alpha(alpha);
     let json = serde_json::to_string(&artist_info_list).unwrap();
 
@@ -171,8 +164,6 @@ pub async fn addsongtomylikes(x: web::Path<String>) -> impl Responder {
 #[get("addsongtoplaylist/{playlistid}/{songid}")]
 pub async fn addsongtoplaylist(x: web::Path<(String, String)>) -> impl Responder {
     let (playlistid, songid) = x.into_inner();
-    println!("playlistid: {}", playlistid.clone());
-    println!("songid: {}", songid.clone());
     let add_song_to_playlist = fragments::add_song_to_playlist(playlistid.clone(), songid.clone());
     let json = serde_json::to_string(&add_song_to_playlist).unwrap();
 

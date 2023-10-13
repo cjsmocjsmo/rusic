@@ -50,10 +50,7 @@ pub fn albumids_for_artistid(xlist: Vec<String>) -> Vec<types::ArtistAlbums> {
 
         };
         artists_albums_vec.push(artistalbums);
-    }
-
-    // log::info!("artist_albums_vec: {:#?}", artists_albums_vec);
-    // println!("artist_albums_vec: {:#?}", artists_albums_vec);
+    };
 
     artists_albums_vec
 }
