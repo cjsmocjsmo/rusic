@@ -356,6 +356,7 @@ pub fn add_song_to_my_likes(rid: String) -> bool {
 
         return update_mylikes_result;
     } else {
+        println!("oldsongs: {:?}", oldsongs.clone());
         let mut oldsongvec: Vec<String> = serde_json::from_str(&oldsongs).unwrap();
         oldsongvec.push(rid.clone());
         let newsongvec_json = serde_json::to_string(&oldsongvec).unwrap();
@@ -522,7 +523,7 @@ pub fn del_song_from_playlist(playlistid: String, songid: String) -> String {
         if song != songid.clone() {
             newoldsongvec.push(song);
         }
-    }
+    };
 
     let newoldsongvec_json = serde_json::to_string(&newoldsongvec).unwrap();
     let oldnumsongs_i64 = oldnumsongs.parse::<i64>().unwrap();
