@@ -42,7 +42,8 @@ pub async fn rusic_server_main() -> std::io::Result<()> {
             .service(fs::Files::new("/Music", "/usr/share/rusic/rusic/Music".to_string()).show_files_listing())
         }
     )
-    .bind(("192.168.0.26", 8080))?
+    // .bind(("192.168.0.26", 8080))?
+    .bind(("192.168.0.91", 8080))?
     .run()
     .await
 }
