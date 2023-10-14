@@ -85,8 +85,9 @@ pub fn post_music_to_db(music_info: types::MusicInfo) -> Result<()> {
 }
 
 pub fn post_songs_for_album_to_db(albumsongsvec: Vec<types::AlbumSongs>) -> Result<()> {
+    let db_path = env::var("RUSIC_DB_PATH").expect("RUSIC_DB_PATH not set");
+    let conn = Connection::open(db_path).unwrap();
     for alb in albumsongsvec {
-        let conn = Connection::open("./db/rusic.db").unwrap();
 
         conn.execute(
             "INSERT INTO songsforalbum (
