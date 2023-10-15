@@ -120,7 +120,8 @@ pub fn split_path(path: String) -> String {
         let foo = component.as_os_str().to_str().unwrap();
         components_vec.push(foo.to_string());
     }
-    components_vec.drain(0..4);
+    // components_vec.drain(0..4);
+    components_vec.drain(0..3);
 
     let ffile = components_vec.join("/");
 
