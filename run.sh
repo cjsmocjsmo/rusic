@@ -5,8 +5,8 @@ if [ -f /etc/systemd/system/rusic.service ]; then
     sudo systemctl stop rusic.service;
 fi
 cd $RUSIC;
-sudo rm -rf $RUSIC/thumbnails;
-sudo rm -rf $RUSIC/db;
+sudo rm -rf ./thumbs;
+sudo rm -rf ./db;
 mkdir $RUSIC/db;
 touch $RUSIC/db/rusic.db;
 git pull;
