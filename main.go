@@ -50,10 +50,10 @@ type TVSeasonStruct struct {
 }
 
 func checkDBExists() {
-	mtvDBPath := os.Getenv("MTV_DB_PATH")
+	mtvDBPath := os.Getenv("RUS_DB_PATH")
 	if _, err := os.Stat(mtvDBPath); os.IsNotExist(err) {
 		// file does not exist
-		fmt.Println("Database file does not exist\n Please run mtvsetup.")
+		fmt.Println("Database file does not exist\n Please run rusicsetup.")
 		os.Exit(1)
 	} else if err != nil {
 		// other error
@@ -65,7 +65,7 @@ func checkDBExists() {
 }
 
 func init() {
-	godotenv.Load("mtvhtmxecho.env")
+	godotenv.Load("rus.env")
 	// checkDBExists()
 }
 
