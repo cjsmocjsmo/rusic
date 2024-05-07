@@ -105,6 +105,7 @@ func album_of_interest(c echo.Context) error {
 
 func songs_for_album(c echo.Context) error {
 	albumid := c.Param("albumid")
+	println("Album ID: ", albumid)
 	songs := SongsForAlbum(albumid)
 	return c.Render(http.StatusOK, "rus_songsforalbum", songs)
 }
