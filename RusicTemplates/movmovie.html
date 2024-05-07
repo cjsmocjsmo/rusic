@@ -1,0 +1,13 @@
+{{ define "mov_movie" }}
+
+<div class="bar">
+    {{ range . }}
+    <div class="baz2">
+        <div class="link-card">
+            <img src="{{ .HttpThumbPath }}" data-movid="{{ .MovId }}" onclick="PlayMovie()"/>
+        </div>
+    </div>
+    {{ end }}
+</div>
+
+{{ end }}

@@ -1,0 +1,60 @@
+{{define "rus_index" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Rusic Music Organizer">
+    <title>Rusic</title>
+    <link rel="stylesheet" href="/assets/rusic.css">
+    <script src="/assets/htmx.min.js"></script>
+    <script src="/assets/rusic.js" defer></script>
+</head>
+
+<body>
+    <div class="audioDiv">
+        <audio src="" id="audio" controls></audio>
+    </div>
+    
+    <nav class="navOne">
+        <div class="navDiv">
+            <a href="/"><button class="navBtn">Home</button></a>
+            <button class="navBtn">Artists</button>
+            <button class="navBtn">Albums</button>
+            <button class="navBtn">Songs</button>
+            <button class="navBtn">Playlists</button>
+            
+        </div>
+    </nav>
+   
+
+
+    
+    
+    <main>
+        <h1>Currently Playing</h1>
+        <div class="playingDiv">
+            <img class="playingImg" src="/assets/playing.jpg" alt="Currently Playing">
+        </div>
+        <h2>Albums Of Interest</h2>
+        <div class="randomArt">
+            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
+            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
+            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
+            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
+            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
+        </div>
+    </main>
+    <footer>
+        <div class="footerDiv">
+            <p class="footerP">Mexican Black Bird</p>
+            <p class="footerP">ZZ Top</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
+
+{{end}}
