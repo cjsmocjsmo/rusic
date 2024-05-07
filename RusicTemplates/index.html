@@ -37,7 +37,7 @@
             <h2 hx-trigger="click" hx-get="/albumofinterest" hx-target=".randomArt" hx-swap="outerHTML">Albums Of Interest</h2>
             <div id="randArt" class="randomArt">
                 {{ range . }}
-                <form action="/songsforalbum" >
+                <form action="/songsforalbum/{{ .AlbumId }}" >
                     <input type="hidden" name="albumid" value="{{ .AlbumId }}">
                     <button class="formBtn" type="submit">
                         <img  class="ranArt"
