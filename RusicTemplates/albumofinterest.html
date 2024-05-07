@@ -2,7 +2,7 @@
 
 <div id="randArt" class="randomArt">
     {{ range . }}
-        <img class="ranArt" src="{{ . }}" alt="Currently Playing">
+        <img class="ranArt" src="{{ .HttpThumbPath }}" data-randImgId="{{ .AlbumId }}" alt="Currently Playing">
     {{ end }}
 </div>
 
