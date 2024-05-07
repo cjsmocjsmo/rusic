@@ -9,11 +9,12 @@ import (
 	"time"
 )
 
-func SayHello() string {
-	return "Hello, World!"
+type RandomArtStruct struct {
+	AlbumId string
+	HttpThumbPath string
 }
 
-func RandomArt() []string {
+func RandomArt() []RandomArtStruct {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -54,28 +55,31 @@ func RandomArt() []string {
 
 	// fmt.Printf("Random numbers: %v\n", randomNumbers)
 
-	thumbPaths := []string{}
+	thumbPaths := []RandomArtStruct{}
 	for _, idx := range randomNumbers {
-		rows, err = db.Query(fmt.Sprintf("SELECT httpthumbpath FROM music_images WHERE idx=%d", idx))
+		rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath, albumid FROM music_images WHERE idx=%d", idx))
 		if err != nil {
 			fmt.Println("Error executing query: ", err)
+			continue
 		}
 		defer rows.Close()
 
 		for rows.Next() {
-			var thumbpath string
-			if err := rows.Scan(&thumbpath); err != nil {
+			var thumbpath, albumid string
+			if err := rows.Scan(&thumbpath, &albumid); err != nil {
 				fmt.Println("Error scanning row: ", err)
 				continue
 			}
-			thumbPaths = append(thumbPaths, thumbpath)
+
+			RA := RandomArtStruct{AlbumId: albumid, HttpThumbPath: thumbpath}
+			thumbPaths = append(thumbPaths, RA)
+		}
+
+		if err := rows.Err(); err != nil {
+			fmt.Println("Error iterating over rows: ", err)
 		}
 	}
-	if err := rows.Err(); err != nil {
-		fmt.Println("Error iterating over rows: ", err)
-	}
-
-	fmt.Printf("Thumb paths: %v\n", thumbPaths)
+	// fmt.Printf("Thumb paths: %v\n", thumbPaths)
 
 	return thumbPaths
 }
