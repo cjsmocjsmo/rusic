@@ -37,7 +37,16 @@
             <h2 hx-trigger="click" hx-get="/albumofinterest" hx-target=".randomArt" hx-swap="outerHTML">Albums Of Interest</h2>
             <div id="randArt" class="randomArt" hx-ext="path-params">
                 {{ range . }}
-                <img 
+                <form action="/randomArtClick" >
+                    <input type="hidden" name="albumid" value="{{ .AlbumId }}">
+                    <button class="ranArt" type="submit">
+                        <img 
+                            src="{{ .HttpThumbPath }}" 
+                            alt="Currently Playing"
+                        >
+                    </button>
+                </form>
+                <!-- <img 
                     class="ranArt" 
                     src="{{ .HttpThumbPath }}" 
                     hx-trigger="click" 
@@ -46,7 +55,7 @@
                     hx-target="main" 
                     hx-swap="innerHTML"
                     alt="Currently Playing"
-                >
+                > -->
                 {{ end }}
             </div>
         </div>
