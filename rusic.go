@@ -113,7 +113,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 	}
 	defer db.Close()
 
-	rows, err := db.Query(fmt.Sprintf("SELECT * FROM music_images WHERE albumid='%s'", albumId))
+	rows, err := db.Query(fmt.Sprintf("SELECT * FROM music WHERE albumid='%s'", albumId))
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 	}
@@ -123,7 +123,9 @@ func SongsForAlbum(albumId string) []MusicInfo {
 	
 	for rows.Next() {
 		song := MusicInfo{}
-		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.Artist, &song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page, &song.FsizeResults); err != nil {
+		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.Artist, &song.Artistid, &song.Album, 
+			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page, 
+			&song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
@@ -133,3 +135,17 @@ func SongsForAlbum(albumId string) []MusicInfo {
 	return songs
 		
 }
+// type MusicInfo struct{
+//     RusicId string
+//     ImgUrl string
+//     Artist string
+//     Artistid string
+//     Album string	 
+// 	Albumid string
+//     Song string
+//     Fullpath string
+//     Extension string
+//     Idx string
+//     Page string
+//     FsizeResults string
+// }
