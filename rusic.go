@@ -14,6 +14,27 @@ type RandomArtStruct struct {
 	HttpThumbPath string
 }
 
+type SongStruct struct {
+	Idx string
+	Path string
+	MovId string
+}
+
+type MusicInfo struct{
+    RusicId string
+    ImgUrl string
+    Artist string
+    Artistid string
+    Album string	 
+	Albumid string
+    Song string
+    Fullpath string
+    Extension string
+    Idx string
+    Page string
+    FsizeResults string
+}
+
 func RandomArt() []RandomArtStruct {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
@@ -82,4 +103,33 @@ func RandomArt() []RandomArtStruct {
 	// fmt.Printf("Thumb paths: %v\n", thumbPaths)
 
 	return thumbPaths
+}
+
+func SongsForAlbum(albumId string) []MusicInfo {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query(fmt.Sprintf("SELECT * FROM music_images WHERE albumid='%s'", albumId))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+	
+	songs := []MusicInfo{}
+	
+	for rows.Next() {
+		song := MusicInfo{}
+		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.Artist, &song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page, &song.FsizeResults); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		songs = append(songs, song)
+	}
+
+	return songs
+		
 }
