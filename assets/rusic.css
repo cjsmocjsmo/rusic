@@ -45,6 +45,8 @@ main {
     background-color: black;
     color: white;
     font-size: 20px;
+    width: 8rem;
+    height: 4rem;
 }
 
 h1 {
@@ -78,6 +80,7 @@ h2 {
 .randomArt {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin: 1rem;
