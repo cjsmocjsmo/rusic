@@ -35,7 +35,7 @@ func RandomArt() []string {
 			continue
 		}
 		fmt.Println("Index:", idx)
-		_ = append(idxlist, idx)
+		idxlist = append(idxlist, idx)
 	}
 
 	fmt.Printf("Index list: %v\n", idxlist)
