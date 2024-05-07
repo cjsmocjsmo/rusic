@@ -96,3 +96,8 @@ func rus_index(c echo.Context) error {
 	randart := RandomArt()
 	return c.Render(http.StatusOK, "rus_index", randart)
 }
+
+func album_of_interest(c echo.Context) error {
+	randart := RandomArt()
+	return c.Render(http.StatusOK, "album_of_interest", randart)
+}

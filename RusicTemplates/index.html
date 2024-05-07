@@ -33,8 +33,8 @@
         <div class="playingDiv">
             <img class="playingImg" src="/assets/playing.jpg" alt="Currently Playing">
         </div>
-        <h2 hx-trigger="click" hx-get="/albumofinterest" hx-target="html" hx-swap="innerHTML">Albums Of Interest</h2>
-        <div class="randomArt">
+        <h2 hx-trigger="click" hx-get="/albumofinterest" hx-target="#randArt" hx-swap="innerHTML">Albums Of Interest</h2>
+        <div id="randArt" class="randomArt">
             {{ range . }}
                 <img class="ranArt" src="{{ . }}" alt="Currently Playing">
             {{ end }}
