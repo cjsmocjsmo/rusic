@@ -6,7 +6,7 @@
         class="ranArt" 
         src="{{ .HttpThumbPath }}" 
         hx-trigger="click" 
-        hx-get="/songsforalbum?albumid={}"
+        hx-get="/songsforalbum"
         hx-vals='{"albumid":"{{ .AlbumId }}"}'
         hx-target="main" 
         hx-swap="innerHTML"
