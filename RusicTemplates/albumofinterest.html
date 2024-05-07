@@ -2,15 +2,15 @@
 
 <div id="randArt" class="randomArt">
     {{ range . }}
-        <img 
-            class="ranArt" 
-            src="{{ .HttpThumbPath }}" 
-            hx-trigger="click" 
-            hx-get="/songsforalbum" 
-            hx-target="main" 
-            hx-swap="innerHTML" 
-            hx-params="{{ .AlbumId }}" 
-            alt="Currently Playing">
+    <img 
+        class="ranArt" 
+        src="{{ .HttpThumbPath }}" 
+        hx-trigger="click" 
+        hx-get="/songsforalbum?albumid={{ .AlbumId }}" 
+        hx-target="main" 
+        hx-swap="innerHTML"
+        alt="Currently Playing"
+    >
     {{ end }}
 </div>
 
