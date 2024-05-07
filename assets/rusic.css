@@ -79,6 +79,9 @@ h2 {
 
 .formBtn {
     background-color: black;
+    border-style: solid;
+    border-color: purple;
+    border-width: 1px;
 }
 
 .randomArt {
