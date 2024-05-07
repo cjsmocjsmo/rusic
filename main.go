@@ -83,7 +83,7 @@ func main() {
 	e.GET("/", rus_index)
 	e.GET("/randomart", rus_index)
 	e.GET("/albumofinterest", album_of_interest)
-	e.GET("/songsforalbum/:albumid", songs_for_album)
+	e.GET("/songsforalbum", songs_for_album)
 
 	e.Static("/assets", "assets")
 	e.Logger.Fatal(e.Start(":8080"))
