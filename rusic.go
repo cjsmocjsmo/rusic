@@ -55,7 +55,7 @@ func RandomArt() []string {
 	fmt.Printf("Random numbers: %v\n", randomNumbers)
 
 	thumbPaths := []string{}
-	rows, err = db.Query("SELECT httpthumbpath FROM movie_images")
+	rows, err = db.Query("SELECT httpthumbpath FROM music_images")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 	}
