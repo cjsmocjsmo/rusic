@@ -39,7 +39,7 @@
                 {{ range . }}
                 <form action="/randomArtClick" >
                     <input type="hidden" name="albumid" value="{{ .AlbumId }}">
-                    <button type="submit">
+                    <button class="formBtn" type="submit">
                         <img  class="ranArt"
                             src="{{ .HttpThumbPath }}" 
                             alt="Currently Playing"
