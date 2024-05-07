@@ -34,11 +34,11 @@ func RandomArt() []string {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println("Index:", idx)
+		// fmt.Println("Index:", idx)
 		idxlist = append(idxlist, idx)
 	}
 
-	fmt.Printf("Index list: %v\n", idxlist)
+	// fmt.Printf("Index list: %v\n", idxlist)
 
 	if err := rows.Err(); err != nil {
 		fmt.Println("Error iterating over rows: ", err)
@@ -52,7 +52,7 @@ func RandomArt() []string {
 		randomNumbers = append(randomNumbers, idxlist[randomIndex])
 	}
 
-	fmt.Printf("Random numbers: %v\n", randomNumbers)
+	// fmt.Printf("Random numbers: %v\n", randomNumbers)
 
 	thumbPaths := []string{}
 	for _, idx := range randomNumbers {
