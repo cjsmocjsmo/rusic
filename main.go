@@ -66,7 +66,7 @@ func checkDBExists() {
 
 func init() {
 	godotenv.Load("rus.env")
-	// checkDBExists()
+	checkDBExists()
 }
 
 func main() {
@@ -81,6 +81,7 @@ func main() {
 	e.Renderer = t
 
 	e.GET("/", rus_index)
+	e.GET("/randomart", rus_index)
 
 	e.Static("/assets", "assets")
 	e.Logger.Fatal(e.Start(":8080"))
@@ -91,6 +92,6 @@ func (t *Template) Render(w io.Writer, Name string, data interface{}, c echo.Con
 }
 
 func rus_index(c echo.Context) error {
-	hello := SayHello()
-	return c.Render(http.StatusOK, "rus_index", hello)
+	randart := RandomArt()
+	return c.Render(http.StatusOK, "rus_index", randart)
 }

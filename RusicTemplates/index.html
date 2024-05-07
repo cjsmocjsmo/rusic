@@ -35,11 +35,9 @@
         </div>
         <h2>Albums Of Interest</h2>
         <div class="randomArt">
-            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
-            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
-            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
-            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
-            <img class="ranArt" src="/assets/playing.jpg" alt="Currently Playing">
+            {{ range . }}
+                <img class="ranArt" src="{{ . }}" alt="Currently Playing">
+            {{ end }}
         </div>
     </main>
     <footer>
