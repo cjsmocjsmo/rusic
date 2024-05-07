@@ -77,6 +77,10 @@ h2 {
     border-radius: 12px;
 }
 
+form {
+    background-color: black;
+}
+
 .randomArt {
     display: flex;
     flex-direction: row;
