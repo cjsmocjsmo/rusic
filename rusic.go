@@ -1,12 +1,12 @@
-package main 
+package main
 
 import (
-	"fmt"
-	"os"
-	"math/rand"
-		"time"
 	"database/sql"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"math/rand"
+	"os"
+	"time"
 )
 
 func SayHello() string {
@@ -61,17 +61,16 @@ func RandomArt() []string {
 			fmt.Println("Error executing query: ", err)
 		}
 		defer rows.Close()
-	}
 
-	for rows.Next() {
-		var thumbpath string
-		if err := rows.Scan(&thumbpath); err != nil {
-			fmt.Println("Error scanning row: ", err)
-			continue
+		for rows.Next() {
+			var thumbpath string
+			if err := rows.Scan(&thumbpath); err != nil {
+				fmt.Println("Error scanning row: ", err)
+				continue
+			}
+			thumbPaths = append(thumbPaths, thumbpath)
 		}
-		thumbPaths = append(thumbPaths, thumbpath)
 	}
-
 	if err := rows.Err(); err != nil {
 		fmt.Println("Error iterating over rows: ", err)
 	}
