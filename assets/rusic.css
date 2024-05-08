@@ -126,6 +126,8 @@ h2 {
     align-items: center;
     margin: 1rem;
     border: 2.5px solid purple;
+    border-radius: 12px;
+    width: 300px;
 }
 
 
