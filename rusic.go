@@ -134,5 +134,33 @@ func SongsForAlbum(albumId string) []MusicInfo {
 	}
 
 	return songs
+}
 
+type SongCountStruct struct {
+	Alpha string
+	Count int
+}
+
+func ArtistStartsWith() []SongCountStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+	rows, err := db.Query("SELECT * FROM songcount")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+	results := []SongCountStruct{}
+	for rows.Next() {
+		var startsWith SongCountStruct
+		if err := rows.Scan(&startsWith.Alpha, &startsWith.Count); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		results = append(results, startsWith)
+	}
+	return results
 }

@@ -20,7 +20,13 @@
     <nav class="navOne">
         <div class="navDiv">
             <a href="/"><button class="navBtn">Home</button></a>
-            <button class="navBtn">Artists</button>
+            <button 
+                class="navBtn"
+                hx-trigger="click"
+                hx-get="/artists"
+                hx-target="main"
+                hx-swap="innerHTML"
+            >Artists</button>
             <button class="navBtn">Albums</button>
             <button class="navBtn">Songs</button>
             <button class="navBtn">Playlists</button>

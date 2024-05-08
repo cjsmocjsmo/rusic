@@ -83,7 +83,8 @@ func main() {
 	e.GET("/", rus_index)
 	e.GET("/randomart", rus_index)
 	e.GET("/albumofinterest", album_of_interest)
-	e.GET("/songsforalbum/:albumid", songs_for_album)
+	e.GET("/songsforalbum/:albumid", songs_for_rand_album)
+	e.GET("/artiststartswith", rus_artiststartswith)
 	
 
 	e.Static("/assets", "assets")
@@ -104,11 +105,14 @@ func album_of_interest(c echo.Context) error {
 	return c.Render(http.StatusOK, "rus_albumofinterest", randart)
 }
 
-func songs_for_album(c echo.Context) error {
+func songs_for_rand_album(c echo.Context) error {
 	albumid := c.Param("albumid")
 	println("Album ID: ", albumid)
 	songs := SongsForAlbum(albumid)
 	return c.Render(http.StatusOK, "rus_songsforalbum", songs)
 }
 
-// e20d98593439a3504a9b5548542d17f9
+func rus_artiststartswith(c echo.Context) error {
+	startswith := ArtistStartsWith()
+	return c.Render(http.StatusOK, "rus_artiststartswith", startswith)
+}
