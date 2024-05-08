@@ -160,6 +160,7 @@ func ArtistStartsWith() []SongCountStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
+		println(startsWith.Alpha, startsWith.Count)
 		results = append(results, startsWith)
 	}
 	return results
