@@ -4,3 +4,8 @@ function PlayMusic(path) {
     audio.src = path;
     audio.play();
 }
+
+function PlayMusic2(path) {
+    player = Audio(path);
+    player.play();
+}
