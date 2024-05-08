@@ -1,10 +1,10 @@
 {{ define "rus_artiststartswith" }}
-
-    {{ range . }}
-        <button class="artistAlphaBtn">
-            <p>{{ .Alpha }}</p>
-            <p>{{ .Count }}</p>
-        </button>
-    {{ end }}
-
+    <div class="artistAlphaDiv">
+        {{ range . }}
+            <button class="artistAlphaBtn">
+                <p>{{ .Alpha }}</p>
+                <p>{{ .Count }}</p>
+            </button>
+        {{ end }}
+    </div>
 {{ end }}
