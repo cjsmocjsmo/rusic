@@ -102,7 +102,7 @@ h2 {
 
 .sfaOuterDiv {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     grid-gap: 1rem;
     justify-content: center;
     align-items: center;
@@ -127,7 +127,7 @@ h2 {
     margin: 1rem;
     border: 2.5px solid yellowgreen;
     border-radius: 12px;
-    width: 300px;
+    width: 400px;
     background-color: grey;
 }
 
@@ -141,6 +141,7 @@ h2 {
     padding: 12px 24px;
     font-weight: 700;
     font-size: 1rem;
+    color: yellowgreen
 }
 
 
