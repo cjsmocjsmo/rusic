@@ -10,30 +10,30 @@ import (
 )
 
 type RandomArtStruct struct {
-	AlbumId string
+	AlbumId       string
 	HttpThumbPath string
 }
 
 type SongStruct struct {
-	Idx string
-	Path string
+	Idx   string
+	Path  string
 	MovId string
 }
 
-type MusicInfo struct{
-    id int
-    RusicId string
-    ImgUrl string
-    Artist string
-    Artistid string
-    Album string	 
-    Albumid string
-    Song string
-    Fullpath string
-    Extension string
-    Idx string
-    Page string
-    FsizeResults string
+type MusicInfo struct {
+	id           int
+	RusicId      string
+	ImgUrl       string
+	Artist       string
+	Artistid     string
+	Album        string
+	Albumid      string
+	Song         string
+	Fullpath     string
+	Extension    string
+	Idx          string
+	Page         string
+	FsizeResults string
 }
 
 func RandomArt() []RandomArtStruct {
@@ -119,13 +119,13 @@ func SongsForAlbum(albumId string) []MusicInfo {
 		fmt.Println("Error executing query: ", err)
 	}
 	defer rows.Close()
-	
+
 	songs := []MusicInfo{}
-	
+
 	for rows.Next() {
 		song := MusicInfo{}
-		if err := rows.Scan(&song.id, &song.RusicId, &song.ImgUrl, &song.Artist, &song.Artistid, &song.Album, 
-			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page, 
+		if err := rows.Scan(&song.id, &song.RusicId, &song.ImgUrl, &song.Artist, &song.Artistid, &song.Album,
+			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
@@ -134,19 +134,5 @@ func SongsForAlbum(albumId string) []MusicInfo {
 	}
 
 	return songs
-		
+
 }
-// type MusicInfo struct{
-//     RusicId string
-//     ImgUrl string
-//     Artist string
-//     Artistid string
-//     Album string	 
-// 	Albumid string
-//     Song string
-//     Fullpath string
-//     Extension string
-//     Idx string
-//     Page string
-//     FsizeResults string
-// }

@@ -3,10 +3,10 @@
     <h1>Fuck it worked</h1>
 
     {{ range . }}
-        <p>{{ .Artist}}</p>
-        <p>{{ .Album }}</p> 
-        <p>{{ .Song }}</p> 
-        <img src="{{ .ImgUrl }}" />
+        <div class="sfaDiv">
+            <p>{{ .Album }}</p> 
+            <p>{{ .Song }}</p> 
+        </div>
     {{ end }}
 
 {{ end }}
