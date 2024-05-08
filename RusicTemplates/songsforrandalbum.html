@@ -1,9 +1,7 @@
 {{ define "rus_songsforalbum" }}
-
     <h1>Fuck it worked</h1>
-
+    <div class="sfaOuterDiv"></div>
     {{ range . }}
-        <div class="sfaOuterDiv">
             <div class="sfaDiv">
                 <p>{{ .Song }}</p> 
                 <div class="sfaPlayAddDiv">
@@ -11,9 +9,8 @@
                     <button>Add</button>
                 </div> 
             </div>
-        </div>
     {{ end }}
-
+    </div>
 {{ end }}
 
 <!-- RusicId string
