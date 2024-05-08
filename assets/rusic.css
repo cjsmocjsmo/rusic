@@ -125,9 +125,18 @@ h2 {
     justify-content: center;
     align-items: center;
     margin: 1rem;
-    border: 2.5px solid purple;
+    border: 2.5px solid yellowgreen;
     border-radius: 12px;
     width: 300px;
+    background-color: grey;
+}
+
+.playBtn, addBtn {
+    background-color: purple;
+    border-style: solid;
+    border-color: yellowgreen;
+    border-width: 1px;
+    margin: 1rem;
 }
 
 
