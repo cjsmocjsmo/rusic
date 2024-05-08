@@ -21,13 +21,13 @@ type SongStruct struct {
 }
 
 type MusicInfo struct{
-	id int
+    id int
     RusicId string
     ImgUrl string
     Artist string
     Artistid string
     Album string	 
-	Albumid string
+    Albumid string
     Song string
     Fullpath string
     Extension string
