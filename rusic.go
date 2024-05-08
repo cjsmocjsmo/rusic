@@ -137,6 +137,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 }
 
 type SongCountStruct struct {
+	ID	int
 	Alpha string
 	Count int
 }
@@ -156,7 +157,7 @@ func ArtistStartsWith() []SongCountStruct {
 	results := []SongCountStruct{}
 	for rows.Next() {
 		var startsWith SongCountStruct
-		if err := rows.Scan(&startsWith.Alpha, &startsWith.Count); err != nil {
+		if err := rows.Scan(&startsWith.ID, &startsWith.Alpha, &startsWith.Count); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
