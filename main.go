@@ -20,35 +20,6 @@ type Template struct {
 	templates *template.Template
 }
 
-type MovieStruct struct {
-	Name          string
-	Year          string
-	PosterAddr    string
-	Size          string
-	Path          string
-	Idx           string
-	MovId         string
-	Catagory      string
-	HttpThumbPath string
-}
-
-type TvEpiStruct struct {
-	TvId     string
-	Size     string
-	Catagory string
-	Name     string
-	Season   string
-	Episode  string
-	Path     string
-	Idx      string
-}
-
-type TVSeasonStruct struct {
-	Cat string
-	Sea string
-	Epi []TvEpiStruct
-}
-
 func checkDBExists() {
 	mtvDBPath := os.Getenv("RUS_DB_PATH")
 	if _, err := os.Stat(mtvDBPath); os.IsNotExist(err) {
