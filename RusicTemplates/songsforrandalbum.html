@@ -5,8 +5,11 @@
     {{ range . }}
         <div class="sfaOuterDiv">
             <div class="sfaDiv">
-                <p>{{ .Album }}</p> 
                 <p>{{ .Song }}</p> 
+                <div class="sfaPlayAddDiv">
+                    <button>Play</button>
+                    <button>Add</button>
+                </div> 
             </div>
         </div>
     {{ end }}
