@@ -149,7 +149,7 @@ func ArtistStartsWith() []SongCountStruct {
 		fmt.Println("Error opening database: ", err)
 	}
 	defer db.Close()
-	rows, err := db.Query("SELECT * FROM songcount")
+	rows, err := db.Query("SELECT * FROM artistcount")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 	}
