@@ -3,9 +3,11 @@
     <h1>Fuck it worked</h1>
 
     {{ range . }}
-        <div class="sfaDiv">
-            <p>{{ .Album }}</p> 
-            <p>{{ .Song }}</p> 
+        <div class="sfaOuterDiv">
+            <div class="sfaDiv">
+                <p>{{ .Album }}</p> 
+                <p>{{ .Song }}</p> 
+            </div>
         </div>
     {{ end }}
 
