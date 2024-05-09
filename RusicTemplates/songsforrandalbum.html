@@ -5,7 +5,8 @@
             <div class="sfaDiv">
                 <p>{{ .Song }}</p> 
                 <div class="sfaPlayAddDiv">
-                    <button onclick='PlayMusic("{{ .PlayPath }}")' data-musid="{{ .RusicId }}" class="playBtn">Play</button>
+                    <!-- <button onclick='PlayMusic("{{ .PlayPath }}")' data-musid="{{ .RusicId }}" class="playBtn">Play</button> -->
+                    <button onclick="PlayMusic()" data-musid="{{ .RusicId }}" class="playBtn">Play</button>
                     <button class="addBtn">Add</button>
                 </div> 
             </div>
