@@ -97,8 +97,8 @@ func rus_artiststartswith(c echo.Context) error {
 }
 
 func PlayMusic(c echo.Context) error {
-	songid := c.Param("songid")
-	println("Song ID: ", songid)
-	song := SongForId(songid)
+	rusicid := c.Param("rusicid")
+	println("Song ID: ", rusicid)
+	song := SongForId(rusicid)
 	return c.Render(http.StatusOK, "rus_playmusic", song)
 }
