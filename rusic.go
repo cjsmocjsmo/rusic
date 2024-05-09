@@ -24,6 +24,7 @@ type MusicInfo struct {
 	id           int
 	RusicId      string
 	ImgUrl       string
+	PlayPath	 string
 	Artist       string
 	Artistid     string
 	Album        string
@@ -124,7 +125,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 
 	for rows.Next() {
 		song := MusicInfo{}
-		if err := rows.Scan(&song.id, &song.RusicId, &song.ImgUrl, &song.Artist, &song.Artistid, &song.Album,
+		if err := rows.Scan(&song.id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
