@@ -20,7 +20,8 @@
     <nav class="navOne">
         <div class="navDiv">
             <a href="/"><button class="navBtn">Home</button></a>
-            <a href="/artiststartswith"><button class="navBtn">Artists</button></a>
+            <!-- <a href="/artiststartswith"><button class="navBtn">Artists</button></a> -->
+            <button class="navBtn" hx-trigger="click" hx-get="/artiststartswith" hx-target="main" hx-swap="innerHTML">Artists</button>
             <button class="navBtn">Albums</button>
             <button class="navBtn">Songs</button>
             <button class="navBtn">Playlists</button>
