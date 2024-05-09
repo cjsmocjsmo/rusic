@@ -2,7 +2,7 @@
 
 function PlayMusic(event) {
     var musid = event.target.getAttribute('data-musid');
-    var url = 'http://192.168.0.97:8080/playmovie?musid=' + musid;
+    var url = 'http://192.168.0.97:8080/playmusic?musid=' + musid;
     console.log(url);
 
     fetch(url)
