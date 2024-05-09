@@ -1,8 +1,8 @@
 
 
-function PlayMovie(event) {
-    var movid = event.target.getAttribute('data-movid');
-    var url = 'http://192.168.0.97:8080/playmovie?movid=' + movid;
+function PlayMusic(event) {
+    var musid = event.target.getAttribute('data-musid');
+    var url = 'http://192.168.0.97:8080/playmovie?musid=' + musid;
 
     fetch(url)
         .then(response => response.json())
