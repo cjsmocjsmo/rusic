@@ -23,7 +23,6 @@ type SongStruct struct {
 }
 
 type MusicInfo struct {
-	id           int
 	RusicId      string
 	ImgUrl       string
 	PlayPath     string
@@ -123,7 +122,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 
 	for rows.Next() {
 		song := MusicInfo{}
-		if err := rows.Scan(&song.id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
+		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
@@ -210,7 +209,7 @@ func SongForId(rusicId string) MusicInfo {
 	song := MusicInfo{}
 
 	for rows.Next() {
-		if err := rows.Scan(&song.id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
+		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
