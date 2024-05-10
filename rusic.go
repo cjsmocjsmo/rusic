@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"time"
-	"encoding/json"
+	// "encoding/json"
 )
 
 type RandomArtStruct struct {
@@ -108,7 +108,7 @@ type MusicInfo struct {
 // 	return thumbPaths
 // }
 
-func RandomArt2() ([]byte, error) {
+func RandomArt2() []RandomArtStruct {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -167,14 +167,14 @@ func RandomArt2() ([]byte, error) {
 	}
 	fmt.Println(thumbPaths)
 
-	jsonData, err := json.Marshal(thumbPaths)
+	// jsonData, err := json.Marshal(thumbPaths)
 
-	fmt.Println(jsonData)
+	// fmt.Println(jsonData)
 	if err != nil {
 		fmt.Println("Error marshaling data to JSON: %w", err)
 	}
 
-	return jsonData, nil
+	return thumbPaths
 }
 
 func SongsForAlbum(albumId string) []MusicInfo {

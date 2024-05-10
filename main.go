@@ -69,35 +69,23 @@ func main() {
 // }
 
 func rus_index(c echo.Context) error {
-	randart, err := RandomArt2()
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
+	randart := RandomArt2()
     return c.JSON(http.StatusOK, randart)
 }
 
 func rus_index2(c echo.Context) error {
-    randart, err := RandomArt2()
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
+    randart := RandomArt2()
     return c.JSON(http.StatusOK, randart)
 }
 
 func rus_main(c echo.Context) error {
-	randart, err := RandomArt2()
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
+	randart := RandomArt2()
     return c.JSON(http.StatusOK, randart)
 }
 
 
 func album_of_interest(c echo.Context) error {
-	randart, err := RandomArt2()
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, err.Error())
-    }
+	randart := RandomArt2()
     return c.JSON(http.StatusOK, randart)
 }
 
