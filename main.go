@@ -77,7 +77,7 @@ func songs_for_rand_album(c echo.Context) error {
 	albumid := c.Param("albumid")
 	println("Album ID: ", albumid)
 	songs := SongsForAlbum(albumid)
-	return c.Render(http.StatusOK, "rus_songsforalbum", songs)
+	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_artiststartswith(c echo.Context) error {
