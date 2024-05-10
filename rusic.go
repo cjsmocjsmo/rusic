@@ -23,6 +23,7 @@ type SongStruct struct {
 }
 
 type MusicInfo struct {
+	Id		     int
 	RusicId      string
 	ImgUrl       string
 	PlayPath     string
@@ -125,7 +126,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
-			fmt.Println("Error scanning row: ", err)
+			fmt.Println("Songs for Album Error scanning row: ", err)
 			continue
 		}
 		songs = append(songs, song)
@@ -212,7 +213,7 @@ func SongForId(rusicId string) MusicInfo {
 		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
-			fmt.Println("Error scanning row: ", err)
+			fmt.Println("song for id Error scanning row: ", err)
 			continue
 		}
 	}
@@ -256,7 +257,7 @@ func get_currentPlayingImg(albid string) MusicImgInfo {
 		if err := rows.Scan(&img.RusicId, &img.Width, &img.Height, &img.Artist, &img.Artistid, &img.Album,
 			&img.Albumid, &img.Filesize, &img.Fullpath, &img.Thumbpath, &img.Idx, &img.Page,
 			&img.HttpThumbPath); err != nil {
-			fmt.Println("Error scanning row: ", err)
+			fmt.Println("getcurrentplayingimg Error scanning row: ", err)
 			continue
 		}
 	}
