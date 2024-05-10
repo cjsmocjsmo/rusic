@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"time"
+	"encoding/json"
 )
 
 type RandomArtStruct struct {
@@ -24,7 +25,7 @@ type MusicInfo struct {
 	id           int
 	RusicId      string
 	ImgUrl       string
-	PlayPath	 string
+	PlayPath     string
 	Artist       string
 	Artistid     string
 	Album        string
@@ -107,6 +108,72 @@ func RandomArt() []RandomArtStruct {
 	return thumbPaths
 }
 
+func RandomArt2() ([]byte, error) {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT idx FROM music_images")
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer rows.Close()
+
+	idxlist := []int{}
+	for rows.Next() {
+		var idx int
+		if err := rows.Scan(&idx); err != nil {
+			fmt.Println("Error scanning row: %w", err)
+		}
+		idxlist = append(idxlist, idx)
+	}
+
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: %w", err)
+	}
+
+	rand.Seed(time.Now().UnixNano())
+
+	randomNumbers := []int{}
+	for i := 0; i < 5; i++ {
+		randomIndex := rand.Intn(len(idxlist))
+		randomNumbers = append(randomNumbers, idxlist[randomIndex])
+	}
+
+	thumbPaths := []RandomArtStruct{}
+	for _, idx := range randomNumbers {
+		rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath, albumid FROM music_images WHERE idx=%d", idx))
+		if err != nil {
+			fmt.Println("Error executing query: %w", err)
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var thumbpath, albumid string
+			if err := rows.Scan(&thumbpath, &albumid); err != nil {
+				fmt.Println("Error scanning row: %w", err)
+			}
+
+			RA := RandomArtStruct{AlbumId: albumid, HttpThumbPath: thumbpath}
+			thumbPaths = append(thumbPaths, RA)
+		}
+
+		if err := rows.Err(); err != nil {
+			fmt.Println("Error iterating over rows: %w", err)
+		}
+	}
+
+	jsonData, err := json.Marshal(thumbPaths)
+	if err != nil {
+		fmt.Println("Error marshaling data to JSON: %w", err)
+	}
+
+	return jsonData, nil
+}
+
 func SongsForAlbum(albumId string) []MusicInfo {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
@@ -138,7 +205,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 }
 
 type SongCountStruct struct {
-	ID	int
+	ID    int
 	Alpha string
 	Count int
 }

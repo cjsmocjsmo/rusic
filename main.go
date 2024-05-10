@@ -53,7 +53,7 @@ func main() {
 
 	e.GET("/", rus_index)
 	e.GET("/main", rus_main)
-	e.GET("/randomart", rus_index)
+	e.GET("/randomart", rus_index2)
 	e.GET("/albumofinterest", album_of_interest)
 	e.GET("/songsforalbum/:albumid", songs_for_rand_album)
 	e.GET("/artiststartswith", rus_artiststartswith)
@@ -71,6 +71,14 @@ func (t *Template) Render(w io.Writer, Name string, data interface{}, c echo.Con
 func rus_index(c echo.Context) error {
 	randart := RandomArt()
 	return c.Render(http.StatusOK, "rus_index", randart)
+}
+
+func rus_index2(c echo.Context) error {
+    randart, err := RandomArt2()
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, err.Error())
+    }
+    return c.JSON(http.StatusOK, randart)
 }
 
 func rus_main(c echo.Context) error {
