@@ -23,20 +23,20 @@ type SongStruct struct {
 }
 
 type MusicInfo struct {
-	Id		     int
-	RusicId      string
-	ImgUrl       string
-	PlayPath     string
-	Artist       string
-	Artistid     string
-	Album        string
-	Albumid      string
-	Song         string
-	Fullpath     string
-	Extension    string
-	Idx          string
-	Page         string
-	FsizeResults string
+	Id		     int	// 1
+	RusicId      string	// 2
+	ImgUrl       string // 3
+	PlayPath     string	// 4
+	Artist       string	// 5
+	Artistid     string	// 6
+	Album        string // 7
+	Albumid      string	// 8
+	Song         string	// 9
+	Fullpath     string	// 10
+	Extension    string	// 11
+	Idx          string	// 12
+	Page         string	// 13
+	FsizeResults string	// 14
 }
 
 func RandomArt() []RandomArtStruct {
@@ -123,7 +123,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 
 	for rows.Next() {
 		song := MusicInfo{}
-		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
+		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
 			fmt.Println("SongsForAlbum Error scanning row: ", err)
@@ -210,7 +210,7 @@ func SongForId(rusicId string) MusicInfo {
 	song := MusicInfo{}
 
 	for rows.Next() {
-		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
+		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
 			fmt.Println("song for id Error scanning row: ", err)
