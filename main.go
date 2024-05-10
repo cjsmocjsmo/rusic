@@ -83,7 +83,7 @@ func songs_for_rand_album(c echo.Context) error {
 func rus_artiststartswith(c echo.Context) error {
 	println("Artist Startswith")
 	startswith := ArtistStartsWith()
-	return c.Render(http.StatusOK, "rus_artiststartswith", startswith)
+	return c.JSON(http.StatusOK, startswith)
 }
 
 func PlayMusic(c echo.Context) error {
