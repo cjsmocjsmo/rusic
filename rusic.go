@@ -132,6 +132,8 @@ func SongsForAlbum(albumId string) []MusicInfo {
 		songs = append(songs, song)
 	}
 
+	fmt.Println(songs)
+
 	return songs
 }
 
