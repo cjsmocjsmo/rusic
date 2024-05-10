@@ -3,8 +3,8 @@ package main
 import (
 	// "database/sql"
 	"fmt"
-	"html/template"
-	"io"
+	// "html/template"
+	// "io"
 
 	// "log"
 	"net/http"
@@ -16,9 +16,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Template struct {
-	templates *template.Template
-}
+// type Template struct {
+// 	templates *template.Template
+// }
 
 func checkDBExists() {
 	mtvDBPath := os.Getenv("RUS_DB_PATH")
@@ -46,10 +46,10 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Gzip())
 	// e.Use(middleware.Recover())
-	t := &Template{
-		templates: template.Must(template.ParseGlob("RusicTemplates/*")),
-	}
-	e.Renderer = t
+	// t := &Template{
+	// 	templates: template.Must(template.ParseGlob("RusicTemplates/*")),
+	// }
+	// e.Renderer = t
 
 	e.GET("/", rus_index)
 	e.GET("/main", rus_main)
@@ -64,13 +64,16 @@ func main() {
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
-func (t *Template) Render(w io.Writer, Name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, Name, data)
-}
+// func (t *Template) Render(w io.Writer, Name string, data interface{}, c echo.Context) error {
+// 	return t.templates.ExecuteTemplate(w, Name, data)
+// }
 
 func rus_index(c echo.Context) error {
-	randart := RandomArt()
-	return c.Render(http.StatusOK, "rus_index", randart)
+	randart, err := RandomArt2()
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, err.Error())
+    }
+    return c.JSON(http.StatusOK, randart)
 }
 
 func rus_index2(c echo.Context) error {
@@ -82,14 +85,22 @@ func rus_index2(c echo.Context) error {
 }
 
 func rus_main(c echo.Context) error {
-	randart := RandomArt()
-	return c.Render(http.StatusOK, "rus_main", randart)
+	randart, err := RandomArt2()
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, err.Error())
+    }
+    return c.JSON(http.StatusOK, randart)
 }
 
+
 func album_of_interest(c echo.Context) error {
-	randart := RandomArt()
-	return c.Render(http.StatusOK, "rus_albumofinterest", randart)
+	randart, err := RandomArt2()
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, err.Error())
+    }
+    return c.JSON(http.StatusOK, randart)
 }
+
 
 func songs_for_rand_album(c echo.Context) error {
 	albumid := c.Param("albumid")

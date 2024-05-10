@@ -38,75 +38,75 @@ type MusicInfo struct {
 	FsizeResults string
 }
 
-func RandomArt() []RandomArtStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
-	db, err := sql.Open("sqlite3", db_path)
-	if err != nil {
-		fmt.Println("Error opening database: ", err)
-	}
-	defer db.Close()
+// func RandomArt() []RandomArtStruct {
+// 	db_path := os.Getenv("RUS_DB_PATH")
+// 	db, err := sql.Open("sqlite3", db_path)
+// 	if err != nil {
+// 		fmt.Println("Error opening database: ", err)
+// 	}
+// 	defer db.Close()
 
-	rows, err := db.Query("SELECT idx FROM music_images")
-	if err != nil {
-		fmt.Println("Error executing query: ", err)
-	}
-	defer rows.Close()
+// 	rows, err := db.Query("SELECT idx FROM music_images")
+// 	if err != nil {
+// 		fmt.Println("Error executing query: ", err)
+// 	}
+// 	defer rows.Close()
 
-	idxlist := []int{}
-	for rows.Next() {
-		var idx int
-		if err := rows.Scan(&idx); err != nil {
-			fmt.Println("Error scanning row: ", err)
-			continue
-		}
-		// fmt.Println("Index:", idx)
-		idxlist = append(idxlist, idx)
-	}
+// 	idxlist := []int{}
+// 	for rows.Next() {
+// 		var idx int
+// 		if err := rows.Scan(&idx); err != nil {
+// 			fmt.Println("Error scanning row: ", err)
+// 			continue
+// 		}
+// 		// fmt.Println("Index:", idx)
+// 		idxlist = append(idxlist, idx)
+// 	}
 
-	// fmt.Printf("Index list: %v\n", idxlist)
+// 	// fmt.Printf("Index list: %v\n", idxlist)
 
-	if err := rows.Err(); err != nil {
-		fmt.Println("Error iterating over rows: ", err)
-	}
+// 	if err := rows.Err(); err != nil {
+// 		fmt.Println("Error iterating over rows: ", err)
+// 	}
 
-	rand.Seed(time.Now().UnixNano())
+// 	rand.Seed(time.Now().UnixNano())
 
-	randomNumbers := []int{}
-	for i := 0; i < 5; i++ {
-		randomIndex := rand.Intn(len(idxlist))
-		randomNumbers = append(randomNumbers, idxlist[randomIndex])
-	}
+// 	randomNumbers := []int{}
+// 	for i := 0; i < 5; i++ {
+// 		randomIndex := rand.Intn(len(idxlist))
+// 		randomNumbers = append(randomNumbers, idxlist[randomIndex])
+// 	}
 
-	// fmt.Printf("Random numbers: %v\n", randomNumbers)
+// 	// fmt.Printf("Random numbers: %v\n", randomNumbers)
 
-	thumbPaths := []RandomArtStruct{}
-	for _, idx := range randomNumbers {
-		rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath, albumid FROM music_images WHERE idx=%d", idx))
-		if err != nil {
-			fmt.Println("Error executing query: ", err)
-			continue
-		}
-		defer rows.Close()
+// 	thumbPaths := []RandomArtStruct{}
+// 	for _, idx := range randomNumbers {
+// 		rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath, albumid FROM music_images WHERE idx=%d", idx))
+// 		if err != nil {
+// 			fmt.Println("Error executing query: ", err)
+// 			continue
+// 		}
+// 		defer rows.Close()
 
-		for rows.Next() {
-			var thumbpath, albumid string
-			if err := rows.Scan(&thumbpath, &albumid); err != nil {
-				fmt.Println("Error scanning row: ", err)
-				continue
-			}
+// 		for rows.Next() {
+// 			var thumbpath, albumid string
+// 			if err := rows.Scan(&thumbpath, &albumid); err != nil {
+// 				fmt.Println("Error scanning row: ", err)
+// 				continue
+// 			}
 
-			RA := RandomArtStruct{AlbumId: albumid, HttpThumbPath: thumbpath}
-			thumbPaths = append(thumbPaths, RA)
-		}
+// 			RA := RandomArtStruct{AlbumId: albumid, HttpThumbPath: thumbpath}
+// 			thumbPaths = append(thumbPaths, RA)
+// 		}
 
-		if err := rows.Err(); err != nil {
-			fmt.Println("Error iterating over rows: ", err)
-		}
-	}
-	// fmt.Printf("Thumb paths: %v\n", thumbPaths)
+// 		if err := rows.Err(); err != nil {
+// 			fmt.Println("Error iterating over rows: ", err)
+// 		}
+// 	}
+// 	// fmt.Printf("Thumb paths: %v\n", thumbPaths)
 
-	return thumbPaths
-}
+// 	return thumbPaths
+// }
 
 func RandomArt2() ([]byte, error) {
 	db_path := os.Getenv("RUS_DB_PATH")
