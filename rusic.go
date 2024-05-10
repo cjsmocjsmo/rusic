@@ -96,7 +96,7 @@ func RandomArt() []RandomArtStruct {
 			fmt.Println("Error iterating over rows: %w", err)
 		}
 	}
-	fmt.Println(thumbPaths)
+	// fmt.Println(thumbPaths)
 	
 	if err != nil {
 		fmt.Println("Error marshaling data to JSON: %w", err)
@@ -132,7 +132,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 		songs = append(songs, song)
 	}
 
-	fmt.Println(songs)
+	// fmt.Println(songs)
 
 	return songs
 }
@@ -261,6 +261,7 @@ func get_currentPlayingImg(albid string) MusicImgInfo {
 			continue
 		}
 	}
+	fmt.Println(img)
 
 	return img
 }

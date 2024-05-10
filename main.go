@@ -97,7 +97,7 @@ func rus_albumstartswith(c echo.Context) error {
 
 func rus_currentPlayingImg(c echo.Context) error {
 	albumid := c.Param("albumid")
-	println("Current Playing Image")
+	println("AlbumID: ", albumid)
 	currentPlaying := get_currentPlayingImg(albumid)
 	return c.JSON(http.StatusOK, currentPlaying)
 }
