@@ -47,6 +47,7 @@ func main() {
 	e.GET("/albumofinterest", album_of_interest)
 	e.GET("/songsforalbum/:albumid", songs_for_rand_album)
 	e.GET("/artiststartswith", rus_artiststartswith)
+	e.GET("/albumstartswith", rus_albumstartswith)
 	e.GET("/playmusic/:songid", PlayMusic)
 
 	e.Static("/assets", "assets")
@@ -83,6 +84,12 @@ func songs_for_rand_album(c echo.Context) error {
 func rus_artiststartswith(c echo.Context) error {
 	println("Artist Startswith")
 	startswith := ArtistStartsWith()
+	return c.JSON(http.StatusOK, startswith)
+}
+
+func rus_albumstartswith(c echo.Context) error {
+	println("album Startswith")
+	startswith := AlbumStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
