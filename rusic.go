@@ -220,3 +220,47 @@ func SongForId(rusicId string) MusicInfo {
 
 	return song
 }
+
+type MusicImgInfo struct {
+	RusicId       string
+	Width         string
+	Height        string
+	Artist        string
+	Artistid      string
+	Album         string
+	Albumid       string
+	Filesize      string
+	Fullpath      string
+	Thumbpath     string
+	Idx           string
+	Page          string
+	HttpThumbPath string
+}
+
+func get_currentPlayingImg(albid string) MusicImgInfo {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query(fmt.Sprintf("SELECT * FROM music_images WHERE albumid='%s'", albid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	img := MusicImgInfo{}
+
+	for rows.Next() {
+		if err := rows.Scan(&img.RusicId, &img.Width, &img.Height, &img.Artist, &img.Artistid, &img.Album,
+			&img.Albumid, &img.Filesize, &img.Fullpath, &img.Thumbpath, &img.Idx, &img.Page,
+			&img.HttpThumbPath); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+	}
+
+	return img
+}
