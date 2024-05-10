@@ -168,6 +168,8 @@ func RandomArt2() ([]byte, error) {
 	fmt.Println(thumbPaths)
 
 	jsonData, err := json.Marshal(thumbPaths)
+
+	fmt.Println(jsonData)
 	if err != nil {
 		fmt.Println("Error marshaling data to JSON: %w", err)
 	}
