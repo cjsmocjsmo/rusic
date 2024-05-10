@@ -126,7 +126,7 @@ func SongsForAlbum(albumId string) []MusicInfo {
 		if err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
 			&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
 			&song.FsizeResults); err != nil {
-			fmt.Println("song for id Error scanning row: ", err)
+			fmt.Println("SongsForAlbum Error scanning row: ", err)
 			continue
 		}
 		songs = append(songs, song)
