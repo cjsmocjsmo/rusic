@@ -165,6 +165,7 @@ func RandomArt2() ([]byte, error) {
 			fmt.Println("Error iterating over rows: %w", err)
 		}
 	}
+	fmt.Println(thumbPaths)
 
 	jsonData, err := json.Marshal(thumbPaths)
 	if err != nil {
