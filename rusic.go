@@ -222,6 +222,7 @@ func SongForId(rusicId string) MusicInfo {
 }
 
 type MusicImgInfo struct {
+	Id			  int
 	RusicId       string
 	Width         string
 	Height        string
@@ -254,7 +255,7 @@ func get_currentPlayingImg(albid string) MusicImgInfo {
 	img := MusicImgInfo{}
 
 	for rows.Next() {
-		if err := rows.Scan(&img.RusicId, &img.Width, &img.Height, &img.Artist, &img.Artistid, &img.Album,
+		if err := rows.Scan(&img.Id, &img.RusicId, &img.Width, &img.Height, &img.Artist, &img.Artistid, &img.Album,
 			&img.Albumid, &img.Filesize, &img.Fullpath, &img.Thumbpath, &img.Idx, &img.Page,
 			&img.HttpThumbPath); err != nil {
 			fmt.Println("getcurrentplayingimg Error scanning row: ", err)
