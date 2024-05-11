@@ -295,7 +295,7 @@ func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
 
 	artist := []ArtistForAlphaStruct{}
 
-	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT artist artistid FROM startswith WHERE artist_first_letter='%s'", alpha))
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT artist, artistid FROM startswith WHERE artist_first_letter='%s'", alpha))
 
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
@@ -329,7 +329,7 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 
 	album := []AlbumForAlphaStruct{}
 
-	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT album albumid FROM startswith WHERE album_first_letter='%s'", alpha))
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT album, albumid FROM startswith WHERE album_first_letter='%s'", alpha))
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 		return nil
