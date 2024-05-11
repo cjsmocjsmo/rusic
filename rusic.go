@@ -6,37 +6,12 @@ import (
 	"math/rand"
 	"os"
 	"time"
-
 	_ "github.com/mattn/go-sqlite3"
-	// "encoding/json"
 )
 
 type RandomArtStruct struct {
 	AlbumId       string
 	HttpThumbPath string
-}
-
-type SongStruct struct {
-	Idx   string
-	Path  string
-	MovId string
-}
-
-type MusicInfo struct {
-	Id           int    // 1
-	RusicId      string // 2
-	ImgUrl       string // 3
-	PlayPath     string // 4
-	Artist       string // 5
-	Artistid     string // 6
-	Album        string // 7
-	Albumid      string // 8
-	Song         string // 9
-	Fullpath     string // 10
-	Extension    string // 11
-	Idx          string // 12
-	Page         string // 13
-	FsizeResults string // 14
 }
 
 func RandomArt() []RandomArtStruct {
@@ -103,6 +78,23 @@ func RandomArt() []RandomArtStruct {
 	}
 
 	return thumbPaths
+}
+
+type MusicInfo struct {
+	Id           int    // 1
+	RusicId      string // 2
+	ImgUrl       string // 3
+	PlayPath     string // 4
+	Artist       string // 5
+	Artistid     string // 6
+	Album        string // 7
+	Albumid      string // 8
+	Song         string // 9
+	Fullpath     string // 10
+	Extension    string // 11
+	Idx          string // 12
+	Page         string // 13
+	FsizeResults string // 14
 }
 
 func SongsForAlbum(albumId string) []MusicInfo {
@@ -267,19 +259,6 @@ func GetCurrentPlayingImg(albid string) MusicImgInfo {
 	return img
 }
 
-// type StartsWithStruct struct {
-// 	Id int
-// 	RusicId string
-// 	Artist string
-// 	Artistid string
-// 	Album string
-// 	Albumid string
-// 	Song string
-// 	ArtistFirstLetter string
-// 	AlbumFirstLetter string
-// 	SongFirstLetter string
-// }
-
 type ArtistForAlphaStruct struct {
 	Artist   string
 	Artistid string
@@ -346,4 +325,40 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 
 	return album
 
+}
+
+type AlbumsForArtistStruct struct {
+	Id	     int
+	Page     int
+	Artistid string
+	Albums   string
+}
+
+func AlbumsForArtist(artid string) []AlbumsForArtistStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT * FROM albumsforartist WHERE artistid='%s'", artid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	albumsforartist := []AlbumsForArtistStruct{}
+	for rows.Next() {
+		var afas AlbumsForArtistStruct
+		if err := rows.Scan(&afas.Id, &afas.Page, &afas.Artistid, &afas.Albums); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		albumsforartist = append(albumsforartist, afas)
+		fmt.Println(afas)
+	}
+	
+	return albumsforartist
+	
 }
