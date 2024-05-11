@@ -3,7 +3,6 @@ package main
 import (
 	// "database/sql"
 	"fmt"
-	
 
 	// "log"
 	"net/http"
@@ -49,7 +48,8 @@ func main() {
 	e.GET("/artiststartswith", rus_artiststartswith)
 	e.GET("/albumstartswith", rus_albumstartswith)
 	e.GET("/currentPlayingImg/:albumid", rus_currentPlayingImg)
-
+	e.GET("/artistforalpha/:alpha", rus_artistForAlpha)
+	e.GET("/albumforalpha/:alpha", rus_albumForAlpha)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -98,8 +98,22 @@ func rus_albumstartswith(c echo.Context) error {
 func rus_currentPlayingImg(c echo.Context) error {
 	albumid := c.Param("albumid")
 	println("AlbumID: ", albumid)
-	currentPlaying := get_currentPlayingImg(albumid)
+	currentPlaying := GetCurrentPlayingImg(albumid)
 	return c.JSON(http.StatusOK, currentPlaying)
+}
+
+func rus_artistForAlpha(c echo.Context) error {
+	alphastr := c.Param("alpha")
+	println("Alpha: ", alphastr)
+	artists := ArtistForAlpha(alphastr)
+	return c.JSON(http.StatusOK, artists)
+}
+
+func rus_albumForAlpha(c echo.Context) error {
+	alphastr := c.Param("alpha")
+	println("Alpha: ", alphastr)
+	albums := AlbumForAlpha(alphastr)
+	return c.JSON(http.StatusOK, albums)
 }
 
 func PlayMusic(c echo.Context) error {

@@ -238,7 +238,7 @@ type MusicImgInfo struct {
 	HttpThumbPath string
 }
 
-func get_currentPlayingImg(albid string) MusicImgInfo {
+func GetCurrentPlayingImg(albid string) MusicImgInfo {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -265,4 +265,77 @@ func get_currentPlayingImg(albid string) MusicImgInfo {
 	fmt.Println(img)
 
 	return img
+}
+
+// type StartsWithStruct struct {	
+// 	Id int
+// 	RusicId string
+// 	Artist string
+// 	Artistid string
+// 	Album string
+// 	Albumid string
+// 	Song string
+// 	ArtistFirstLetter string
+// 	AlbumFirstLetter string
+// 	SongFirstLetter string
+// }
+
+type ArtistForAlphaStruct struct {
+	Artist string
+	Artistid string
+}
+
+func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	artist := []ArtistForAlphaStruct{}
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT artist artistid FROM startswith WHERE artst_first_letter='%s'", alpha))
+	for rows.Next() {
+		var startswith ArtistForAlphaStruct
+		if err := rows.Scan(&startswith.Artist, &startswith.Artistid); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		artist = append(artist, startswith)
+	}
+	fmt.Println(artist)
+
+	return artist 
+	
+}
+
+type AlbumForAlphaStruct struct {
+	Album string
+	Albumid string
+}
+
+func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	album := []AlbumForAlphaStruct{}
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT album albumid FROM startswith WHERE album_first_letter='%s'", alpha))
+	for rows.Next() {
+		var startswith AlbumForAlphaStruct
+		if err := rows.Scan(&startswith.Album, &startswith.Albumid); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		album = append(album, startswith)
+	}
+	fmt.Println(album)
+
+	return album 
+	
 }
