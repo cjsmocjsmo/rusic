@@ -331,6 +331,10 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 	album := []AlbumForAlphaStruct{}
 
 	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT album albumid FROM startswith WHERE album_first_letter='%s'", alpha))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+		return nil
+	}
 	for rows.Next() {
 		var startswith AlbumForAlphaStruct
 		if err := rows.Scan(&startswith.Album, &startswith.Albumid); err != nil {
