@@ -23,20 +23,20 @@ type SongStruct struct {
 }
 
 type MusicInfo struct {
-	Id		     int	// 1
-	RusicId      string	// 2
+	Id           int    // 1
+	RusicId      string // 2
 	ImgUrl       string // 3
-	PlayPath     string	// 4
-	Artist       string	// 5
-	Artistid     string	// 6
+	PlayPath     string // 4
+	Artist       string // 5
+	Artistid     string // 6
 	Album        string // 7
-	Albumid      string	// 8
-	Song         string	// 9
-	Fullpath     string	// 10
-	Extension    string	// 11
-	Idx          string	// 12
-	Page         string	// 13
-	FsizeResults string	// 14
+	Albumid      string // 8
+	Song         string // 9
+	Fullpath     string // 10
+	Extension    string // 11
+	Idx          string // 12
+	Page         string // 13
+	FsizeResults string // 14
 }
 
 func RandomArt() []RandomArtStruct {
@@ -97,7 +97,7 @@ func RandomArt() []RandomArtStruct {
 		}
 	}
 	// fmt.Println(thumbPaths)
-	
+
 	if err != nil {
 		fmt.Println("Error marshaling data to JSON: %w", err)
 	}
@@ -222,7 +222,7 @@ func SongForId(rusicId string) MusicInfo {
 }
 
 type MusicImgInfo struct {
-	Id			  int
+	Id            int
 	RusicId       string
 	Width         string
 	Height        string
@@ -267,7 +267,7 @@ func GetCurrentPlayingImg(albid string) MusicImgInfo {
 	return img
 }
 
-// type StartsWithStruct struct {	
+// type StartsWithStruct struct {
 // 	Id int
 // 	RusicId string
 // 	Artist string
@@ -281,7 +281,7 @@ func GetCurrentPlayingImg(albid string) MusicImgInfo {
 // }
 
 type ArtistForAlphaStruct struct {
-	Artist string
+	Artist   string
 	Artistid string
 }
 
@@ -296,6 +296,11 @@ func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
 	artist := []ArtistForAlphaStruct{}
 
 	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT artist artistid FROM startswith WHERE artst_first_letter='%s'", alpha))
+
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+		return nil
+	}
 	for rows.Next() {
 		var startswith ArtistForAlphaStruct
 		if err := rows.Scan(&startswith.Artist, &startswith.Artistid); err != nil {
@@ -306,12 +311,12 @@ func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
 	}
 	fmt.Println(artist)
 
-	return artist 
-	
+	return artist
+
 }
 
 type AlbumForAlphaStruct struct {
-	Album string
+	Album   string
 	Albumid string
 }
 
@@ -336,6 +341,6 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 	}
 	fmt.Println(album)
 
-	return album 
-	
+	return album
+
 }
