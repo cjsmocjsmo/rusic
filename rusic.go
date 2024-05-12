@@ -9,7 +9,7 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
-	// "strconv"
+	"encoding/json"
 )
 
 type RandomArtStruct struct {
@@ -334,7 +334,7 @@ type AlbumsForArtistStruct struct {
 	Id	     int
 	Page     int
 	Artistid string
-	Albums   []string
+	Albums   string
 }
 
 type ArtistInfoStruct struct {
@@ -429,13 +429,21 @@ func AlbumsForArtist(artid string) []ArtistAlbumsStructFinal {
 		}
 
 		fmt.Println("afas.Albums: ", afas.Albums)
+		albumsJson, err := json.Marshal(afas.Albums)
+		if err != nil {
+			fmt.Println("Error converting albums to JSON: ", err)
+			continue
+		}
+		
+		fmt.Println("afas.Albums in JSON: ", string(albumsJson))
 		
 		artiststruct := get_artist_info_from_artistid(afas.Artistid)
 
 		albums := []AlbumInfoStruct{}
 		for _, albumid := range afas.Albums {
 			fmt.Println("albumid:", albumid)
-			albumstruct := get_album_info_from_albumid(albumid)
+			aid := fmt.Sprintf("this is Sprintf: %v", albumid)
+			albumstruct := get_album_info_from_albumid(aid)
 			albums = append(albums, albumstruct)
 		}
 		foo := ArtistAlbumsStructFinal{Artist: artiststruct, Albums: albums}
