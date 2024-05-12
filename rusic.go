@@ -427,6 +427,8 @@ func AlbumsForArtist(artid string) []ArtistAlbumsStructFinal {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
+
+		fmt.Println("afas.Albums: ", afas.Albums)
 		
 		artiststruct := get_artist_info_from_artistid(afas.Artistid)
 
