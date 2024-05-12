@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
+	// "strconv"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -334,7 +334,7 @@ type AlbumsForArtistStruct struct {
 	Id	     int
 	Page     int
 	Artistid string
-	Albums   string
+	Albums   []string
 }
 
 type ArtistInfoStruct struct {
@@ -435,9 +435,7 @@ func AlbumsForArtist(artid string) []ArtistAlbumsStructFinal {
 		albums := []AlbumInfoStruct{}
 		for _, albumid := range afas.Albums {
 			fmt.Println("albumid:", albumid)
-			albumidz := strconv.Itoa(int(albumid))
-			fmt.Println("albumidz:", albumidz)
-			albumstruct := get_album_info_from_albumid(albumidz)
+			albumstruct := get_album_info_from_albumid(albumid)
 			albums = append(albums, albumstruct)
 		}
 		foo := ArtistAlbumsStructFinal{Artist: artiststruct, Albums: albums}
