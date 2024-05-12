@@ -337,3 +337,36 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 
 }
 
+type AlbumsForArtistAlbumStruct struct {
+	Albumid string
+	Album   string
+	HttpThumbPath string
+}
+
+func AlbumsForArtist(artid string) []AlbumsForArtistAlbumStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	albums := []AlbumsForArtistAlbumStruct{}
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT albumid, album, httpthumbpath FROM music_images WHERE artistid='%s'", artid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+		return nil
+	}
+	for rows.Next() {
+		var album AlbumsForArtistAlbumStruct
+		if err := rows.Scan(&album.Albumid, &album.Album, &album.HttpThumbPath); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		albums = append(albums, album)
+	}
+
+	return albums
+
+}
