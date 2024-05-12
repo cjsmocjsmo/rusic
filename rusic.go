@@ -370,3 +370,32 @@ func AlbumsForArtist(artid string) []AlbumsForArtistAlbumStruct {
 	return albums
 
 }
+
+func AlbumsForArtistSongs(albid string) []MusicInfo {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT * FROM music WHERE albumid='%s'", albid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+
+	songs := []MusicInfo{}
+	for rows.Next() {
+		var song MusicInfo
+		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
+			&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
+			&song.Idx, &song.Page, &song.FsizeResults); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		fmt.Println(song)
+		songs = append(songs, song)
+	}
+
+	return songs
+}

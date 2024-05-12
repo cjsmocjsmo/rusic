@@ -51,6 +51,7 @@ func main() {
 	e.GET("/artistforalpha/:alpha", rus_artist_for_alpha)
 	e.GET("/albumforalpha/:alpha", rus_album_for_alpha)
 	e.GET("/albumsforartist/:artistid", rus_albums_for_artist)
+	e.GET("/albumsforartistsongs/:artistid", rus_albums_for_artist_songs)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -122,6 +123,13 @@ func rus_albums_for_artist(c echo.Context) error {
 	println("Artist ID: ", artistid)
 	albums := AlbumsForArtist(artistid)
 	return c.JSON(http.StatusOK, albums)
+}
+
+func rus_albums_for_artist_songs(c echo.Context) error {
+	albid := c.Param("artistid")
+	println("Album ID: ", albid)
+	songs := AlbumsForArtistSongs(albid)
+	return c.JSON(http.StatusOK, songs)
 }
 
 func PlayMusic(c echo.Context) error {
