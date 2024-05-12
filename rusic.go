@@ -434,8 +434,11 @@ func AlbumsForArtist(artid string) []ArtistAlbumsStructFinal {
 			fmt.Println("Error converting albums to JSON: ", err)
 			continue
 		}
+		for _, albumid := range albumsJson {
+			fmt.Println("booalbumid:", albumid)
+		}
 		
-		fmt.Println("afas.Albums in JSON: ", string(albumsJson))
+		// fmt.Println("afas.Albums in JSON: ", string(albumsJson))
 		
 		artiststruct := get_artist_info_from_artistid(afas.Artistid)
 
