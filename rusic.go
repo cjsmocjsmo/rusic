@@ -23,23 +23,6 @@ type SongStruct struct {
 
 }
 
-// type MusicInfo struct {
-// 	id           int
-// 	RusicId      string
-// 	ImgUrl       string
-// 	PlayPath     string
-// 	Artist       string
-// 	Artistid     string
-// 	Album        string
-// 	Albumid      string
-// 	Song         string
-// 	Fullpath     string
-// 	Extension    string
-// 	Idx          string
-// 	Page         string
-// 	FsizeResults string
-// }
-
 func RandomArt() []RandomArtStruct {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
