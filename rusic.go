@@ -399,3 +399,30 @@ func AlbumsForArtistSongs(albid string) []MusicInfo {
 
 	return songs
 }
+
+func SongPages() []string {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, _ := db.Query("SELECT DISTINCT page FROM music")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+
+	pages := []string{}
+	for rows.Next() {
+		var page string
+		if err := rows.Scan(&page); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		fmt.Println(page)
+		pages = append(pages, page)
+	}
+
+	return pages
+}
