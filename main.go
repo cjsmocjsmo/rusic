@@ -53,6 +53,7 @@ func main() {
 	e.GET("/albumsforartist/:artistid", rus_albums_for_artist)
 	e.GET("/albumsforartistsongs/:albumid", rus_albums_for_artist_songs)
 	e.GET("/songpages", rus_song_pages)
+	e.GET("/songsforpage/:page", rus_songs_for_page)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -137,6 +138,13 @@ func rus_song_pages(c echo.Context) error {
 	println("Song Pages")
 	songpages := SongPages()
 	return c.JSON(http.StatusOK, songpages)
+}
+
+func rus_songs_for_page(c echo.Context) error {
+	page := c.Param("page")
+	println("Page: ", page)
+	songs := SongsForPage(page)
+	return c.JSON(http.StatusOK, songs)
 }
 
 func PlayMusic(c echo.Context) error {
