@@ -380,6 +380,7 @@ func get_album_info_from_albumid(albid string) AlbumInfoStruct {
 		fmt.Println("Error opening database: ", err)
 	}
 	defer db.Close()
+	fmt.Println("AlbumID:", albid)
 
 	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT albumid, httpthumbpath FROM music_images WHERE albumid='%s'", albid))
 	if err != nil {
