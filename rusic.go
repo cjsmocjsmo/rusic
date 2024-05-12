@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
+
 	_ "github.com/mattn/go-sqlite3"
+	// "strconv"
 )
 
 type RandomArtStruct struct {
@@ -334,7 +337,74 @@ type AlbumsForArtistStruct struct {
 	Albums   string
 }
 
-func AlbumsForArtist(artid string) []AlbumsForArtistStruct {
+type ArtistInfoStruct struct {
+	Artist  string
+	Artistid string
+}
+
+func get_artist_info_from_artistid(artid string) ArtistInfoStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT artist, artistid FROM music WHERE artistid='%s'", artid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+	
+	artist := ArtistInfoStruct{}
+	for rows.Next() {
+		if err := rows.Scan(&artist.Artist, &artist.Artistid); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+	}
+	fmt.Println(artist)
+
+	return artist
+}
+
+type AlbumInfoStruct struct {
+	Albumid string
+	HttpThumbPath string
+}
+
+func get_album_info_from_albumid(albid string) AlbumInfoStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT albumid, httpthumbpath FROM music_images WHERE albumid='%s'", albid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	album := AlbumInfoStruct{}
+	for rows.Next() {
+		if err := rows.Scan(&album.Albumid, &album.HttpThumbPath); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+	}
+	fmt.Println(album)
+
+	return album
+}
+
+type ArtistAlbumsStructFinal struct {
+	Artist  ArtistInfoStruct
+	Albums  []AlbumInfoStruct
+}
+
+func AlbumsForArtist(artid string) []ArtistAlbumsStructFinal {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -348,17 +418,30 @@ func AlbumsForArtist(artid string) []AlbumsForArtistStruct {
 	}
 	defer rows.Close()
 
-	albumsforartist := []AlbumsForArtistStruct{}
+	// albumsforartist := []AlbumsForArtistStruct{}
+	albumsfinal := []ArtistAlbumsStructFinal{}
 	for rows.Next() {
 		var afas AlbumsForArtistStruct
 		if err := rows.Scan(&afas.Id, &afas.Page, &afas.Artistid, &afas.Albums); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		albumsforartist = append(albumsforartist, afas)
-		fmt.Println(afas)
+		
+		artiststruct := get_artist_info_from_artistid(afas.Artistid)
+
+		albums := []AlbumInfoStruct{}
+		for _, albumid := range afas.Albums {
+			albumidz := strconv.Itoa(int(albumid))
+			albumstruct := get_album_info_from_albumid(albumidz)
+			albums = append(albums, albumstruct)
+		}
+		foo := ArtistAlbumsStructFinal{Artist: artiststruct, Albums: albums}
+
+		albumsfinal = append(albumsfinal, foo)
+		// albumsforartist = append(albumsforartist, afas)
+		// fmt.Println(afas)
 	}
 	
-	return albumsforartist
+	return albumsfinal
 	
 }

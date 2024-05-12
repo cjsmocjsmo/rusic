@@ -45,12 +45,12 @@ func main() {
 	e.GET("/randomart", rus_index2)
 	e.GET("/albumofinterest", album_of_interest)
 	e.GET("/songsforalbum/:albumid", songs_for_rand_album)
-	e.GET("/artiststartswith", rus_artiststartswith)
-	e.GET("/albumstartswith", rus_albumstartswith)
-	e.GET("/currentPlayingImg/:albumid", rus_currentPlayingImg)
-	e.GET("/artistforalpha/:alpha", rus_artistForAlpha)
-	e.GET("/albumforalpha/:alpha", rus_albumForAlpha)
-	e.GET("/albumsforartist/:artistid", rus_albumsforartist)
+	e.GET("/artiststartswith", rus_artist_starts_with)
+	e.GET("/albumstartswith", rus_album_starts_with)
+	e.GET("/currentPlayingImg/:albumid", rus_current_playing_img)
+	e.GET("/artistforalpha/:alpha", rus_artist_for_alpha)
+	e.GET("/albumforalpha/:alpha", rus_album_for_alpha)
+	e.GET("/albumsforartist/:artistid", rus_albums_for_artist)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -84,40 +84,40 @@ func songs_for_rand_album(c echo.Context) error {
 	return c.JSON(http.StatusOK, songs)
 }
 
-func rus_artiststartswith(c echo.Context) error {
+func rus_artist_starts_with(c echo.Context) error {
 	println("Artist Startswith")
 	startswith := ArtistStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
-func rus_albumstartswith(c echo.Context) error {
+func rus_album_starts_with(c echo.Context) error {
 	println("album Startswith")
 	startswith := AlbumStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
-func rus_currentPlayingImg(c echo.Context) error {
+func rus_current_playing_img(c echo.Context) error {
 	albumid := c.Param("albumid")
 	println("AlbumID: ", albumid)
 	currentPlaying := GetCurrentPlayingImg(albumid)
 	return c.JSON(http.StatusOK, currentPlaying)
 }
 
-func rus_artistForAlpha(c echo.Context) error {
+func rus_artist_for_alpha(c echo.Context) error {
 	alphastr := c.Param("alpha")
 	println("Alpha: ", alphastr)
 	artists := ArtistForAlpha(alphastr)
 	return c.JSON(http.StatusOK, artists)
 }
 
-func rus_albumForAlpha(c echo.Context) error {
+func rus_album_for_alpha(c echo.Context) error {
 	alphastr := c.Param("alpha")
 	println("Alpha: ", alphastr)
 	albums := AlbumForAlpha(alphastr)
 	return c.JSON(http.StatusOK, albums)
 }
 
-func rus_albumsforartist(c echo.Context) error {
+func rus_albums_for_artist(c echo.Context) error {
 	artistid := c.Param("artistid")
 	println("Artist ID: ", artistid)
 	albums := AlbumsForArtist(artistid)
