@@ -432,7 +432,9 @@ func AlbumsForArtist(artid string) []ArtistAlbumsStructFinal {
 
 		albums := []AlbumInfoStruct{}
 		for _, albumid := range afas.Albums {
+			fmt.Println("albumid:", albumid)
 			albumidz := strconv.Itoa(int(albumid))
+			fmt.Println("albumidz:", albumidz)
 			albumstruct := get_album_info_from_albumid(albumidz)
 			albums = append(albums, albumstruct)
 		}
