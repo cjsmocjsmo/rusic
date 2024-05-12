@@ -50,7 +50,6 @@ func main() {
 	e.GET("/currentPlayingImg/:albumid", rus_current_playing_img)
 	e.GET("/artistforalpha/:alpha", rus_artist_for_alpha)
 	e.GET("/albumforalpha/:alpha", rus_album_for_alpha)
-	// e.GET("/albumsforartist/:artistid", rus_albums_for_artist)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
