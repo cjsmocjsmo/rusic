@@ -594,7 +594,7 @@ func CreateRandomPlaylist(plname string, count string) string {
 		}
 		songslist = append(songslist, songs)
 	}
-	fmt.Println(songslist)
+	fmt.Println(songslist[0])
 	fmt.Println(rusicid)
 	fmt.Println(name)		
 
