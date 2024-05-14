@@ -1,13 +1,13 @@
 package main
 
 import (
+	"crypto/md5"
 	"database/sql"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"os"
-	"crypto/md5"
-    "encoding/hex"
-	"encoding/json"
 	"strconv"
 	"time"
 
@@ -20,10 +20,9 @@ type RandomArtStruct struct {
 }
 
 type SongStruct struct {
-	Idx   string
-	Path  string
+	Idx     string
+	Path    string
 	MusicId string
-
 }
 
 func RandomArt() []RandomArtStruct {
@@ -166,7 +165,7 @@ func ArtistStartsWith() []SongCountStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		
+
 		results = append(results, startsWith)
 	}
 	println(results)
@@ -341,8 +340,8 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 }
 
 type AlbumsForArtistAlbumStruct struct {
-	Albumid string
-	Album   string
+	Albumid       string
+	Album         string
 	HttpThumbPath string
 }
 
@@ -390,8 +389,8 @@ func AlbumsForArtistSongs(albid string) []MusicInfo {
 	songs := []MusicInfo{}
 	for rows.Next() {
 		var song MusicInfo
-		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
-			&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
+		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist,
+			&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension,
 			&song.Idx, &song.Page, &song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
@@ -446,8 +445,8 @@ func SongsForPage(page string) []MusicInfo {
 	songs := []MusicInfo{}
 	for rows.Next() {
 		var song MusicInfo
-		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
-			&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
+		if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist,
+			&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension,
 			&song.Idx, &song.Page, &song.FsizeResults); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
@@ -484,10 +483,10 @@ func PlaylistCheck() bool {
 }
 
 type PlaylistStruct struct {
-	Id      int
-	RusicId string
-	Name    string
-	Songs   string
+	Id       int
+	RusicId  string
+	Name     string
+	Songs    string
 	NumSongs string
 }
 
@@ -504,9 +503,9 @@ func CreateEmptyPlaylist(plname string) PlaylistStruct {
 	numsongs := "0"
 
 	pllist := PlaylistStruct{
-		RusicId: rusicid, 
-		Name: name, 
-		Songs: songs, 
+		RusicId:  rusicid,
+		Name:     name,
+		Songs:    songs,
 		NumSongs: numsongs,
 	}
 
@@ -530,43 +529,43 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	rusicid := create_md5_hash(plname)
 	name := plname
 	numSongs, err := strconv.Atoi(count)
-    if err != nil {
-        fmt.Println("Error converting count to integer: ", err)
-    }
+	if err != nil {
+		fmt.Println("Error converting count to integer: ", err)
+	}
 
-    rand.Seed(time.Now().UnixNano())
-    randomNumbers := make([]int, numSongs)
-    for i := range randomNumbers {
-        randomNumbers[i] = rand.Intn(numSongs + 1) // Intn returns a number in the range [0, n)
-    }
-	
+	rand.Seed(time.Now().UnixNano())
+	randomNumbers := make([]int, numSongs)
+	for i := range randomNumbers {
+		randomNumbers[i] = rand.Intn(numSongs + 1) // Intn returns a number in the range [0, n)
+	}
+
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
 	}
 	defer db.Close()
-	
+
 	songs := []MusicInfo{}
 
-    for _, idx := range randomNumbers {
-        rows, err := db.Query(fmt.Sprintf("SELECT * FROM music WHERE idx=%d", idx))
-        if err != nil {
-            fmt.Println("Error executing query: ", err)
-        }
-        defer rows.Close()
+	for _, idx := range randomNumbers {
+		rows, err := db.Query(fmt.Sprintf("SELECT * FROM music WHERE idx=%d", idx))
+		if err != nil {
+			fmt.Println("Error executing query: ", err)
+		}
+		defer rows.Close()
 
-        for rows.Next() {
-            var song MusicInfo
-            if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
-                &song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
-                &song.Idx, &song.Page, &song.FsizeResults); err != nil {
-                fmt.Println("Error scanning row: ", err)
-                continue
-            }
-            songs = append(songs, song)
-        }
-    }
+		for rows.Next() {
+			var song MusicInfo
+			if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist,
+				&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension,
+				&song.Idx, &song.Page, &song.FsizeResults); err != nil {
+				fmt.Println("Error scanning row: ", err)
+				continue
+			}
+			songs = append(songs, song)
+		}
+	}
 
 	songsJSON, err := json.Marshal(songs)
 	if err != nil {
@@ -576,9 +575,9 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	songsString := string(songsJSON)
 
 	playlistinfo := PlaylistStruct{
-		RusicId: rusicid,
-		Name: name,
-		Songs: songsString,
+		RusicId:  rusicid,
+		Name:     name,
+		Songs:    songsString,
 		NumSongs: count,
 	}
 
@@ -621,4 +620,58 @@ func AllPlaylists() []PlaylistStruct {
 
 	return allplaylist
 
+}
+
+type NewPlayListStruct struct {
+	Id       int
+	RusicId  string
+	Name     string
+	Songs    []MusicInfo
+	NumSongs string
+}
+
+func SongsForPlaylist(rusicid string) []NewPlayListStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query(fmt.Sprintf("SELECT * FROM playlists WHERE rusicid='%s'", rusicid))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	newPlaylist := []NewPlayListStruct{}
+
+	for rows.Next() {
+		var pl PlaylistStruct
+		if err := rows.Scan(&pl.Id, &pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		fmt.Println(pl)
+
+		var songs []MusicInfo
+		err := json.Unmarshal([]byte(pl.Songs), &songs)
+		if err != nil {
+			fmt.Println("Error unmarshalling songs: ", err)
+			continue
+		}
+
+		newplaylist := NewPlayListStruct{
+			Id:       pl.Id,
+			RusicId:  pl.RusicId,
+			Name:     pl.Name,
+			Songs:    songs,
+			NumSongs: pl.NumSongs,
+		}
+
+		newPlaylist = append(newPlaylist, newplaylist)
+	}
+	fmt.Println(newPlaylist)
+
+	return newPlaylist
 }

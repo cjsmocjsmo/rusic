@@ -58,6 +58,7 @@ func main() {
 	e.GET("/createemptyplaylist/:plname", rus_create_empty_playlist)
 	e.GET("/createrandomplaylist/:plname/:count", rus_create_random_playlist)
 	e.GET("/allplaylists", rus_all_playlists)
+	e.GET("/editplaylistpage", rus_edit_playlist)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -176,6 +177,13 @@ func rus_all_playlists(c echo.Context) error {
 	println("All Playlists")
 	playlists := AllPlaylists()
 	return c.JSON(http.StatusOK, playlists)
+}
+
+func rus_edit_playlist(c echo.Context) error {
+	rusicid := c.Param("rusicid")
+	println("Edit Playlist")
+	playlist := SongsForPlaylist(rusicid)
+	return c.JSON(http.StatusOK, playlist)
 }
 
 func PlayMusic(c echo.Context) error {
