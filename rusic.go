@@ -591,3 +591,33 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	return playlistinfo
 
 }
+
+func AllPlaylists() []PlaylistStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM playlists")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	allplaylist := []PlaylistStruct{}
+
+	for rows.Next() {
+		var pl PlaylistStruct
+		if err := rows.Scan(&pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		fmt.Println(pl)
+		allplaylist = append(allplaylist, pl)
+	}
+
+	return allplaylist
+
+}
