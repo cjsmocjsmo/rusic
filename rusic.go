@@ -455,3 +455,26 @@ func SongsForPage(page string) []MusicInfo {
 
 	return songs
 }
+
+func PlaylistCheck() bool {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM playlist")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		return true
+	}
+
+	return false
+
+
+}
