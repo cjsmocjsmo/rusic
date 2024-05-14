@@ -657,11 +657,18 @@ func SongsForPlaylist(rusicid string) []NewPlayListStruct {
 		var songs []MusicInfo
 		err := json.Unmarshal([]byte(pl.Songs), &songs)
 		if err != nil {
-			fmt.Println("Error unmarshalling songs: ", err)
-			continue
+			fmt.Println("Error unmarshalling songs this is an empty playlist: ", err)
+			new_Play_List := NewPlayListStruct{
+				Id:       pl.Id,
+				RusicId:  pl.RusicId,
+				Name:     pl.Name,
+				Songs:    []MusicInfo{},
+				NumSongs: pl.NumSongs,
+			}
+			newPlaylist = append(newPlaylist, new_Play_List)
 		}
 
-		newplaylist := NewPlayListStruct{
+		newplaylist2 := NewPlayListStruct{
 			Id:       pl.Id,
 			RusicId:  pl.RusicId,
 			Name:     pl.Name,
@@ -669,7 +676,7 @@ func SongsForPlaylist(rusicid string) []NewPlayListStruct {
 			NumSongs: pl.NumSongs,
 		}
 
-		newPlaylist = append(newPlaylist, newplaylist)
+		newPlaylist = append(newPlaylist, newplaylist2)
 	}
 	fmt.Println(newPlaylist)
 
