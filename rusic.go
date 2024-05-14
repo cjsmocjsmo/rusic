@@ -465,7 +465,7 @@ func PlaylistCheck() bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM playlist")
+	rows, err := db.Query("SELECT * FROM playlists")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 		return false
