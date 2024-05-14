@@ -7,6 +7,7 @@ import (
 	"os"
 	"crypto/md5"
     "encoding/hex"
+	"encoding/json"
 	"strconv"
 	"time"
 
@@ -550,7 +551,7 @@ func CreateEmptyPlaylist(plname string) PlaylistStruct {
 // 	return count
 // }
 
-func CreateRandomPlaylist(plname string, count string) string {
+func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	rusicid := create_md5_hash(plname)
 	name := plname
 	numSongs, err := strconv.Atoi(count)
@@ -594,9 +595,25 @@ func CreateRandomPlaylist(plname string, count string) string {
 		}
 		songslist = append(songslist, songs)
 	}
-	fmt.Println(songslist[0])
-	fmt.Println(rusicid)
-	fmt.Println(name)		
 
-	return name
+	songsJSON, err := json.Marshal(songslist[0])
+	if err != nil {
+		fmt.Println("Error marshaling songslist[0] to JSON: ", err)
+	}
+
+	songsString := string(songsJSON)
+
+	songsinfo := PlaylistStruct{
+		RusicId: rusicid,
+		Name: name,
+		Songs: songsString,
+		NumSongs: count,
+	}
+	fmt.Println(songsinfo)
+	// fmt.Println(songslist[0])
+	// fmt.Println(rusicid)
+	// fmt.Println(name)
+
+	return songsinfo
+
 }
