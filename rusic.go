@@ -525,32 +525,6 @@ func CreateEmptyPlaylist(plname string) PlaylistStruct {
 
 }
 
-// func music_count() int {
-// 	db_path := os.Getenv("RUS_DB_PATH")
-// 	db, err := sql.Open("sqlite3", db_path)
-// 	if err != nil {
-// 		fmt.Println("Error opening database: ", err)
-// 		return 0
-// 	}
-// 	defer db.Close()
-
-// 	rows, err := db.Query("SELECT COUNT(*) FROM music")
-// 	if err != nil {
-// 		fmt.Println("Error executing query: ", err)
-// 		return 0
-// 	}
-// 	defer rows.Close()
-
-// 	var count int
-// 	for rows.Next() {
-// 		if err := rows.Scan(&count); err != nil {
-// 			fmt.Println("Error scanning row: ", err)
-// 		}
-// 	}
-
-// 	return count
-// }
-
 func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	rusicid := create_md5_hash(plname)
 	name := plname
@@ -558,14 +532,12 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
     if err != nil {
         fmt.Println("Error converting count to integer: ", err)
     }
-    // music_range := music_count()
 
     rand.Seed(time.Now().UnixNano())
     randomNumbers := make([]int, numSongs)
     for i := range randomNumbers {
         randomNumbers[i] = rand.Intn(numSongs + 1) // Intn returns a number in the range [0, n)
     }
-
 	
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
@@ -595,9 +567,6 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
         }
     }
 
-    
-
-
 	songsJSON, err := json.Marshal(songs)
 	if err != nil {
 		fmt.Println("Error marshaling songslist[0] to JSON: ", err)
@@ -605,17 +574,20 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 
 	songsString := string(songsJSON)
 
-	songsinfo := PlaylistStruct{
+	playlistinfo := PlaylistStruct{
 		RusicId: rusicid,
 		Name: name,
 		Songs: songsString,
 		NumSongs: count,
 	}
-	fmt.Println(songsinfo)
-	// fmt.Println(songslist[0])
-	// fmt.Println(rusicid)
-	// fmt.Println(name)
 
-	return songsinfo
+	fmt.Println(playlistinfo)
+
+	_, err = db.Exec("INSERT INTO playlists (rusicid, name, songs, numsongs) VALUES (?, ?, ?, ?)", playlistinfo.RusicId, playlistinfo.Name, playlistinfo.Songs, playlistinfo.NumSongs)
+	if err != nil {
+		fmt.Println("Error inserting playlist: ", err)
+	}
+
+	return playlistinfo
 
 }
