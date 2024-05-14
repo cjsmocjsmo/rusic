@@ -550,7 +550,7 @@ func CreateEmptyPlaylist(plname string) PlaylistStruct {
 // 	return count
 // }
 
-func CreateRandomPlaylist(plname string, count string) {
+func CreateRandomPlaylist(plname string, count string) string {
 	rusicid := create_md5_hash(plname)
 	name := plname
 	numSongs, err := strconv.Atoi(count)
@@ -597,5 +597,5 @@ func CreateRandomPlaylist(plname string, count string) {
 	fmt.Println(rusicid)
 	fmt.Println(name)		
 
-
+	return name
 }
