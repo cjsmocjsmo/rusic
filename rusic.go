@@ -573,30 +573,32 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 		fmt.Println("Error opening database: ", err)
 	}
 	defer db.Close()
-	songslist := [][]MusicInfo{}
-	for _, idx := range randomNumbers {
-		rows, err := db.Query(fmt.Sprintf("SELECT * FROM music WHERE idx=%d", idx))
-		if err != nil {
-			fmt.Println("Error executing query: ", err)
-		}
-		defer rows.Close()
+	
+	songs := []MusicInfo{}
 
-		songs := []MusicInfo{}
-		for rows.Next() {
-			var song MusicInfo
-			if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
-				&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
-				&song.Idx, &song.Page, &song.FsizeResults); err != nil {
-				fmt.Println("Error scanning row: ", err)
-				continue
-			}
-			songs = append(songs, song)
-			fmt.Println(songs)
-		}
-		songslist = append(songslist, songs)
-	}
+    for _, idx := range randomNumbers {
+        rows, err := db.Query(fmt.Sprintf("SELECT * FROM music WHERE idx=%d", idx))
+        if err != nil {
+            fmt.Println("Error executing query: ", err)
+        }
+        defer rows.Close()
 
-	songsJSON, err := json.Marshal(songslist[0])
+        for rows.Next() {
+            var song MusicInfo
+            if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
+                &song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
+                &song.Idx, &song.Page, &song.FsizeResults); err != nil {
+                fmt.Println("Error scanning row: ", err)
+                continue
+            }
+            songs = append(songs, song)
+        }
+    }
+
+    
+
+
+	songsJSON, err := json.Marshal(songs)
 	if err != nil {
 		fmt.Println("Error marshaling songslist[0] to JSON: ", err)
 	}
