@@ -484,6 +484,7 @@ func PlaylistCheck() bool {
 }
 
 type PlaylistStruct struct {
+	Id      int
 	RusicId string
 	Name    string
 	Songs   string
@@ -610,7 +611,7 @@ func AllPlaylists() []PlaylistStruct {
 
 	for rows.Next() {
 		var pl PlaylistStruct
-		if err := rows.Scan(&pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
+		if err := rows.Scan(&pl.Id, &pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
