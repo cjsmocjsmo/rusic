@@ -58,7 +58,7 @@ func main() {
 	e.GET("/createemptyplaylist/:plname", rus_create_empty_playlist)
 	e.GET("/createrandomplaylist/:plname/:count", rus_create_random_playlist)
 	e.GET("/allplaylists", rus_all_playlists)
-	e.GET("/editplaylistpage", rus_edit_playlist)
+	e.GET("/editplaylistpage/:rusicid", rus_edit_playlist)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
