@@ -55,6 +55,7 @@ func main() {
 	e.GET("/songpages", rus_song_pages)
 	e.GET("/songsforpage/:page", rus_songs_for_page)
 	e.GET("/playlistcheck", rus_playlist_check)
+	e.GET("/createemptyplaylist/:plname", rus_create_empty_playlist)
 
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -151,6 +152,13 @@ func rus_songs_for_page(c echo.Context) error {
 func rus_playlist_check(c echo.Context) error {
 	println("Playlist Check")
 	playlist := PlaylistCheck()
+	return c.JSON(http.StatusOK, playlist)
+}
+
+func rus_create_empty_playlist(c echo.Context) error {
+	plname := c.Param("plname")
+	println("Create Empty Playlist")
+	playlist := CreateEmptyPlaylist(plname)
 	return c.JSON(http.StatusOK, playlist)
 }
 
