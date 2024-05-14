@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	// "strconv"
+	"crypto/md5"
+    "encoding/hex"
+	"strconv"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -477,5 +479,123 @@ func PlaylistCheck() bool {
 	}
 
 	return false
+
+}
+
+type PlaylistStruct struct {
+	RusicId string
+	Name    string
+	Songs   string
+	NumSongs string
+}
+
+func create_md5_hash(aname string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(aname))
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func CreateEmptyPlaylist(plname string) PlaylistStruct {
+	rusicid := create_md5_hash(plname)
+	name := plname
+	songs := "None"
+	numsongs := "0"
+
+	pllist := PlaylistStruct{
+		RusicId: rusicid, 
+		Name: name, 
+		Songs: songs, 
+		NumSongs: numsongs,
+	}
+
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec("INSERT INTO playlists (rusicid, name, songs, numsongs) VALUES (?, ?, ?, ?)", pllist.RusicId, pllist.Name, pllist.Songs, pllist.NumSongs)
+	if err != nil {
+		fmt.Println("Error inserting playlist: ", err)
+	}
+
+	return pllist
+
+}
+
+// func music_count() int {
+// 	db_path := os.Getenv("RUS_DB_PATH")
+// 	db, err := sql.Open("sqlite3", db_path)
+// 	if err != nil {
+// 		fmt.Println("Error opening database: ", err)
+// 		return 0
+// 	}
+// 	defer db.Close()
+
+// 	rows, err := db.Query("SELECT COUNT(*) FROM music")
+// 	if err != nil {
+// 		fmt.Println("Error executing query: ", err)
+// 		return 0
+// 	}
+// 	defer rows.Close()
+
+// 	var count int
+// 	for rows.Next() {
+// 		if err := rows.Scan(&count); err != nil {
+// 			fmt.Println("Error scanning row: ", err)
+// 		}
+// 	}
+
+// 	return count
+// }
+
+func CreateRandomPlaylist(plname string, count string) {
+	rusicid := create_md5_hash(plname)
+	name := plname
+	numSongs, err := strconv.Atoi(count)
+    if err != nil {
+        fmt.Println("Error converting count to integer: ", err)
+    }
+    // music_range := music_count()
+
+    rand.Seed(time.Now().UnixNano())
+    randomNumbers := make([]int, numSongs)
+    for i := range randomNumbers {
+        randomNumbers[i] = rand.Intn(numSongs + 1) // Intn returns a number in the range [0, n)
+    }
+
+	
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+	songslist := [][]MusicInfo{}
+	for _, idx := range randomNumbers {
+		rows, err := db.Query(fmt.Sprintf("SELECT * FROM music WHERE idx=%d", idx))
+		if err != nil {
+			fmt.Println("Error executing query: ", err)
+		}
+		defer rows.Close()
+
+		songs := []MusicInfo{}
+		for rows.Next() {
+			var song MusicInfo
+			if err := rows.Scan(&song.Id, &song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, 
+				&song.Artistid, &song.Album, &song.Albumid, &song.Song, &song.Fullpath, &song.Extension, 
+				&song.Idx, &song.Page, &song.FsizeResults); err != nil {
+				fmt.Println("Error scanning row: ", err)
+				continue
+			}
+			songs = append(songs, song)
+			fmt.Println(songs)
+		}
+	}
+	fmt.Println(songslist)
+	fmt.Println(rusicid)
+	fmt.Println(name)		
+
 
 }
