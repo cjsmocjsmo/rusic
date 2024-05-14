@@ -461,12 +461,14 @@ func PlaylistCheck() bool {
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
+		return false
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM playlist")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return false
 	}
 	defer rows.Close()
 
@@ -475,6 +477,5 @@ func PlaylistCheck() bool {
 	}
 
 	return false
-
 
 }
