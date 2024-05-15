@@ -682,3 +682,37 @@ func SongsForPlaylist(rusicid string) []NewPlayListStruct {
 
 	return newPlaylist
 }
+
+func DeletePlaylist(rusicid string) []PlaylistStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec(fmt.Sprintf("DELETE FROM playlists WHERE rusicid='%s'", rusicid))
+	if err != nil {
+		fmt.Println("Error deleting playlist: ", err)
+	}
+
+	rows, err := db.Query("SELECT * FROM playlists")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	allplaylist := []PlaylistStruct{}
+
+	for rows.Next() {
+		var pl PlaylistStruct
+		if err := rows.Scan(&pl.Id, &pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+		fmt.Println(pl)
+		allplaylist = append(allplaylist, pl)
+	}
+
+	return allplaylist
+}

@@ -60,6 +60,10 @@ func main() {
 	e.GET("/allplaylists", rus_all_playlists)
 	e.GET("/editplaylistpage/:rusicid", rus_edit_playlist)
 
+
+
+
+	e.GET("/deleteplaylist/:rusicid", rus_delete_playlist)
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
 	e.Logger.Fatal(e.Start(":8080"))
@@ -184,6 +188,15 @@ func rus_edit_playlist(c echo.Context) error {
 	println("Edit Playlist")
 	playlist := SongsForPlaylist(rusicid)
 	return c.JSON(http.StatusOK, playlist)
+}
+
+
+
+func rus_delete_playlist(c echo.Context) error {
+	rusicid := c.Param("rusicid")
+	println("Delete Playlist")
+	playlists := DeletePlaylist(rusicid)
+	return c.JSON(http.StatusOK, playlists)
 }
 
 func PlayMusic(c echo.Context) error {
