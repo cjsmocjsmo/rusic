@@ -310,7 +310,13 @@ type AlbumForAlphaStruct struct {
 	Albumid string
 }
 
-func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
+type AlbumStruct struct {
+	Album  string
+	Albumid string
+	HttpThumbPath string
+}
+
+func AlbumForAlpha(alpha string) []AlbumStruct {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -318,7 +324,7 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 	}
 	defer db.Close()
 
-	album := []AlbumForAlphaStruct{}
+	albums := []AlbumForAlphaStruct{}
 
 	rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT album, albumid FROM startswith WHERE album_first_letter='%s'", alpha))
 	if err != nil {
@@ -331,12 +337,29 @@ func AlbumForAlpha(alpha string) []AlbumForAlphaStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		album = append(album, startswith)
+		albums = append(albums, startswith)
 	}
-	fmt.Println(album)
+	fmt.Println(albums)
 
-	return album
+	albumList := []AlbumStruct{}
+	for _, alb := range albums {
+		rows, _ := db.Query(fmt.Sprintf("SELECT album, albumid, httpthumbpath FROM music_images WHERE albumid='%s'", alb.Albumid))
+		if err != nil {
+			fmt.Println("Error executing query: ", err)
+			return nil
+		}
+		for rows.Next() {
+			var album AlbumStruct
+			if err := rows.Scan(&album.Album, &album.Albumid, &album.HttpThumbPath); err != nil {
+				fmt.Println("Error scanning row: ", err)
+				continue
+			}
+			fmt.Println(album)
+			albumList = append(albumList, album)
+		}
+	}
 
+	return albumList
 }
 
 type AlbumsForArtistAlbumStruct struct {
