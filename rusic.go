@@ -343,7 +343,7 @@ func AlbumForAlpha(alpha string) []AlbumStruct {
 
 	albumList := []AlbumStruct{}
 	for _, alb := range albums {
-		rows, _ := db.Query(fmt.Sprintf("SELECT album, albumid, httpthumbpath FROM music_images WHERE albumid='%s'", alb.Albumid))
+		rows, _ := db.Query(fmt.Sprintf("SELECT DISTINCT album, albumid, httpthumbpath FROM music_images WHERE albumid='%s'", alb.Albumid))
 		if err != nil {
 			fmt.Println("Error executing query: ", err)
 			return nil
