@@ -739,3 +739,67 @@ func DeletePlaylist(rusicid string) []PlaylistStruct {
 
 	return allplaylist
 }
+
+func RemoveSongFromPlaylist(playlistid string, songid string) []NewPlayListStruct {
+	playlist := SongsForPlaylist(playlistid)
+	songs := playlist[0].Songs
+
+	for i, song := range songs {
+		if song.RusicId == songid {
+			songs = append(songs[:i], songs[i+1:]...)
+			break
+		}
+	}
+
+	songsJSON, err := json.Marshal(songs)
+	if err != nil {
+		fmt.Println("Error marshaling songslist[0] to JSON: ", err)
+	}
+
+	songsString := string(songsJSON)
+
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec(fmt.Sprintf("UPDATE playlists SET songs='%s' WHERE rusicid='%s'", songsString, playlistid))
+	if err != nil {
+		fmt.Println("Error updating playlist: ", err)
+	}
+
+	return SongsForPlaylist(playlistid)
+
+}
+
+func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
+	playlist := SongsForPlaylist(playlistid)
+	songs := playlist[0].Songs
+
+	song := SongForId(songid)
+	songs = append(songs, song)
+
+	songsJSON, err := json.Marshal(songs)
+	if err != nil {
+		fmt.Println("Error marshaling songslist[0] to JSON: ", err)
+	}
+
+	songsString := string(songsJSON)
+
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec(fmt.Sprintf("UPDATE playlists SET songs='%s' WHERE rusicid='%s'", songsString, playlistid))
+	if err != nil {
+		fmt.Println("Error updating playlist: ", err)
+	}
+
+	return SongsForPlaylist(playlistid)
+
+}
