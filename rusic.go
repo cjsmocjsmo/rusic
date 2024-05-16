@@ -6,12 +6,11 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 type RandomArtStruct struct {
@@ -311,8 +310,8 @@ type AlbumForAlphaStruct struct {
 }
 
 type AlbumStruct struct {
-	Album  string
-	Albumid string
+	Album         string
+	Albumid       string
 	HttpThumbPath string
 }
 

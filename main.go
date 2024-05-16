@@ -1,10 +1,7 @@
 package main
 
 import (
-	// "database/sql"
 	"fmt"
-
-	// "log"
 	"net/http"
 	"os"
 
@@ -17,15 +14,12 @@ import (
 func checkDBExists() {
 	mtvDBPath := os.Getenv("RUS_DB_PATH")
 	if _, err := os.Stat(mtvDBPath); os.IsNotExist(err) {
-		// file does not exist
 		fmt.Println("Database file does not exist\n Please run rusicsetup.")
 		os.Exit(1)
 	} else if err != nil {
-		// other error
 		fmt.Println("Error checking for database file: ", err)
 		os.Exit(1)
 	}
-	// file exists
 	fmt.Println("Database file exists.")
 }
 
@@ -59,10 +53,8 @@ func main() {
 	e.GET("/createrandomplaylist/:plname/:count", rus_create_random_playlist)
 	e.GET("/allplaylists", rus_all_playlists)
 	e.GET("/editplaylistpage/:rusicid", rus_edit_playlist)
-
-
-
-
+	e.GET("/addsongtoplaylist/:playlistid/:songid", rus_add_song_to_playlist)
+	e.GET("/removesongfromplaylist/:playlistid/:songid", rus_remove_song_from_playlist)
 	e.GET("/deleteplaylist/:rusicid", rus_delete_playlist)
 	e.GET("/playmusic/:songid", PlayMusic)
 	e.Static("/assets", "assets")
@@ -190,7 +182,21 @@ func rus_edit_playlist(c echo.Context) error {
 	return c.JSON(http.StatusOK, playlist)
 }
 
+func rus_add_song_to_playlist(c echo.Context) error {
+	rusicid := c.Param("playlistid")
+	songid := c.Param("songid")
+	println("Add Song to Playlist")
+	playlist := AddSongToPlaylist(rusicid, songid)
+	return c.JSON(http.StatusOK, playlist)
+}
 
+func rus_remove_song_from_playlist(c echo.Context) error {
+	rusicid := c.Param("playlistid")
+	songid := c.Param("songid")
+	println("Remove Song from Playlist")
+	playlist := RemoveSongFromPlaylist(rusicid, songid)
+	return c.JSON(http.StatusOK, playlist)
+}
 
 func rus_delete_playlist(c echo.Context) error {
 	rusicid := c.Param("rusicid")
