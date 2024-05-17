@@ -786,6 +786,7 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 
 	song := SongForId(songid)
 	songs = append(songs, song)
+	numsongs := len(songs)
 
 	songsJSON, err := json.Marshal(songs)
 	if err != nil {
@@ -802,6 +803,11 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 	defer db.Close()
 
 	_, err = db.Exec(fmt.Sprintf("UPDATE playlists SET songs='%s' WHERE rusicid='%s'", songsString, playlistid))
+	if err != nil {
+		fmt.Println("Error updating playlist: ", err)
+	}
+
+	_, err = db.Exec(fmt.Sprintf("UPDATE playlists SET numsongs='%d' WHERE rusicid='%s'", numsongs, playlistid))
 	if err != nil {
 		fmt.Println("Error updating playlist: ", err)
 	}
