@@ -821,7 +821,7 @@ type PlaylistPlaySonglistStruct struct {
 	ImgUrl  string
 }
 
-func PlayPlaylist(plid string) string {
+func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -835,7 +835,7 @@ func PlayPlaylist(plid string) string {
 	}
 	defer rows.Close()
 
-	// var infolist []PlaylistPlaySonglistStruct
+	var infolist []PlaylistPlaySonglistStruct
 
 	for rows.Next() {
 		
@@ -857,16 +857,16 @@ func PlayPlaylist(plid string) string {
 
 		
 
-		// for _, song := range songs {
-		// 	var info PlaylistPlaySonglistStruct
-		// 	info.PlayPath = song.PlayPath
-		// 	info.ImgUrl = song.ImgUrl
-		// 	fmt.Println(info)
-		// 	infolist = append(infolist, info)
-		// }
+		for _, song := range songs {
+			var info PlaylistPlaySonglistStruct
+			info.PlayPath = song.PlayPath
+			info.ImgUrl = song.ImgUrl
+			fmt.Println(info)
+			infolist = append(infolist, info)
+		}
 		// Use the decoded songs variable here
 		
 	}
 
-	return "ruck"
+	return infolist
 }
