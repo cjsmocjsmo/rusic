@@ -851,6 +851,8 @@ func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
 			continue
 		}
 
+		fmt.Println(songs)
+
 		
 
 		for _, song := range songs {

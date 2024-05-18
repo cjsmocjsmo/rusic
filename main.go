@@ -215,7 +215,7 @@ func rus_PlayMusic(c echo.Context) error {
 
 func rus_PlayPlayList(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	println("Song ID: ", rusicid)
+	println("Playlist ID: ", rusicid)
 	plsongs :=  PlayPlaylist(rusicid)
 	return c.Render(http.StatusOK, "rus_playmusic", plsongs)
 }
