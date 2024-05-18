@@ -847,13 +847,13 @@ func PlayPlaylist(plid string) string {
 
 		fmt.Println(&pl.Songs)
 
-		// var songs []MusicInfo
-		// if err := json.Unmarshal([]byte(pl.Songs), &songs); err != nil {
-		// 	fmt.Println("Error decoding JSON: ", err)
-		// 	continue
-		// }
+		var songs []MusicInfo
+		if err := json.Unmarshal([]byte(pl.Songs), &songs); err != nil {
+			fmt.Println("Error decoding JSON: ", err)
+			continue
+		}
 
-		// fmt.Println(songs)
+		fmt.Println(songs)
 
 		
 
