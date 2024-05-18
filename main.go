@@ -57,7 +57,7 @@ func main() {
 	e.GET("/removesongfromplaylist/:playlistid/:songid", rus_remove_song_from_playlist)
 	e.GET("/deleteplaylist/:rusicid", rus_delete_playlist)
 	e.GET("/playmusic/:songid", rus_PlayMusic)
-	e.GET("/rus_playplaylist/:rusicid", rus_PlayPlayList)
+	e.GET("/playplaylist/:rusicid", rus_PlayPlayList)
 	e.Static("/assets", "assets")
 	e.Logger.Fatal(e.Start(":8080"))
 }
