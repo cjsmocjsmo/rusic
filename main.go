@@ -56,7 +56,8 @@ func main() {
 	e.GET("/addsongtoplaylist/:playlistid/:songid", rus_add_song_to_playlist)
 	e.GET("/removesongfromplaylist/:playlistid/:songid", rus_remove_song_from_playlist)
 	e.GET("/deleteplaylist/:rusicid", rus_delete_playlist)
-	e.GET("/playmusic/:songid", PlayMusic)
+	e.GET("/playmusic/:songid", rus_PlayMusic)
+	e.GET("/rus_playplaylist/:rusicid", rus_PlayPlayList)
 	e.Static("/assets", "assets")
 	e.Logger.Fatal(e.Start(":8080"))
 }
@@ -205,9 +206,16 @@ func rus_delete_playlist(c echo.Context) error {
 	return c.JSON(http.StatusOK, playlists)
 }
 
-func PlayMusic(c echo.Context) error {
+func rus_PlayMusic(c echo.Context) error {
 	rusicid := c.Param("rusicid")
 	println("Song ID: ", rusicid)
 	song := SongForId(rusicid)
 	return c.Render(http.StatusOK, "rus_playmusic", song)
+}
+
+func rus_PlayPlayList(c echo.Context) error {
+	rusicid := c.Param("rusicid")
+	println("Song ID: ", rusicid)
+	plsongs :=  PlayPlaylist(rusicid)
+	return c.Render(http.StatusOK, "rus_playmusic", plsongs)
 }

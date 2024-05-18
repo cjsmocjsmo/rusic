@@ -815,3 +815,53 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 	return SongsForPlaylist(playlistid)
 
 }
+
+type PlaylistPlaySonglistStruct struct {
+	PlayPath string
+	ImgUrl  string
+}
+
+func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM playlists where rusicid='plid'")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	var infolist []PlaylistPlaySonglistStruct
+
+	for rows.Next() {
+		
+		var pl PlaylistStruct
+		if err := rows.Scan(&pl.Id, &pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			continue
+		}
+
+		var songs []MusicInfo
+		if err := json.Unmarshal([]byte(pl.Songs), &songs); err != nil {
+			fmt.Println("Error decoding JSON: ", err)
+			continue
+		}
+
+		
+
+		for _, song := range songs {
+			var info PlaylistPlaySonglistStruct
+			info.PlayPath = song.PlayPath
+			info.ImgUrl = song.ImgUrl
+			fmt.Println(info)
+			infolist = append(infolist, info)
+		}
+		// Use the decoded songs variable here
+		
+	}
+	return infolist
+}
