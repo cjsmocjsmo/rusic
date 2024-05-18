@@ -845,23 +845,25 @@ func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
 			continue
 		}
 
-		var songs []MusicInfo
-		if err := json.Unmarshal([]byte(pl.Songs), &songs); err != nil {
-			fmt.Println("Error decoding JSON: ", err)
-			continue
-		}
+		fmt.Println(&pl.Songs)
 
-		fmt.Println(songs)
+		// var songs []MusicInfo
+		// if err := json.Unmarshal([]byte(pl.Songs), &songs); err != nil {
+		// 	fmt.Println("Error decoding JSON: ", err)
+		// 	continue
+		// }
+
+		// fmt.Println(songs)
 
 		
 
-		for _, song := range songs {
-			var info PlaylistPlaySonglistStruct
-			info.PlayPath = song.PlayPath
-			info.ImgUrl = song.ImgUrl
-			fmt.Println(info)
-			infolist = append(infolist, info)
-		}
+		// for _, song := range songs {
+		// 	var info PlaylistPlaySonglistStruct
+		// 	info.PlayPath = song.PlayPath
+		// 	info.ImgUrl = song.ImgUrl
+		// 	fmt.Println(info)
+		// 	infolist = append(infolist, info)
+		// }
 		// Use the decoded songs variable here
 		
 	}
