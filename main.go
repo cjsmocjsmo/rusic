@@ -56,6 +56,7 @@ func main() {
 	e.GET("/addsongtoplaylist/:playlistid/:songid", rus_add_song_to_playlist)
 	e.GET("/removesongfromplaylist/:playlistid/:songid", rus_remove_song_from_playlist)
 	e.GET("/deleteplaylist/:rusicid", rus_delete_playlist)
+	e.GET("/coverartfromplaypath/:playpath", rus_cover_art_from_playpath)
 	e.GET("/playmusic/:songid", rus_PlayMusic)
 	e.GET("/playplaylist/:rusicid", rus_PlayPlayList)
 	e.Static("/assets", "assets")
@@ -206,12 +207,23 @@ func rus_delete_playlist(c echo.Context) error {
 	return c.JSON(http.StatusOK, playlists)
 }
 
+func rus_cover_art_from_playpath(c echo.Context) error {
+	playpath := c.Param("playpath")
+	println("Playpath: ", playpath)
+	coverart := CoverArtFromPlayPath(playpath)
+	return c.JSON(http.StatusOK, coverart)
+}
+
 func rus_PlayMusic(c echo.Context) error {
 	rusicid := c.Param("rusicid")
 	println("Song ID: ", rusicid)
 	song := SongForId(rusicid)
 	return c.Render(http.StatusOK, "rus_playmusic", song)
 }
+
+// need a function to get coverart from Playpath
+
+
 
 func rus_PlayPlayList(c echo.Context) error {
 	rusicid := c.Param("rusicid")

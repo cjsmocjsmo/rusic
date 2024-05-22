@@ -816,12 +816,41 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 
 }
 
-type PlaylistPlaySonglistStruct struct {
-	PlayPath string
-	ImgUrl  string
+func CoverArtFromPlayPath(playpath string) string {
+	db_path := os.Getenv("RUS_DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
+	if err != nil {
+		fmt.Println("Error opening database: ", err)
+		return ""
+	}
+	defer db.Close()
+
+	rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath FROM music_images WHERE playpath='%s'", playpath))
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+		return ""
+	}
+	defer rows.Close()
+
+	var thumbpath string
+
+	for rows.Next() {
+		if err := rows.Scan(&thumbpath); err != nil {
+			fmt.Println("Error scanning row: ", err)
+			return ""
+		}
+	}
+
+	return thumbpath
 }
 
-func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
+
+
+
+
+
+
+func PlayPlaylist(plid string) []string {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
@@ -835,7 +864,7 @@ func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
 	}
 	defer rows.Close()
 
-	var infolist []PlaylistPlaySonglistStruct
+	var infolist []string
 
 	for rows.Next() {
 		
@@ -845,27 +874,17 @@ func PlayPlaylist(plid string) []PlaylistPlaySonglistStruct {
 			continue
 		}
 
-		fmt.Println(&pl.Songs)
-
 		var songs []MusicInfo
 		if err := json.Unmarshal([]byte(pl.Songs), &songs); err != nil {
 			fmt.Println("Error decoding JSON: ", err)
 			continue
 		}
 
-		fmt.Println(songs)
-
-		
-
 		for _, song := range songs {
-			var info PlaylistPlaySonglistStruct
-			info.PlayPath = song.PlayPath
-			info.ImgUrl = song.ImgUrl
+			info := song.PlayPath
 			fmt.Println(info)
 			infolist = append(infolist, info)
 		}
-		// Use the decoded songs variable here
-		
 	}
 
 	return infolist
