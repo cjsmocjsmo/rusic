@@ -796,7 +796,11 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 		fmt.Println("Error updating playlist: ", err)
 	}
 
-	return SongsForPlaylist(playlistid)
+	songsforplaylist := SongsForPlaylist(playlistid)
+
+	fmt.Println(songsforplaylist)
+
+	return songsforplaylist
 
 }
 
