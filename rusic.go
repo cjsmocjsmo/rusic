@@ -81,7 +81,6 @@ func RandomArt() []RandomArtStruct {
 			fmt.Println("Error iterating over rows: %w", err)
 		}
 	}
-	// fmt.Println(thumbPaths)
 
 	if err != nil {
 		fmt.Println("Error marshaling data to JSON: %w", err)
@@ -133,8 +132,6 @@ func SongsForAlbum(albumId string) []MusicInfo {
 		}
 		songs = append(songs, song)
 	}
-
-	// fmt.Println(songs)
 
 	return songs
 }
@@ -265,7 +262,6 @@ func GetCurrentPlayingImg(albid string) MusicImgInfo {
 			continue
 		}
 	}
-	fmt.Println(img)
 
 	return img
 }
@@ -298,7 +294,6 @@ func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
 		}
 		artist = append(artist, startswith)
 	}
-	fmt.Println(artist)
 
 	return artist
 
@@ -338,7 +333,6 @@ func AlbumForAlpha(alpha string) []AlbumStruct {
 		}
 		albums = append(albums, startswith)
 	}
-	fmt.Println(albums)
 
 	albumList := []AlbumStruct{}
 	for _, alb := range albums {
@@ -353,7 +347,6 @@ func AlbumForAlpha(alpha string) []AlbumStruct {
 				fmt.Println("Error scanning row: ", err)
 				continue
 			}
-			fmt.Println(album)
 			albumList = append(albumList, album)
 		}
 	}
@@ -417,7 +410,6 @@ func AlbumsForArtistSongs(albid string) []MusicInfo {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println(song)
 		songs = append(songs, song)
 	}
 
@@ -444,7 +436,6 @@ func SongPages() []string {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println(page)
 		pages = append(pages, page)
 	}
 
@@ -473,7 +464,6 @@ func SongsForPage(page string) []MusicInfo {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println(song)
 		songs = append(songs, song)
 	}
 
@@ -603,8 +593,6 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 		NumSongs: count,
 	}
 
-	fmt.Println(playlistinfo)
-
 	_, err = db.Exec("INSERT INTO playlists (rusicid, name, songs, numsongs) VALUES (?, ?, ?, ?)", playlistinfo.RusicId, playlistinfo.Name, playlistinfo.Songs, playlistinfo.NumSongs)
 	if err != nil {
 		fmt.Println("Error inserting playlist: ", err)
@@ -636,7 +624,6 @@ func AllPlaylists() []PlaylistStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println(pl)
 		allplaylist = append(allplaylist, pl)
 	}
 
@@ -674,7 +661,6 @@ func SongsForPlaylist(rusicid string) []NewPlayListStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println(pl)
 
 		var songs []MusicInfo
 		err := json.Unmarshal([]byte(pl.Songs), &songs)
@@ -700,7 +686,6 @@ func SongsForPlaylist(rusicid string) []NewPlayListStruct {
 
 		newPlaylist = append(newPlaylist, newplaylist2)
 	}
-	fmt.Println(newPlaylist)
 
 	return newPlaylist
 }
@@ -732,7 +717,6 @@ func DeletePlaylist(rusicid string) []PlaylistStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		fmt.Println(pl)
 		allplaylist = append(allplaylist, pl)
 	}
 
@@ -882,7 +866,6 @@ func PlayPlaylist(plid string) []string {
 
 		for _, song := range songs {
 			info := song.PlayPath
-			fmt.Println(info)
 			infolist = append(infolist, info)
 		}
 	}
