@@ -85,80 +85,68 @@ func album_of_interest(c echo.Context) error {
 
 func songs_for_rand_album(c echo.Context) error {
 	albumid := c.Param("albumid")
-	println("Album ID: ", albumid)
 	songs := SongsForAlbum(albumid)
 	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_artist_starts_with(c echo.Context) error {
-	println("Artist Startswith")
 	startswith := ArtistStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
 func rus_album_starts_with(c echo.Context) error {
-	println("album Startswith")
 	startswith := AlbumStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
 func rus_current_playing_img(c echo.Context) error {
 	albumid := c.Param("albumid")
-	println("AlbumID: ", albumid)
 	currentPlaying := GetCurrentPlayingImg(albumid)
 	return c.JSON(http.StatusOK, currentPlaying)
 }
 
 func rus_artist_for_alpha(c echo.Context) error {
 	alphastr := c.Param("alpha")
-	println("Alpha: ", alphastr)
 	artists := ArtistForAlpha(alphastr)
 	return c.JSON(http.StatusOK, artists)
 }
 
 func rus_album_for_alpha(c echo.Context) error {
 	alphastr := c.Param("alpha")
-	println("Alpha: ", alphastr)
 	albums := AlbumForAlpha(alphastr)
 	return c.JSON(http.StatusOK, albums)
 }
 
 func rus_albums_for_artist(c echo.Context) error {
 	artistid := c.Param("artistid")
-	println("Artist ID: ", artistid)
 	albums := AlbumsForArtist(artistid)
 	return c.JSON(http.StatusOK, albums)
 }
 
 func rus_albums_for_artist_songs(c echo.Context) error {
 	albid := c.Param("albumid")
-	println("Album ID: ", albid)
 	songs := AlbumsForArtistSongs(albid)
 	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_song_pages(c echo.Context) error {
-	println("Song Pages")
 	songpages := SongPages()
 	return c.JSON(http.StatusOK, songpages)
 }
 
 func rus_songs_for_page(c echo.Context) error {
 	page := c.Param("page")
-	println("Page: ", page)
 	songs := SongsForPage(page)
 	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_playlist_check(c echo.Context) error {
-	println("Playlist Check")
 	playlist := PlaylistCheck()
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_create_empty_playlist(c echo.Context) error {
 	plname := c.Param("plname")
-	println("Create Empty Playlist")
 	playlist := CreateEmptyPlaylist(plname)
 	return c.JSON(http.StatusOK, playlist)
 }
@@ -166,20 +154,17 @@ func rus_create_empty_playlist(c echo.Context) error {
 func rus_create_random_playlist(c echo.Context) error {
 	plname := c.Param("plname")
 	count := c.Param("count")
-	println("Create Random Playlist")
 	playlist := CreateRandomPlaylist(plname, count)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_all_playlists(c echo.Context) error {
-	println("All Playlists")
 	playlists := AllPlaylists()
 	return c.JSON(http.StatusOK, playlists)
 }
 
 func rus_edit_playlist(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	println("Edit Playlist")
 	playlist := SongsForPlaylist(rusicid)
 	return c.JSON(http.StatusOK, playlist)
 }
@@ -187,7 +172,6 @@ func rus_edit_playlist(c echo.Context) error {
 func rus_add_song_to_playlist(c echo.Context) error {
 	rusicid := c.Param("playlistid")
 	songid := c.Param("songid")
-	println("Add Song to Playlist")
 	playlist := AddSongToPlaylist(rusicid, songid)
 	return c.JSON(http.StatusOK, playlist)
 }
@@ -195,28 +179,24 @@ func rus_add_song_to_playlist(c echo.Context) error {
 func rus_remove_song_from_playlist(c echo.Context) error {
 	rusicid := c.Param("playlistid")
 	songid := c.Param("songid")
-	println("Remove Song from Playlist")
 	playlist := RemoveSongFromPlaylist(rusicid, songid)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_delete_playlist(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	println("Delete Playlist")
 	playlists := DeletePlaylist(rusicid)
 	return c.JSON(http.StatusOK, playlists)
 }
 
 func rus_cover_art_from_playpath(c echo.Context) error {
 	playpath := c.Param("playpath")
-	println("Playpath: ", playpath)
 	coverart := CoverArtFromPlayPath(playpath)
 	return c.JSON(http.StatusOK, coverart)
 }
 
 func rus_PlayMusic(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	println("Song ID: ", rusicid)
 	song := SongForId(rusicid)
 	return c.Render(http.StatusOK, "rus_playmusic", song)
 }
@@ -227,7 +207,6 @@ func rus_PlayMusic(c echo.Context) error {
 
 func rus_PlayPlayList(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	println("Playlist ID: ", rusicid)
 	plsongs :=  PlayPlaylist(rusicid)
 	return c.JSON(http.StatusOK, plsongs)
 }

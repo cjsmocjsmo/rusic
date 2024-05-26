@@ -164,7 +164,6 @@ func ArtistStartsWith() []SongCountStruct {
 
 		results = append(results, startsWith)
 	}
-	println(results)
 	return results
 }
 
@@ -187,7 +186,6 @@ func AlbumStartsWith() []SongCountStruct {
 			fmt.Println("Error scanning row: ", err)
 			continue
 		}
-		println(startsWith.Alpha, startsWith.Count)
 		results = append(results, startsWith)
 	}
 	return results
@@ -571,8 +569,6 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 		randomNumbers[i] = rand.Intn(numSongsInDB-0+1) + 0 // Intn returns a number in the range [0, n)
 	}
 
-	fmt.Println(randomNumbers)
-
 	songs := []MusicInfo{}
 
 	for _, idx := range randomNumbers {
@@ -812,8 +808,6 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 	}
 
 	songsforplaylist := SongsForPlaylist(playlistid)
-
-	fmt.Println(songsforplaylist)
 
 	return songsforplaylist
 
