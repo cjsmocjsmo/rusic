@@ -545,18 +545,33 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 		fmt.Println("Error converting count to integer: ", err)
 	}
 
-	rand.Seed(time.Now().UnixNano())
-	randomNumbers := make([]int, numSongs)
-	for i := range randomNumbers {
-		randomNumbers[i] = rand.Intn(numSongs + 1) // Intn returns a number in the range [0, n)
-	}
-
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
 	}
 	defer db.Close()
+
+	rows, err := db.Query("SELECT COUNT(*) FROM music")
+	if err != nil {
+		fmt.Println("Error executing query: ", err)
+	}
+	defer rows.Close()
+
+	var numSongsInDB int
+	for rows.Next() {
+		if err := rows.Scan(&numSongsInDB); err != nil {
+			fmt.Println("Error scanning row: ", err)
+		}
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	randomNumbers := make([]int, numSongs)
+	for i := range randomNumbers {
+		randomNumbers[i] = rand.Intn(numSongsInDB-0+1) + 0 // Intn returns a number in the range [0, n)
+	}
+
+	fmt.Println(randomNumbers)
 
 	songs := []MusicInfo{}
 
@@ -832,12 +847,6 @@ func CoverArtFromPlayPath(playpath string) string {
 	return thumbpath
 }
 
-
-
-
-
-
-
 func PlayPlaylist(plid string) []string {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
@@ -855,7 +864,7 @@ func PlayPlaylist(plid string) []string {
 	var infolist []string
 
 	for rows.Next() {
-		
+
 		var pl PlaylistStruct
 		if err := rows.Scan(&pl.Id, &pl.RusicId, &pl.Name, &pl.Songs, &pl.NumSongs); err != nil {
 			fmt.Println("Error scanning row: ", err)
