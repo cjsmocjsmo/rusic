@@ -813,7 +813,7 @@ func CoverArtFromPlayPath(playpath string) string {
 	}
 	defer db.Close()
 
-	rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath FROM music_images WHERE playpath='%s'", playpath))
+	rows, err := db.Query(fmt.Sprintf("SELECT imgurl FROM music WHERE playpath='%s'", playpath))
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 		return ""
