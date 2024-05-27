@@ -564,9 +564,10 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	}
 
 	rand.Seed(time.Now().UnixNano())
+	permutation := rand.Perm(numSongsInDB)
 	randomNumbers := make([]int, numSongs)
 	for i := range randomNumbers {
-		randomNumbers[i] = rand.Intn(numSongsInDB-0+1) + 0 // Intn returns a number in the range [0, n)
+		randomNumbers[i] = permutation[i]
 	}
 
 	songs := []MusicInfo{}
