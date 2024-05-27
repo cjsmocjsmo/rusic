@@ -834,7 +834,6 @@ func CoverArtFromPlayPath(playpath string) []string {
 		var artist, song, imgurl string
 		if err := rows.Scan(&artist, &song, &imgurl); err != nil {
 			fmt.Println("Error scanning row: ", err)
-			// return ""
 		}
 		results = append(results, artist)
 		results = append(results, song)
