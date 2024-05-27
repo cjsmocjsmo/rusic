@@ -735,6 +735,7 @@ func DeletePlaylist(rusicid string) []PlaylistStruct {
 }
 
 func RemoveSongFromPlaylist(playlistid string, songid string) []NewPlayListStruct {
+	fmt.Println("PlaylistID: ", playlistid)
 	playlist := SongsForPlaylist(playlistid)
 	songs := playlist[0].Songs
 
