@@ -814,32 +814,35 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 
 }
 
-func CoverArtFromPlayPath(playpath string) string {
+func CoverArtFromPlayPath(playpath string) []string {
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
-		return ""
 	}
 	defer db.Close()
 
-	rows, err := db.Query(fmt.Sprintf("SELECT imgurl FROM music WHERE playpath='%s'", playpath))
+	rows, err := db.Query(fmt.Sprintf("SELECT artist, song, imgurl FROM music WHERE playpath='%s'", playpath))
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
-		return ""
 	}
 	defer rows.Close()
 
-	var thumbpath string
+	var results []string
 
 	for rows.Next() {
-		if err := rows.Scan(&thumbpath); err != nil {
+		var artist, song, imgurl string
+		if err := rows.Scan(&artist, &song, &imgurl); err != nil {
 			fmt.Println("Error scanning row: ", err)
-			return ""
+			// return ""
 		}
+		results = append(results, artist)
+		results = append(results, song)
+		results = append(results, imgurl)
 	}
 
-	return thumbpath
+	return results
+
 }
 
 func PlayPlaylist(plid string) []string {
