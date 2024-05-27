@@ -777,11 +777,15 @@ func RemoveSongFromPlaylist(playlistid string, songid string) []NewPlayListStruc
 
 func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 	playlist := SongsForPlaylist(playlistid)
+	fmt.Println("Playlist: ", playlist)
 	songs := playlist[0].Songs
+	fmt.Println("Songs: ", songs)
 
 	song := SongForId(songid)
+	fmt.Println("Song: ", song)
 	songs = append(songs, song)
 	numsongs := len(songs)
+	fmt.Println("NumSongs: ", numsongs)
 
 	songsJSON, err := json.Marshal(songs)
 	if err != nil {

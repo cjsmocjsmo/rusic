@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"os"
-
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
+	"net/http"
+	"os"
 )
 
 func checkDBExists() {
@@ -203,10 +202,8 @@ func rus_PlayMusic(c echo.Context) error {
 
 // need a function to get coverart from Playpath
 
-
-
 func rus_PlayPlayList(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	plsongs :=  PlayPlaylist(rusicid)
+	plsongs := PlayPlaylist(rusicid)
 	return c.JSON(http.StatusOK, plsongs)
 }
