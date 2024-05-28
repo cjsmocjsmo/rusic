@@ -32,10 +32,8 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
     exit 1
 fi
 
-
 # If the first argument is 32, execute the following commands
 if [ "$1" = "32" ]; then
-    
         
     # Copy the Dockerfile for the 32-bit architecture to the current directory
     cp -pvr RPI/32/Dockerfile .
@@ -46,14 +44,13 @@ if [ "$1" = "32" ]; then
     -d \
     -p 8080:80 \
     -v /usr/share/rusic/rusic/db/rusic.db:/usr/share/rusic/rusic/db/rusic.db \
-    -v /usr/share/rusic/rusic/assets/thumbnails:/usr/share/rusic/rusic/assets/thumbnails \
+    -v /usr/share/rusic/rusic/assets:/usr/share/rusic/rusic/assets \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
     rusic:$2 
     # Remove the Dockerfile
     rm Dockerfile
     
 else
-    
    
     # Copy the Dockerfile for the 64-bit architecture to the current directory
     cp -pvr RPI/64/Dockerfile .

@@ -10,14 +10,12 @@ RUN \
     touch /usr/share/rusic/rusic/db/rusic.db && \
     mkdir /usr/share/rusic/rusic/assets && \
     chmod -R 755 /usr/share/rusic/rusic/assets && \
-    mkdir /usr/share/rusic/rusic/assets/Music && \
-    chmod -R 755 /usr/share/rusic/rusic/assets/Music && \
-    mkdir /usr/share/rusic/rusic/assets/thumbnails && \
-    chmod -R 755 /usr/share/rusic/rusic/assets/thumbnails && \
+    mkdir /usr/share/rusic/rusic/Music && \
+    chmod -R 755 /usr/share/rusic/rusic/Music && \
     mkdir /usr/share/rusic/rusic/nfo && \
     chmod -R 755 /usr/share/rusic/rusic/nfo
 
-COPY assets/thumbnails/playing.jpg /usr/share/rusic/rusic/assets/thumbnails/playing.jpg
+COPY assets/playing.jpg /usr/share/rusic/rusic/assets/playing.jpg
 COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
