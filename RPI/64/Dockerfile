@@ -10,6 +10,8 @@ RUN \
     touch /usr/share/rusic/rusic/db/rusic.db && \
     mkdir /usr/share/rusic/rusic/assets && \
     chmod -R 755 /usr/share/rusic/rusic/assets && \
+    mkdir /usr/share/rusic/rusic/assets/Music && \
+    chmod -R 755 /usr/share/rusic/rusic/assets/Music && \
     mkdir /usr/share/rusic/rusic/assets/thumbnails && \
     chmod -R 755 /usr/share/rusic/rusic/assets/thumbnails && \
     mkdir /usr/share/rusic/rusic/nfo && \
