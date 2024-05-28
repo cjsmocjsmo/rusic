@@ -47,7 +47,7 @@ if [ "$1" = "32" ]; then
     -p 8080:80 \
     -v /usr/share/rusic/rusic/db/rusic.db:/usr/share/rusic/rusic/db/rusic.db \
     -v /usr/share/rusic/rusic/assets/thumbnails:/usr/share/rusic/rusic/assets/thumbnails \
-    -v $HOME/Music:/usr/share/rusic/rusic/assets/Music \
+    -v $HOME/Music:/usr/share/rusic/rusic/Music \
     rusic:$2 
     # Remove the Dockerfile
     rm Dockerfile
