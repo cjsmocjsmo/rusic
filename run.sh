@@ -32,12 +32,7 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
     exit 1
 fi
 
-# Check if Golang is installed
-# If not, print an error message and exit the script
-if ! command -v go &> /dev/null; then
-    echo "Golang is not installed. Please install Golang before running this script."
-    exit 1
-fi
+
 
 # Check if Git is installed
 # If not, print an error message and exit the script
