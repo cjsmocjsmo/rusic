@@ -34,19 +34,9 @@ fi
 
 
 
-# Check if Git is installed
-# If not, print an error message and exit the script
-if ! command -v git &> /dev/null; then
-    echo "Git is not installed. Please install Git before running this script."
-    exit 1
-fi
 
-# Check if Docker is installed
-# If not, print an error message and exit the script
-if ! command -v docker &> /dev/null; then
-    echo "Docker is not installed. Please install Docker before running this script."
-    exit 1
-fi
+
+
 
 # If the first argument is 32, execute the following commands
 if [ "$1" = "32" ]; then
