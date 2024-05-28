@@ -33,11 +33,6 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
 fi
 
 
-
-
-
-
-
 # If the first argument is 32, execute the following commands
 if [ "$1" = "32" ]; then
     
