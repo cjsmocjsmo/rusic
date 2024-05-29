@@ -43,8 +43,8 @@ if [ "$1" = "32" ]; then
     docker run \
     -d \
     -p 8080:80 \
-    -v /usr/share/rusic/rusic/db/rusic.db:/usr/share/rusic/rusic/db/rusic.db \
-    -v /usr/share/rusic/rusic/assets:/usr/share/rusic/rusic/assets \
+    -v /usr/share/rusicsetup/rusicsetup/db/rusic.db:/usr/share/rusic/rusic/db/rusic.db \
+    -v /usr/share/rusicsetup/rusicsetup/thumbnails:/usr/share/rusic/rusic/thumbnails \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
     rusic:$2 
     # Remove the Dockerfile
@@ -61,7 +61,7 @@ else
     -d \
     -p 8080:80 \
     -v /usr/share/rusic/rusic/db/rusic.db:/usr/share/rusic/rusic/db/rusic.db \
-    -v /usr/share/rusic/rusic/assets/thumbnails:/usr/share/rusic/rusic/assets/thumbnails \
+    -v /usr/share/rusic/rusic/thumbnails:/usr/share/rusic/rusic/thumbnails \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
     rusic:$2 
     # Remove the Dockerfile

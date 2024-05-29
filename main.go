@@ -58,7 +58,7 @@ func main() {
 	e.GET("/coverartfromplaypath/:playpath", rus_cover_art_from_playpath)
 	e.GET("/playmusic/:songid", rus_PlayMusic)
 	e.GET("/playplaylist/:rusicid", rus_PlayPlayList)
-	e.Static("/assets", "assets")
+	e.Static("/thumbnails", "thumbnails")
 	e.Static("/Music", "Music")
 	e.Logger.Fatal(e.Start(":8080"))
 }
