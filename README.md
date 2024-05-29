@@ -21,13 +21,24 @@ Install sequence:
 1. Create the directory /usr/share/rusic
 2. Adjust permissions as needed to do the next step
 3. Git clone this repository to /usr/share/rusic/
-4. Edit .env as needed for your setup (pagination, address, port, etc...)
-5. Execute RUN.sh
+4. Edit rus.env as needed for your setup (pagination, address, port, etc...)
+5. Execute run.sh
 
 ```bash
+mkdir /usr/share/rusic
+git clone https://github.com/cjsmocjsmo/rusic.git
+cs /usr/share/rusic/rusic
 
-#insure rust is installed
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#rpi3
+sh run.sh 32 0.0.1
 
+#rpi4 and above
+sh run.sh 64 0.0.1
 
 ```
+
+## Warning
+
+Rusic was designed to run on your home network and not on the wider internet.  It has not authentication system so you have been warned!!!
+
+Rusic is very much a work in process so there may be some breaking changes in the future.
