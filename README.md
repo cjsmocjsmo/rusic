@@ -37,6 +37,18 @@ sh run.sh 64 0.0.1
 
 ```
 
+## Updating
+
+To update simply re run RUN.sh with a new version
+
+```bash
+sh RUN.sh 32 0.0.2
+
+#or 
+
+sh RUN.sh 64 0.0.2
+```
+
 ## Warning
 
 Rusic was designed to run on your home network and not on the wider internet.  It has not authentication system so you have been warned!!!
