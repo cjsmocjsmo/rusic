@@ -11,6 +11,7 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"log"
 )
 
 type RandomArtStruct struct {
@@ -25,16 +26,25 @@ type SongStruct struct {
 }
 
 func RandomArt() []RandomArtStruct {
+	// Open log file
+    logFile, err := os.OpenFile("/usr/share/rusic/rusic/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer logFile.Close()
+
+    // Set the output log file
+    log.SetOutput(logFile)
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
-		fmt.Println("Error opening database: ", err)
+		log.Println("Error opening database: ", err)
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT idx FROM music_images")
 	if err != nil {
-		fmt.Println("Error opening database: ", err)
+		log.Println("Error opening database: ", err)
 	}
 	defer rows.Close()
 
@@ -42,13 +52,13 @@ func RandomArt() []RandomArtStruct {
 	for rows.Next() {
 		var idx int
 		if err := rows.Scan(&idx); err != nil {
-			fmt.Println("Error scanning row: %w", err)
+			log.Println("Error scanning row: %w", err)
 		}
 		idxlist = append(idxlist, idx)
 	}
 
 	if err := rows.Err(); err != nil {
-		fmt.Println("Error iterating over rows: %w", err)
+		log.Println("Error iterating over rows: %w", err)
 	}
 
 	rand.Seed(time.Now().UnixNano())
@@ -63,14 +73,14 @@ func RandomArt() []RandomArtStruct {
 	for _, idx := range randomNumbers {
 		rows, err := db.Query(fmt.Sprintf("SELECT httpthumbpath, albumid FROM music_images WHERE idx=%d", idx))
 		if err != nil {
-			fmt.Println("Error executing query: %w", err)
+			log.Println("Error executing query: %w", err)
 		}
 		defer rows.Close()
 
 		for rows.Next() {
 			var thumbpath, albumid string
 			if err := rows.Scan(&thumbpath, &albumid); err != nil {
-				fmt.Println("Error scanning row: %w", err)
+				log.Println("Error scanning row: %w", err)
 			}
 
 			RA := RandomArtStruct{AlbumId: albumid, HttpThumbPath: thumbpath}
@@ -78,12 +88,12 @@ func RandomArt() []RandomArtStruct {
 		}
 
 		if err := rows.Err(); err != nil {
-			fmt.Println("Error iterating over rows: %w", err)
+			log.Println("Error iterating over rows: %w", err)
 		}
 	}
 
 	if err != nil {
-		fmt.Println("Error marshaling data to JSON: %w", err)
+		log.Println("Error marshaling data to JSON: %w", err)
 	}
 
 	return thumbPaths
