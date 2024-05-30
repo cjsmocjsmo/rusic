@@ -1,6 +1,13 @@
 FROM golang:bookworm
 
 RUN \
+    apt-get update && \
+    apt-get dist-upgrade && \
+    apt-get -y install golang nano && \
+    apt-get -y autoremove && \
+    apt-get -y autoclean
+
+RUN \
     mkdir /usr/share/rusic && \
     chmod -R 755 /usr/share/rusic && \
     mkdir /usr/share/rusic/rusic && \

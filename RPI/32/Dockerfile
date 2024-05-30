@@ -1,4 +1,11 @@
-FROM arm32v7/golang:bookworm
+FROM arm32v7/debian:bookworm
+
+RUN \
+    apt-get update && \
+    apt-get dist-upgrade && \
+    apt-get -y install golang nano && \
+    apt-get -y autoremove && \
+    apt-get -y autoclean
 
 RUN \
     mkdir /usr/share/rusic && \
