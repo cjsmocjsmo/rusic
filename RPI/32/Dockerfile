@@ -32,7 +32,7 @@ COPY rus.env /usr/share/rusic/rusic/rus.env
 
 WORKDIR  /usr/share/rusic/rusic
 
-RUN go mod download
+# RUN go mod download
 
 RUN go build -o main .
 
