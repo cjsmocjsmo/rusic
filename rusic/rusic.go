@@ -1,4 +1,4 @@
-package main
+package rusic
 
 import (
 	"crypto/md5"
@@ -35,6 +35,8 @@ func RandomArt() []RandomArtStruct {
 
     // Set the output log file
     log.SetOutput(logFile)
+
+	log.Println("RandomArt() called")
 	db_path := os.Getenv("RUS_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {

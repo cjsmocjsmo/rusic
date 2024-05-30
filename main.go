@@ -7,7 +7,8 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
 	"net/http"
-	"os"
+	"github.com/cjsmocjsmo/rusic/rusic"
+	// "os"
 )
 
 // func checkDBExists() {
@@ -22,52 +23,9 @@ import (
 // 	fmt.Println("Database file exists.")
 // }
 
-func SetEnvVars() {
-	err := os.Setenv("RUS_DB_PATH", "/usr/share/rusicsetup/rusicsetup/db/rusic.db")
-	if err != nil {
-		fmt.Println("Error setting environment variable:", err)
-		return
-	}
-
-	err2 := os.Setenv("RUS_CHECK_FILE_PATH", "/usr/share/rusicsetup/rusicsetup/db/db_check_file.txt")
-	if err2 != nil {
-		fmt.Println("Error setting environment variable:", err2)
-		return
-	}
-
-	err3 := os.Setenv("RUS_THUMBS", "/usr/share/rusicsetup/rusicsetup/thumbnails")
-	if err3 != nil {
-		fmt.Println("Error setting environment variable:", err3)
-		return
-	}
-
-	err4 := os.Setenv("RUS_NFOS", "/usr/share/rusicsetup/rusicsetup/nfo")
-	if err4 != nil {
-		fmt.Println("Error setting environment variable:", err4)
-		return
-	}
-
-	err5 := os.Setenv("RUS_RAW_HTTP", "192.168.0.91")
-	if err5 != nil {
-		fmt.Println("Error setting environment variable:", err5)
-		return
-	}
-
-	err6 := os.Setenv("RUS_HTTP_ADDR", "http://192.168.0.91")
-	if err6 != nil {
-		fmt.Println("Error setting environment variable:", err6)
-		return
-	}
-
-	err7 := os.Setenv("RUS_PORT", ":8080")
-	if err7 != nil {
-		fmt.Println("Error setting environment variable:", err7)
-		return
-	}
-}	
+	
 
 func init() {
-	// SetEnvVars()
 	err := godotenv.Load("rus.env")
 	if err != nil {
 		fmt.Println("Error loading .env file")
@@ -112,140 +70,140 @@ func main() {
 }
 
 func rus_index(c echo.Context) error {
-	randart := RandomArt()
+	randart := rusic.RandomArt()
 	return c.JSON(http.StatusOK, randart)
 }
 
 func rus_index2(c echo.Context) error {
-	randart := RandomArt()
+	randart := rusic.RandomArt()
 	return c.JSON(http.StatusOK, randart)
 }
 
 func rus_main(c echo.Context) error {
-	randart := RandomArt()
+	randart := rusic.RandomArt()
 	return c.JSON(http.StatusOK, randart)
 }
 
 func album_of_interest(c echo.Context) error {
-	randart := RandomArt()
+	randart := rusic.RandomArt()
 	return c.JSON(http.StatusOK, randart)
 }
 
 func songs_for_rand_album(c echo.Context) error {
 	albumid := c.Param("albumid")
-	songs := SongsForAlbum(albumid)
+	songs := rusic.SongsForAlbum(albumid)
 	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_artist_starts_with(c echo.Context) error {
-	startswith := ArtistStartsWith()
+	startswith := rusic.ArtistStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
 func rus_album_starts_with(c echo.Context) error {
-	startswith := AlbumStartsWith()
+	startswith := rusic.AlbumStartsWith()
 	return c.JSON(http.StatusOK, startswith)
 }
 
 func rus_current_playing_img(c echo.Context) error {
 	albumid := c.Param("albumid")
-	currentPlaying := GetCurrentPlayingImg(albumid)
+	currentPlaying := rusic.GetCurrentPlayingImg(albumid)
 	return c.JSON(http.StatusOK, currentPlaying)
 }
 
 func rus_artist_for_alpha(c echo.Context) error {
 	alphastr := c.Param("alpha")
-	artists := ArtistForAlpha(alphastr)
+	artists := rusic.ArtistForAlpha(alphastr)
 	return c.JSON(http.StatusOK, artists)
 }
 
 func rus_album_for_alpha(c echo.Context) error {
 	alphastr := c.Param("alpha")
-	albums := AlbumForAlpha(alphastr)
+	albums := rusic.AlbumForAlpha(alphastr)
 	return c.JSON(http.StatusOK, albums)
 }
 
 func rus_albums_for_artist(c echo.Context) error {
 	artistid := c.Param("artistid")
-	albums := AlbumsForArtist(artistid)
+	albums := rusic.AlbumsForArtist(artistid)
 	return c.JSON(http.StatusOK, albums)
 }
 
 func rus_albums_for_artist_songs(c echo.Context) error {
 	albid := c.Param("albumid")
-	songs := AlbumsForArtistSongs(albid)
+	songs := rusic.AlbumsForArtistSongs(albid)
 	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_song_pages(c echo.Context) error {
-	songpages := SongPages()
+	songpages := rusic.SongPages()
 	return c.JSON(http.StatusOK, songpages)
 }
 
 func rus_songs_for_page(c echo.Context) error {
 	page := c.Param("page")
-	songs := SongsForPage(page)
+	songs := rusic.SongsForPage(page)
 	return c.JSON(http.StatusOK, songs)
 }
 
 func rus_playlist_check(c echo.Context) error {
-	playlist := PlaylistCheck()
+	playlist := rusic.PlaylistCheck()
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_create_empty_playlist(c echo.Context) error {
 	plname := c.Param("plname")
-	playlist := CreateEmptyPlaylist(plname)
+	playlist := rusic.CreateEmptyPlaylist(plname)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_create_random_playlist(c echo.Context) error {
 	plname := c.Param("plname")
 	count := c.Param("count")
-	playlist := CreateRandomPlaylist(plname, count)
+	playlist := rusic.CreateRandomPlaylist(plname, count)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_all_playlists(c echo.Context) error {
-	playlists := AllPlaylists()
+	playlists := rusic.AllPlaylists()
 	return c.JSON(http.StatusOK, playlists)
 }
 
 func rus_edit_playlist(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	playlist := SongsForPlaylist(rusicid)
+	playlist := rusic.SongsForPlaylist(rusicid)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_add_song_to_playlist(c echo.Context) error {
 	rusicid := c.Param("playlistid")
 	songid := c.Param("songid")
-	playlist := AddSongToPlaylist(rusicid, songid)
+	playlist := rusic.AddSongToPlaylist(rusicid, songid)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_remove_song_from_playlist(c echo.Context) error {
 	rusicid := c.Param("playlistid")
 	songid := c.Param("songid")
-	playlist := RemoveSongFromPlaylist(rusicid, songid)
+	playlist := rusic.RemoveSongFromPlaylist(rusicid, songid)
 	return c.JSON(http.StatusOK, playlist)
 }
 
 func rus_delete_playlist(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	playlists := DeletePlaylist(rusicid)
+	playlists := rusic.DeletePlaylist(rusicid)
 	return c.JSON(http.StatusOK, playlists)
 }
 
 func rus_cover_art_from_playpath(c echo.Context) error {
 	playpath := c.Param("playpath")
-	coverart := CoverArtFromPlayPath(playpath)
+	coverart := rusic.CoverArtFromPlayPath(playpath)
 	return c.JSON(http.StatusOK, coverart)
 }
 
 func rus_PlayMusic(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	song := SongForId(rusicid)
+	song := rusic.SongForId(rusicid)
 	return c.Render(http.StatusOK, "rus_playmusic", song)
 }
 
@@ -253,6 +211,6 @@ func rus_PlayMusic(c echo.Context) error {
 
 func rus_PlayPlayList(c echo.Context) error {
 	rusicid := c.Param("rusicid")
-	plsongs := PlayPlaylist(rusicid)
+	plsongs := rusic.PlayPlaylist(rusicid)
 	return c.JSON(http.StatusOK, plsongs)
 }
