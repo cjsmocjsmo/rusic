@@ -1,30 +1,30 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
 	"net/http"
-	"os"
+	// "os"
 )
 
-func checkDBExists() {
-	mtvDBPath := os.Getenv("RUS_DB_PATH")
-	if _, err := os.Stat(mtvDBPath); os.IsNotExist(err) {
-		fmt.Println("Database file does not exist\n Please run rusicsetup.")
-		os.Exit(1)
-	} else if err != nil {
-		fmt.Println("Error checking for database file: ", err)
-		os.Exit(1)
-	}
-	fmt.Println("Database file exists.")
-}
+// func checkDBExists() {
+// 	mtvDBPath := os.Getenv("RUS_DB_PATH")
+// 	if _, err := os.Stat(mtvDBPath); os.IsNotExist(err) {
+// 		fmt.Println("Database file does not exist\n Please run rusicsetup.")
+// 		os.Exit(1)
+// 	} else if err != nil {
+// 		fmt.Println("Error checking for database file: ", err)
+// 		os.Exit(1)
+// 	}
+// 	fmt.Println("Database file exists.")
+// }
 
 func init() {
 	godotenv.Load("rus.env")
-	checkDBExists()
+	// checkDBExists()
 }
 
 func main() {
