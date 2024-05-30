@@ -1,13 +1,13 @@
 package main
 
 import (
-	// "fmt"
-	"github.com/joho/godotenv"
+	"fmt"
+	// "github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
 	"net/http"
-	// "os"
+	"os"
 )
 
 // func checkDBExists() {
@@ -22,8 +22,52 @@ import (
 // 	fmt.Println("Database file exists.")
 // }
 
+func SetEnvVars() {
+	err := os.Setenv("RUS_DB_PATH", "/usr/share/rusicsetup/rusicsetup/db/rusic.db")
+	if err != nil {
+		fmt.Println("Error setting environment variable:", err)
+		return
+	}
+
+	err2 := os.Setenv("RUS_CHECK_FILE_PATH", "/usr/share/rusicsetup/rusicsetup/db/db_check_file.txt")
+	if err2 != nil {
+		fmt.Println("Error setting environment variable:", err2)
+		return
+	}
+
+	err3 := os.Setenv("RUS_THUMBS", "/usr/share/rusicsetup/rusicsetup/thumbnails")
+	if err3 != nil {
+		fmt.Println("Error setting environment variable:", err3)
+		return
+	}
+
+	err4 := os.Setenv("RUS_NFOS", "/usr/share/rusicsetup/rusicsetup/nfo")
+	if err4 != nil {
+		fmt.Println("Error setting environment variable:", err4)
+		return
+	}
+
+	err5 := os.Setenv("RUS_RAW_HTTP", "192.168.0.91")
+	if err5 != nil {
+		fmt.Println("Error setting environment variable:", err5)
+		return
+	}
+
+	err6 := os.Setenv("RUS_HTTP_ADDR", "http://192.168.0.91")
+	if err6 != nil {
+		fmt.Println("Error setting environment variable:", err6)
+		return
+	}
+
+	err7 := os.Setenv("RUS_PORT", ":8080")
+	if err7 != nil {
+		fmt.Println("Error setting environment variable:", err7)
+		return
+	}
+}	
+
 func init() {
-	godotenv.Load("rus.env")
+	SetEnvVars()
 	// checkDBExists()
 }
 
