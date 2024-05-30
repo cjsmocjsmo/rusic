@@ -2,9 +2,7 @@ module github.com/cjsmocjsmo/rusic
 
 go 1.19
 
-require (
-	github.com/labstack/echo/v4 v4.12.0 // direct
-)
+require github.com/labstack/echo/v4 v4.12.0 // direct
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
@@ -20,3 +18,5 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
+
+require github.com/joho/godotenv v1.5.1 // indirect

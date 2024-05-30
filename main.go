@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
@@ -67,7 +67,11 @@ func SetEnvVars() {
 }	
 
 func init() {
-	SetEnvVars()
+	// SetEnvVars()
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
 	// checkDBExists()
 }
 
