@@ -8,7 +8,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"net/http"
 	"github.com/cjsmocjsmo/rusic/rusic"
-	// "os"
+	"log"
+	"os"
 )
 
 // func checkDBExists() {
@@ -26,15 +27,22 @@ import (
 	
 
 func init() {
-	err := godotenv.Load("rus.env")
-	if err != nil {
-		fmt.Println("Error loading .env file")
-	}
-	// checkDBExists()
+    logFile, err := os.OpenFile("/usr/share/rusic/rusic/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+    if err != nil {
+        fmt.Println("Error opening log file: ", err)
+    }
+    log.SetOutput(logFile)
+
+    log.Println("Initializing...")
+    err = godotenv.Load("rus.env")
+    if err != nil {
+        log.Println("Error loading .env file: ", err)
+    }
+    log.Println("Initialization complete.")
 }
 
 func main() {
-
+	log.Println("Starting main...")
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.Use(middleware.Gzip())
@@ -71,16 +79,19 @@ func main() {
 
 func rus_index(c echo.Context) error {
 	randart := rusic.RandomArt()
+	log.Println("Random Art: ", randart)
 	return c.JSON(http.StatusOK, randart)
 }
 
 func rus_index2(c echo.Context) error {
 	randart := rusic.RandomArt()
+	log.Println("Random Art: ", randart)
 	return c.JSON(http.StatusOK, randart)
 }
 
 func rus_main(c echo.Context) error {
 	randart := rusic.RandomArt()
+	log.Println("Random Art: ", randart)
 	return c.JSON(http.StatusOK, randart)
 }
 
