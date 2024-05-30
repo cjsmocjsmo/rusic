@@ -3,7 +3,7 @@ FROM debian:bookworm
 RUN \
     apt-get update && \
     apt-get dist-upgrade && \
-    apt-get -y install golang nano git && \
+    apt-get -y install golang nano git sqlite3 && \
     apt-get -y autoremove && \
     apt-get -y autoclean
 
