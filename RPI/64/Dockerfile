@@ -30,6 +30,7 @@ COPY playing.jpg /usr/share/rusic/rusic/thumbnails/playing.jpg
 COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
+COPY rus.env /usr/share/rusic/rusic/rus.env
 COPY rusic/rusic.go /usr/share/rusic/rusic/rusic/rusic.go
 
 WORKDIR  /usr/share/rusic/rusic
