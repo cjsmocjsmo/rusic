@@ -68,7 +68,7 @@ func SetEnvVars() {
 
 func init() {
 	// SetEnvVars()
-	err := godotenv.Load()
+	err := godotenv.Load("rus.env")
 	if err != nil {
 		fmt.Println("Error loading .env file")
 	}

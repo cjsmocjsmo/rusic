@@ -96,6 +96,8 @@ func RandomArt() []RandomArtStruct {
 		log.Println("Error marshaling data to JSON: %w", err)
 	}
 
+	log.Println(thumbPaths)
+
 	return thumbPaths
 }
 
