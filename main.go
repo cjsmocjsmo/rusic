@@ -66,7 +66,7 @@ func main() {
 	e.GET("/playplaylist/:rusicid", rus_PlayPlayList)
 	e.Static("/thumbnails", "thumbnails")
 	e.Static("/Music", "Music")
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start("0.0.0.0:8080"))
 }
 
 func rus_index(c echo.Context) error {
