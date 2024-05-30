@@ -14,7 +14,7 @@ RUN \
     chmod -R 755 /usr/share/rusic/rusic/Music && \
     mkdir /usr/share/rusic/rusic/nfo && \
     chmod -R 755 /usr/share/rusic/rusic/nfo && \
-    touch /usrshare/rusic/rusic/log.txt
+    touch /usr/share/rusic/rusic/log.txt
 
 COPY playing.jpg /usr/share/rusic/rusic/thumbnails/playing.jpg
 COPY go.mod /usr/share/rusic/rusic/go.mod
