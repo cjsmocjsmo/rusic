@@ -3,7 +3,7 @@ FROM arm32v7/debian:bookworm
 RUN \
     apt-get update && \
     apt-get dist-upgrade && \
-    apt-get -y install golang nano && \
+    apt-get -y install golang nano git && \
     apt-get -y autoremove && \
     apt-get -y autoclean
 
@@ -30,7 +30,7 @@ COPY main.go /usr/share/rusic/rusic/main.go
 COPY rusic.go /usr/share/rusic/rusic/rusic.go
 
 WORKDIR  /usr/share/rusic/rusic
-ENV GOPROXY=direct
+
 # RUN go mod download
 
 RUN go build -o main .
