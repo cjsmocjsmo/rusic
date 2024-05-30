@@ -28,7 +28,6 @@ COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
 COPY rusic.go /usr/share/rusic/rusic/rusic.go
-COPY rus.env /usr/share/rusic/rusic/rus.env
 
 WORKDIR  /usr/share/rusic/rusic
 
