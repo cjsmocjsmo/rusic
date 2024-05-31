@@ -32,16 +32,17 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
     exit 1
 fi
 
-container = "rusic:" + "$2"
-echo "container"=$container
-
-RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
-if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
-    echo "A container with the image $container\n is already running STOPPING IT NOW"
-    # stop the container with the image name $container
-    docker stop $(docker ps -q --filter ancestor=$container)
-else
-    echo "No container with the image $container is running"
+container="rusic:" + "$2"
+echo container=$container
+if [ $container != ""]; then
+    RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
+    if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
+        echo "A container with the image $container\n is already running STOPPING IT NOW"
+        # stop the container with the image name $container
+        docker stop $(docker ps -q --filter ancestor=$container)
+    else
+        echo "No container with the image $container is running"
+    fi
 fi
 
 if [ "$1" = "32" ]; then
