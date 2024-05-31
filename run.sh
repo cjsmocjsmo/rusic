@@ -44,10 +44,10 @@ if [ "$1" = "32" ]; then
     docker build -t rusic:$2 .
     # Run the Docker container
     docker run \
-    -e RUS_DB_PATH=/usr/share/rusicsetup/rusicsetup/db/rusic.db \
-    -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusicsetup/rusicsetup/db/db_check_file.txt \
-    -e RUS_THUMBS=/usr/share/rusicsetup/rusicsetup/thumbnails \
-    -e RUS_NFOS=/usr/share/rusicsetup/rusicsetup/nfo \
+    -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
+    -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
+    -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
+    -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
     -e RUS_RAW_HTTP=192.168.0.91 \
     -e RUS_HTTP_ADDR=http://192.168.0.91 \
     -e RUS_PORT=:8080 \
@@ -71,10 +71,10 @@ else
     docker build -t rusic:$2 .
     # Run the Docker container
     docker run \
-    -e RUS_DB_PATH=/usr/share/rusicsetup/rusicsetup/db/rusic.db \
-    -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusicsetup/rusicsetup/db/db_check_file.txt \
-    -e RUS_THUMBS=/usr/share/rusicsetup/rusicsetup/thumbnails \
-    -e RUS_NFOS=/usr/share/rusicsetup/rusicsetup/nfo \
+    -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
+    -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
+    -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
+    -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
     -e RUS_RAW_HTTP=192.168.0.91 \
     -e RUS_HTTP_ADDR=http://192.168.0.91 \
     -e RUS_PORT=:8080 \
