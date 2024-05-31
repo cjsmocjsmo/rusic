@@ -32,7 +32,7 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
     exit 1
 fi
 
-container = rusic:"$2"
+container = "rusic:" + "$2"
 echo "container"=$container
 
 RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
