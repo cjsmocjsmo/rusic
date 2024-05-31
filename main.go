@@ -78,9 +78,10 @@ func main() {
 }
 
 func rus_index(c echo.Context) error {
-	randart := rusic.RandomArt()
-	log.Println("Random Art: ", randart)
-	return c.JSON(http.StatusOK, randart)
+    log.Println("Entering rus_index...")
+    message := map[string]string{"message": "Hello from rusic"}
+    log.Println("Message: ", message)
+    return c.JSON(http.StatusOK, message)
 }
 
 func rus_index2(c echo.Context) error {
