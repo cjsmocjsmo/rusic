@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/cjsmo/cjsmo/rusic/rusic"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
@@ -37,11 +37,11 @@ func init() {
 
     log.Println("Initializing...")
 
-    err = godotenv.Load()
-    if err != nil {
-        log.Println("Error loading .env file: ", err)
-    }
-    log.Println("Initialization complete.")
+    // err = godotenv.Load()
+    // if err != nil {
+    //     log.Println("Error loading .env file: ", err)
+    // }
+    // log.Println("Initialization complete.")
 }
 
 func main() {
