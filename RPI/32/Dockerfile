@@ -3,7 +3,7 @@ FROM arm32v7/debian:bookworm
 RUN \
     apt-get update && \
     apt-get dist-upgrade && \
-    apt-get -y install golang nano git && \
+    apt-get -y install golang nano git sqlite3 && \
     apt-get -y autoremove && \
     apt-get -y autoclean
 
@@ -23,19 +23,19 @@ RUN \
     chmod -R 755 /usr/share/rusic/rusic/Music && \
     mkdir /usr/share/rusic/rusic/nfo && \
     chmod -R 755 /usr/share/rusic/rusic/nfo && \
-    touch /usr/share/rusic/rusic/log.txt
+    touch /usr/share/rusic/rusic/log.txt && \
+    chmod -R 755 /usr/share/rusic/rusic/log.txt
 
 COPY playing.jpg /usr/share/rusic/rusic/thumbnails/playing.jpg
+COPY rus.env /usr/share/rusic/rusic/rus.env
 COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
-COPY rus.env /usr/share/rusic/rusic/rus.env
 COPY rusic/rusic.go /usr/share/rusic/rusic/rusic/rusic.go
-    
 
 WORKDIR  /usr/share/rusic/rusic
 
-# RUN go mod download
+RUN go mod download
 
 RUN go build -o main .
 

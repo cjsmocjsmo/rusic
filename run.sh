@@ -45,7 +45,7 @@ if [ "$1" = "32" ]; then
     # Run the Docker container
     docker run \
     -d \
-    -p 8080:80 \
+    -p 8080:8080 \
     -v /usr/share/rusicsetup/rusicsetup/db:/usr/share/rusic/rusic/db \
     -v /usr/share/rusicsetup/rusicsetup/thumbnails:/usr/share/rusic/rusic/thumbnails \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
@@ -65,7 +65,7 @@ else
     # Run the Docker container
     docker run \
     -d \
-    -p 8080:80 \
+    -p 8080:8080 \
     -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
     -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
