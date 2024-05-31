@@ -33,7 +33,7 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
 fi
 
 container = rusic:"$2"
-echo $container
+echo "container"=$container
 
 RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
 if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
