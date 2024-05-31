@@ -33,6 +33,8 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
 fi
 
 container = rusic:"$2"
+echo $container
+
 RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
 if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
     echo "A container with the image $container\n is already running STOPPING IT NOW"
