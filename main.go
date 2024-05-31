@@ -36,7 +36,8 @@ func init() {
     log.SetOutput(logFile)
 
     log.Println("Initializing...")
-    err = godotenv.Load("rus.env")
+
+    err = godotenv.Load()
     if err != nil {
         log.Println("Error loading .env file: ", err)
     }

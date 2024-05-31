@@ -7,7 +7,7 @@ RUN \
     apt-get -y autoremove && \
     apt-get -y autoclean
 
-RUN \
+    RUN \
     mkdir /usr/share/rusic && \
     chmod -R 755 /usr/share/rusic && \
     mkdir /usr/share/rusic/rusic && \
@@ -27,7 +27,7 @@ RUN \
     chmod -R 755 /usr/share/rusic/rusic/log.txt
 
 COPY playing.jpg /usr/share/rusic/rusic/thumbnails/playing.jpg
-COPY rus.env /usr/share/rusic/rusic/rus.env
+COPY .env /usr/share/rusic/rusic/.env
 COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
