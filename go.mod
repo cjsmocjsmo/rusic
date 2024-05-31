@@ -1,4 +1,4 @@
-module github.com/cjsmocjsmo/rusic
+module github.com/cjsmo/cjsmo/rusic
 
 go 1.19
 
