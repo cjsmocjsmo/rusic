@@ -38,7 +38,8 @@ if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
     echo "A container with the image $container\n is already running STOPPING IT NOW"
     # stop the container with the image name $container
     docker stop $(docker ps -q --filter ancestor=$container)
-
+else
+    echo "No container with the image $container is running"
 fi
 
 if [ "$1" = "32" ]; then
