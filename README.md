@@ -21,13 +21,18 @@ Install sequence:
 1. Create the directory /usr/share/rusic
 2. Adjust permissions as needed to do the next step
 3. Git clone this repository to /usr/share/rusic/
-4. Edit rus.env as needed for your setup (pagination, address, port, etc...)
+4. Edit run.sh as needed for your setup (pagination, address, port, etc...)
 5. Execute run.sh
 
 ```bash
 mkdir /usr/share/rusic
+
 git clone https://github.com/cjsmocjsmo/rusic.git
-cs /usr/share/rusic/rusic
+
+cd /usr/share/rusic/rusic
+
+nano /usr/share/rusic/rusic/run.sh
+
 
 #rpi3
 sh run.sh 32 0.0.1

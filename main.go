@@ -2,46 +2,23 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/cjsmo/cjsmo/rusic/rusic"
-	// "github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
-
 	"log"
+	"net/http"
 	"os"
 )
 
-// func checkDBExists() {
-// 	mtvDBPath := os.Getenv("RUS_DB_PATH")
-// 	if _, err := os.Stat(mtvDBPath); os.IsNotExist(err) {
-// 		fmt.Println("Database file does not exist\n Please run rusicsetup.")
-// 		os.Exit(1)
-// 	} else if err != nil {
-// 		fmt.Println("Error checking for database file: ", err)
-// 		os.Exit(1)
-// 	}
-// 	fmt.Println("Database file exists.")
-// }
-
-	
-
 func init() {
-    logFile, err := os.OpenFile("/usr/share/rusic/rusic/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-    if err != nil {
-        fmt.Println("Error opening log file: ", err)
-    }
-    log.SetOutput(logFile)
+	logFile, err := os.OpenFile("/usr/share/rusic/rusic/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error opening log file: ", err)
+	}
+	log.SetOutput(logFile)
 
-    log.Println("Initializing...")
-
-    // err = godotenv.Load()
-    // if err != nil {
-    //     log.Println("Error loading .env file: ", err)
-    // }
-    // log.Println("Initialization complete.")
+	log.Println("Initializing...")
 }
 
 func main() {
@@ -81,10 +58,10 @@ func main() {
 }
 
 func rus_index(c echo.Context) error {
-    log.Println("Entering rus_index...")
-    message := map[string]string{"message": "Hello from rusic"}
-    log.Println("Message: ", message)
-    return c.JSON(http.StatusOK, message)
+	log.Println("Entering rus_index...")
+	message := map[string]string{"message": "Hello from rusic"}
+	log.Println("Message: ", message)
+	return c.JSON(http.StatusOK, message)
 }
 
 func rus_index2(c echo.Context) error {
