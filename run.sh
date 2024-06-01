@@ -75,7 +75,7 @@ if [ "$1" = "32" ]; then
     -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
     -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
     -e RUS_RAW_HTTP=192.168.0.91 \
-    -e RUS_HTTP_ADDR=http://192.168.0.91 \
+    -e RUS_HTTP_ADDR=http://192.168.0.74 \
     -e RUS_PORT=:8080 \
     -d \
     -p 8080:8080 \
@@ -103,7 +103,7 @@ if [ "$1" = "64" ]; then
     -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
     -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
     -e RUS_RAW_HTTP=192.168.0.91 \
-    -e RUS_HTTP_ADDR=http://192.168.0.91 \
+    -e RUS_HTTP_ADDR=http://192.168.0.74 \
     -e RUS_PORT=:8080 \
     -d \
     -p 8080:8080 \
