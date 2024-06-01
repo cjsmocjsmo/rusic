@@ -62,42 +62,18 @@ fi
 
 # If the first argument is 32, execute the following commands
 if [ "$1" = "32" ]; then
-
-    # Copy the Dockerfile for the 32-bit architecture to the current directory
     cp -pvr RPI/32/Dockerfile .
-    # Build the Docker image
-    docker build -t rusic:$2 .
-
-    # Run the Docker container
-    docker run \
-    -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
-    -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
-    -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
-    -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
-    -e RUS_RAW_HTTP=192.168.0.91 \
-    -e RUS_HTTP_ADDR=http://192.168.0.74 \
-    -e RUS_PORT=:8080 \
-    -d \
-    -p 8080:8080 \
-    -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
-    -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
-    -v $HOME/Music:/usr/share/rusic/rusic/Music \
-    rusic:$2 
-
-    # Remove the Dockerfile
-    rm Dockerfile
 fi
 
 if [ "$1" = "64" ]; then
-
-    # Copy the Dockerfile for the 64-bit architecture to the current directory
     cp -pvr RPI/64/Dockerfile .
+fi
 
-    # Build the Docker image
-    docker build -t rusic:$2 .
+# Build the Docker image
+docker build -t rusic:$2 .
 
-    # Run the Docker container
-    docker run \
+# Run the Docker container
+docker run \
     -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
     -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
     -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
@@ -110,8 +86,7 @@ if [ "$1" = "64" ]; then
     -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
     -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
-    rusic:$2 
-    
-    # Remove the Dockerfile
-    rm Dockerfile
-fi
+    rusic:"$2" 
+
+# Remove the Dockerfile
+rm Dockerfile
