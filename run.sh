@@ -62,14 +62,12 @@ fi
 
 # If the first argument is 32, execute the following commands
 if [ "$1" = "32" ]; then
-    if [ "$(uname -m)" = "aarch64" ]; then
-        echo "This is a 64-bit ARM system."
-        exit 1
-    fi
+
     # Copy the Dockerfile for the 32-bit architecture to the current directory
     cp -pvr RPI/32/Dockerfile .
     # Build the Docker image
     docker build -t rusic:$2 .
+
     # Run the Docker container
     docker run \
     -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
@@ -85,18 +83,19 @@ if [ "$1" = "32" ]; then
     -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
     rusic:$2 
+
     # Remove the Dockerfile
     rm Dockerfile
-    
-else
-    if [ "$(uname -m)" = "armv7l" ]; then
-        echo "This is a 32-bit ARM system."
-        exit 1
-    fi
+fi
+
+if [ "$1" = "64" ]; then
+
     # Copy the Dockerfile for the 64-bit architecture to the current directory
     cp -pvr RPI/64/Dockerfile .
+
     # Build the Docker image
     docker build -t rusic:$2 .
+
     # Run the Docker container
     docker run \
     -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
@@ -112,6 +111,7 @@ else
     -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
     -v $HOME/Music:/usr/share/rusic/rusic/Music \
     rusic:$2 
+    
     # Remove the Dockerfile
     rm Dockerfile
 fi
