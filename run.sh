@@ -32,20 +32,6 @@ if [ ! -d /usr/share/rusicsetup/rusicsetup ]; then
     exit 1
 fi
 
-# Stop the running rusic container if it exists
-container=rusic:"$2"
-echo container=$container
-if [ "$container" != "" ]; then
-    RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
-    if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
-        echo "A container with the name $container\n is already running STOPPING IT NOW"
-        # stop the container with the image name $container
-        docker stop $(docker ps -q --filter ancestor=$container)
-    else
-        echo "No container with the image $container is running"
-    fi
-fi
-
 if [ "$1" = "32" ]; then
     if [ "$(uname -m)" = "aarch64" ]; then
         echo "ERROR: This is a 64-bit ARM system."
@@ -57,6 +43,20 @@ if [ "$1" = "64" ]; then
     if [ "$(uname -m)" = "armv7l" ]; then
         echo "ERROR: This is a 32-bit ARM system."
         exit 1
+    fi
+fi
+
+# Stop the running rusic container if it exists
+container=rusic:"$2"
+echo container=$container
+if [ "$container" != "" ]; then
+    RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
+    if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
+        echo "A container with the name $container\n is already running STOPPING IT NOW"
+        # stop the container with the image name $container
+        docker stop $(docker ps -q --filter ancestor=$container)
+    else
+        echo "No container with the name $container is running"
     fi
 fi
 
