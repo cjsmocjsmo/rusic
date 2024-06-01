@@ -14,7 +14,8 @@ Install sequence:
 ## Prerequisites
 
 1. raspberrypiOS (bookworm)
-2. docker
+2. rusicsetup installed and executed
+3. docker
 
 ## Usage
 
@@ -32,7 +33,6 @@ git clone https://github.com/cjsmocjsmo/rusic.git
 cd /usr/share/rusic/rusic
 
 nano /usr/share/rusic/rusic/run.sh
-
 
 #rpi3
 sh run.sh 32 0.0.1
@@ -56,6 +56,6 @@ sh RUN.sh 64 0.0.2
 
 ## Warning
 
-Rusic was designed to run on your home network and not on the wider internet.  It has no authentication system so you have been warned!!!
+Rusic was designed to run on your home network and not on the wider internet.  It has no authentication system or TLS support, so you have been warned!!!
 
 Rusic is very much a work in progress so there may be some breaking changes in the future.
