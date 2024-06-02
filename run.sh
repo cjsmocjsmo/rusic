@@ -46,19 +46,7 @@ if [ "$1" = "64" ]; then
     fi
 fi
 
-# Stop the running rusic container if it exists
-container=rusic:"$2"
-echo container=$container
-if [ "$container" != "" ]; then
-    RUNNING_CONTAINERS=$(docker ps -af status=running --format 'image={{.Image}}')
-    if echo "$RUNNING_CONTAINERS" | grep -q "$container"; then
-        echo "A container with the name $container\n is already running STOPPING IT NOW"
-        # stop the container with the image name $container
-        docker stop $(docker ps -q --filter ancestor=$container)
-    else
-        echo "No container with the name $container is running"
-    fi
-fi
+git pull https://github.com/cjsmocjsmo/rusic.git
 
 # If the first argument is 32, execute the following commands
 if [ "$1" = "32" ]; then
@@ -69,24 +57,92 @@ if [ "$1" = "64" ]; then
     cp -pvr RPI/64/Dockerfile .
 fi
 
-# Build the Docker image
-docker build -t rusic:$2 .
+count1=$(echo "$2" | sed 's/\.//g' )
+count=$((count1+1-1))
+minusone=$((count-1))
 
-# Run the Docker container
-docker run \
-    -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
-    -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
-    -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
-    -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
-    -e RUS_RAW_HTTP=192.168.0.91 \
-    -e RUS_HTTP_ADDR=http://192.168.0.74 \
-    -e RUS_PORT=:8080 \
-    -d \
-    -p 8080:8080 \
-    -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
-    -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
-    -v $HOME/Music:/usr/share/rusic/rusic/Music \
-    rusic:"$2" 
+echo "Version: $2";
+echo "rusic:$2";
+echo "rusic$count";
+echo "rusic$minusone";
 
-# Remove the Dockerfile
-rm Dockerfile
+if [ "$minusone" -eq 0 ]; then
+    docker build -t rusic:$2 .
+
+    # Run the Docker container
+    docker run \
+        --name rusic1
+        -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
+        -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
+        -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
+        -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
+        -e RUS_RAW_HTTP=192.168.0.91 \
+        -e RUS_HTTP_ADDR=http://192.168.0.74 \
+        -e RUS_PORT=:8080 \
+        -d \
+        -p 8080:8080 \
+        -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
+        -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
+        -v $HOME/Music:/usr/share/rusic/rusic/Music \
+        rusic:"$2" 
+
+    # Remove the Dockerfile
+    rm Dockerfile
+fi
+
+if [ "$minusone" -eq 1 ]; then
+    docker stop rusic1;
+
+    docker rm rusic1;
+
+    docker build -t rusic:$2 .
+
+    # Run the Docker container
+    docker run \
+        --name rusic$count
+        -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
+        -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
+        -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
+        -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
+        -e RUS_RAW_HTTP=192.168.0.91 \
+        -e RUS_HTTP_ADDR=http://192.168.0.74 \
+        -e RUS_PORT=:8080 \
+        -d \
+        -p 8080:8080 \
+        -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
+        -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
+        -v $HOME/Music:/usr/share/rusic/rusic/Music \
+        rusic:"$2" 
+
+    # Remove the Dockerfile
+    rm Dockerfile
+fi 
+
+
+if [ "$minusone" -gt 1 ]; then
+    docker stop rusic$count;
+
+    docker rm rusic$count;
+
+    docker build -t rusic:$2 .
+
+    # Run the Docker container
+    docker run \
+        --name rusic$count
+        -e RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db \
+        -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
+        -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
+        -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
+        -e RUS_RAW_HTTP=192.168.0.91 \
+        -e RUS_HTTP_ADDR=http://192.168.0.74 \
+        -e RUS_PORT=:8080 \
+        -d \
+        -p 8080:8080 \
+        -v /usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/ \
+        -v /usr/share/rusicsetup/rusicsetup/thumbnails/:/usr/share/rusic/rusic/thumbnails/ \
+        -v $HOME/Music:/usr/share/rusic/rusic/Music \
+        rusic:"$2" 
+
+    # Remove the Dockerfile
+    rm Dockerfile
+fi 
