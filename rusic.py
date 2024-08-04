@@ -31,16 +31,39 @@ def rusic_install(version, docker_file, arch):
 
     if os.path.exists(docker_file):
         print(f"Installing Rusic{arch}:{version}")
-        subprocess.run(["docker", "build", "-t", f"rusic{arch}:{version}", "-f", docker_file, "."])
+        subprocess.run(["docker", "build", "-t", f"rusic{arch}:{version}", "."])
         dcommand = docker_command(arch, version)
         subprocess.run(dcommand)
-        subprocess.run(["rm", "-f", docker_file])
+        subprocess.run(["rm", "-f", f"{CWD}/Dockerfile"])
 
 def rusic_update(version, docker_file, arch):
-    print(f"Updating Rusic:{version}")
+    print(f"Updating Rusic{arch}:{version}")
+    subprocess.run(["rm", "-f", f"{CWD}/Dockerfile"])
+    subprocess.run(["docker", "stop", f"rusic{arch}"])
+    print("Docker container stopped.")
+    subprocess.run(["docker", "rm", f"rusic{arch}"])
+    print("Docker container removed.")
+    subprocess.run(["git", "pull"])
+    print("Git repository updated.")
+    subprocess.run(["cp", "-pvr", docker_file, CWD])
+    print("New Dockerfile copied.")
+    subprocess.run(["docker", "build", "-t", f"rusic{arch}:{version}", "."])
+    print("Docker image built.")
+    dcommand = docker_command(arch, version)
+    subprocess.run(dcommand)
+    print("Docker container started.")
+    subprocess.run(["rm", "-f", f"{CWD}/Dockerfile"])
 
-def rusic_delete(version, docker_file, arch):
-    print(f"Deleting Rusic:{version}")
+def rusic_delete(version, arch):
+    print(f"Deleting Rusic{arch}:{version}")
+    subprocess.run(["docker", "stop", f"rusic{arch}"])
+    print("Docker container stopped.")
+    subprocess.run(["docker", "rm", f"rusic{arch}"])
+    print("Docker container removed.")
+    subprocess.run(["docker", "rmi", f"rusic{arch}:{version}"])
+    print("Docker image removed.")
+    print("The Rusic folder can now be removed")
+
 
 def main():
     parser = argparse.ArgumentParser(description="CLI program for managing software.")
@@ -54,6 +77,8 @@ def main():
     
     docker_32_file = os.path.join(CWD, "RPI", "32", "Dockerfile")
     docker_64_file = os.path.join(CWD, "RPI", "64", "Dockerfile")
+    print(docker_32_file)
+    print(docker_64_file)
 
     # count1 = args.version.replace(".", "")
     # count = int(count1) + 1 - 1
@@ -70,7 +95,7 @@ def main():
             rusic_update(args.version, docker_32_file, arch)
         elif args.delete:
             print(f"Deleting Rusic:{args.version}")
-            rusic_delete(args.version, docker_32_file, arch)
+            rusic_delete(args.version, arch)
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
