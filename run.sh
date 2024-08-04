@@ -76,7 +76,7 @@ if [ "$minusone" -eq 0 ]; then
         -e RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt \
         -e RUS_THUMBS=/usr/share/rusic/rusic/thumbnails \
         -e RUS_NFOS=/usr/share/rusic/rusic/nfo \
-        -e RUS_RAW_HTTP=192.168.0.91 \
+        -e RUS_RAW_HTTP=192.168.0.74 \
         -e RUS_HTTP_ADDR=http://192.168.0.74 \
         -e RUS_PORT=:8080 \
         -d \
