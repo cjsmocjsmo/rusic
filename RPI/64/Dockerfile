@@ -17,8 +17,8 @@ RUN \
     mkdir /usr/share/rusic/rusic/db && \
     chmod -R 755 /usr/share/rusic/rusic/db && \
     touch /usr/share/rusic/rusic/db/rusic.db && \
-    mkdir /usr/share/rusic/rusic/thumbnails && \
-    chmod -R 755 /usr/share/rusic/rusic/thumbnails && \
+    mkdir /usr/share/rusic/rusic/thumbs && \
+    chmod -R 755 /usr/share/rusic/rusic/thumbs && \
     mkdir /usr/share/rusic/rusic/Music && \
     chmod -R 755 /usr/share/rusic/rusic/Music && \
     mkdir /usr/share/rusic/rusic/nfo && \
@@ -26,7 +26,7 @@ RUN \
     touch /usr/share/rusic/rusic/log.txt && \
     chmod -R 755 /usr/share/rusic/rusic/log.txt
 
-COPY playing.jpg /usr/share/rusic/rusic/thumbnails/playing.jpg
+COPY playing.jpg /usr/share/rusic/rusic/thumbs/playing.jpg
 COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
