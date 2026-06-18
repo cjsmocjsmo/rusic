@@ -85,7 +85,7 @@ def main():
     # minusone = count - 1
 
     if os.uname().machine == "armv7l":
-        subprocess.run("./setup/rusicsetup_rpi3b+", shell=True)
+        subprocess.run("./setup/rusicsetup_rpi3b+-0.0.1", shell=True)
         subprocess.run(["cp", "-pvr", docker_32_file, CWD])
         arch = "32"
         if args.install:
@@ -100,7 +100,7 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
-        subprocess.run("./setup/rusicsetup_rpi4", shell=True)
+        subprocess.run("./setup/rusicsetup_rpi4-0.0.1", shell=True)
         subprocess.run(["cp", "-pvr", docker_64_file, CWD])
         arch = "64"
         if args.install:
