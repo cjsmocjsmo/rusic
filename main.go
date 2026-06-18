@@ -64,7 +64,7 @@ func main() {
 
 	h := withRecover(withCORS(withGzip(mux)))
 	port := os.Getenv("RUSIC_PORT")
-	addr := fmt.Sprintf("%s:%s", "0.0.0.0", port)
+	addr := fmt.Sprintf("%s%s", "0.0.0.0", port)
 	log.Fatal(http.ListenAndServe(addr, h))
 }
 
