@@ -89,11 +89,6 @@ def main():
         arch = "32"
         if args.install:
             print(f"Installing Rusic:{args.version}")
-
-
-            subprocess.run(["./setup/rusicsetup_rpi3b+"])
-
-
             rusic_install(args.version, docker_32_file, arch)
         elif args.update:
             print(f"Updating Rusic:{args.version}")
@@ -108,11 +103,6 @@ def main():
         arch = "64"
         if args.install:
             print(f"Installing Rusic:{args.version}")
-
-
-            subprocess.run(["./setup/rusicsetup_rpi4"])
-
-            
             rusic_install(args.version, docker_64_file, arch)
         elif args.update:
             print(f"Updating Rusic:{args.version}")
