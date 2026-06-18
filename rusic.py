@@ -85,7 +85,7 @@ def main():
     # minusone = count - 1
 
     if os.uname().machine == "armv7l":
-        subprocess.run("/usr/share/rusic/rusic/setup/rusicsetup_rpi3b-0.0.1", shell=True)
+        subprocess.run("/usr/share/rusic/rusic/setup/rusicsetup_rpi3b-.0.0.1", shell=True)
         subprocess.run(["cp", "-pvr", docker_32_file, CWD])
         arch = "32"
         if args.install:
