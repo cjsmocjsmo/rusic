@@ -63,13 +63,8 @@ func main() {
 	mux.Handle("/", r)
 
 	h := withRecover(withCORS(withGzip(mux)))
-	// hex := os.Getenv("RUSIC_RAW_HTTP")
 	port := os.Getenv("RUSIC_PORT")
 	addr := fmt.Sprintf("%s:%s", "0.0.0.0", port)
-	// addr := os.Getenv("RUSIC_ADDR")
-	// if addr == "" {
-	// 	addr = "0.0.0.0:8080"
-	// }
 	log.Fatal(http.ListenAndServe(addr, h))
 }
 
