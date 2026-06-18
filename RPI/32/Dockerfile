@@ -1,4 +1,4 @@
-FROM arm32v7/debian:bookworm
+FROM arm32v7/debian:trixie
 
 RUN \
     apt-get update && \
