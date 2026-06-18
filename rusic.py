@@ -29,11 +29,6 @@ def rusic_install(version, docker_file, arch):
     #     print("Rusic Setup not found. Please install it first.")
     #     exit(1)
 
-    if arch == "armv7l":
-        subprocess.run("./setup/rusicsetup_rpi3b+", shell=True)
-    elif arch == "aarch64":
-        subprocess.run("./setup/rusicsetup_rpi4", shell=True)
-
     if os.path.exists(docker_file):
         print(f"Installing Rusic{arch}:{version}")
         subprocess.run(["docker", "build", "-t", f"rusic{arch}:{version}", "."])
@@ -90,6 +85,7 @@ def main():
     # minusone = count - 1
 
     if os.uname().machine == "armv7l":
+        subprocess.run("./setup/rusicsetup_rpi3b+", shell=True)
         subprocess.run(["cp", "-pvr", docker_32_file, CWD])
         arch = "32"
         if args.install:
@@ -104,6 +100,7 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
+        subprocess.run("./setup/rusicsetup_rpi4", shell=True)
         subprocess.run(["cp", "-pvr", docker_64_file, CWD])
         arch = "64"
         if args.install:
