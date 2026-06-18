@@ -85,8 +85,8 @@ def main():
     # minusone = count - 1
 
     if os.uname().machine == "armv7l":
-        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-.0.0.2"):
-            subprocess.run(["/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-.0.0.2"])
+        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-0.0.3"):
+            subprocess.run(["/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-0.0.3"])
         else:
             print("Rusic Setup not found. Please install it first.")
             exit(1)
@@ -104,8 +104,8 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
-        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.0.2"):
-            subprocess.run(["/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.0.2"])
+        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.0.3"):
+            subprocess.run(["/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.0.3"])
         else:
             print("Rusic Setup not found. Please install it first.")
             exit(1)
