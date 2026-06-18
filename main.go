@@ -17,7 +17,8 @@ import (
 )
 
 func init() {
-	logFile, err := os.OpenFile("/usr/share/rusic/rusic/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	logPath := os.Getenv("RUSIC_LOG_PATH")
+	logFile, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println("Error opening log file: ", err)
 	} else {
@@ -62,10 +63,13 @@ func main() {
 	mux.Handle("/", r)
 
 	h := withRecover(withCORS(withGzip(mux)))
-	addr := os.Getenv("RUSIC_ADDR")
-	if addr == "" {
-		addr = "0.0.0.0:8080"
-	}
+	hex := os.Getenv("RUSIC_RAW_HTTP")
+	port := os.Getenv("RUSIC_PORT")
+	addr := fmt.Sprintf("%s:%s", hex, port)
+	// addr := os.Getenv("RUSIC_ADDR")
+	// if addr == "" {
+	// 	addr = "0.0.0.0:8080"
+	// }
 	log.Fatal(http.ListenAndServe(addr, h))
 }
 

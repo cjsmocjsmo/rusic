@@ -31,7 +31,8 @@ type SongStruct struct {
 
 func RandomArt() []RandomArtStruct {
 	// Open log file
-    logFile, err := os.OpenFile("/usr/share/rusic/rusic/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	logPath := os.Getenv("RUSIC_LOG_PATH")
+    logFile, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     if err != nil {
         log.Fatal(err)
     }
@@ -41,7 +42,7 @@ func RandomArt() []RandomArtStruct {
     log.SetOutput(logFile)
 
 	log.Println("RandomArt() called")
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		log.Println("Error opening database: ", err)
@@ -125,7 +126,7 @@ type MusicInfo struct {
 }
 
 func SongsForAlbum(albumId string) []MusicInfo {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -161,7 +162,7 @@ type SongCountStruct struct {
 }
 
 func ArtistStartsWith() []SongCountStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -186,7 +187,7 @@ func ArtistStartsWith() []SongCountStruct {
 }
 
 func AlbumStartsWith() []SongCountStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -210,7 +211,7 @@ func AlbumStartsWith() []SongCountStruct {
 }
 
 func SongForId(rusicId string) MusicInfo {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -255,7 +256,7 @@ type MusicImgInfo struct {
 }
 
 func GetCurrentPlayingImg(albid string) MusicImgInfo {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -288,7 +289,7 @@ type ArtistForAlphaStruct struct {
 }
 
 func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -327,7 +328,7 @@ type AlbumStruct struct {
 }
 
 func AlbumForAlpha(alpha string) []AlbumStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -377,7 +378,7 @@ type AlbumsForArtistAlbumStruct struct {
 }
 
 func AlbumsForArtist(artid string) []AlbumsForArtistAlbumStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -405,7 +406,7 @@ func AlbumsForArtist(artid string) []AlbumsForArtistAlbumStruct {
 }
 
 func AlbumsForArtistSongs(albid string) []MusicInfo {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -433,7 +434,7 @@ func AlbumsForArtistSongs(albid string) []MusicInfo {
 }
 
 func SongPages() []string {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -459,7 +460,7 @@ func SongPages() []string {
 }
 
 func SongsForPage(page string) []MusicInfo {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -487,7 +488,7 @@ func SongsForPage(page string) []MusicInfo {
 }
 
 func PlaylistCheck() bool {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -537,7 +538,7 @@ func CreateEmptyPlaylist(plname string) PlaylistStruct {
 		NumSongs: numsongs,
 	}
 
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -561,7 +562,7 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 		fmt.Println("Error converting count to integer: ", err)
 	}
 
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -633,7 +634,7 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 }
 
 func AllPlaylists() []PlaylistStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -670,7 +671,7 @@ type NewPlayListStruct struct {
 }
 
 func SongsForPlaylist(rusicid string) []NewPlayListStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -721,7 +722,7 @@ func SongsForPlaylist(rusicid string) []NewPlayListStruct {
 }
 
 func DeletePlaylist(rusicid string) []PlaylistStruct {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -774,7 +775,7 @@ func RemoveSongFromPlaylist(playlistid string, songid string) []NewPlayListStruc
 
 	songsString := string(songsJSON)
 
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -810,7 +811,7 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 
 	songsString := string(songsJSON)
 
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -834,7 +835,7 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 }
 
 func CoverArtFromPlayPath(playpath string) []string {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -864,7 +865,7 @@ func CoverArtFromPlayPath(playpath string) []string {
 }
 
 func PlayPlaylist(plid string) []string {
-	db_path := os.Getenv("RUS_DB_PATH")
+	db_path := os.Getenv("RUSIC_DB_PATH")
 	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
