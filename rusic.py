@@ -8,18 +8,18 @@ def docker_command(arch, version):
     docker_command = [
             "docker", "run",
             "--name", f"rusic{arch}",
-            "-e", "RUS_DB_PATH=/usr/share/rusic/rusic/db/rusic.db",
-            "-e", "RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/rusic/db/db_check_file.txt",
-            "-e", "RUS_THUMBS=/usr/share/rusicsetup/rusicsetup/thumbs",
-            "-e", "RUS_NFOS=/usr/share/rusic/rusic/nfo",
+            "-e", "RUS_DB_PATH=/usr/share/rusic/db/rusic.db",
+            "-e", "RUS_DB_CHECK_FILE_PATH=/usr/share/rusic/db/db_check_file.txt",
+            "-e", "RUS_THUMBS=/usr/share/rusic/thumbs",
+            "-e", "RUS_NFOS=/usr/share/rusic/nfo",
             "-e", "RUS_RAW_HTTP=10.0.4.76",
             "-e", "RUS_HTTP_ADDR=http://10.0.4.76",
             "-e", "RUS_PORT=:8080",
             "-d",
             "-p", "8080:8080",
-            "-v", "/usr/share/rusicsetup/rusicsetup/db/:/usr/share/rusic/rusic/db/",
-            "-v", "/usr/share/rusicsetup/rusicsetup/thumbs/:/usr/share/rusic/rusic/thumbs/",
-            "-v", f"{os.path.expanduser('~')}/Music:/usr/share/rusic/rusic/Music",
+            "-v", "/usr/share/rusic/db/:/usr/share/rusic/db/",
+            "-v", "/usr/share/rusic/thumbs/:/usr/share/rusic/thumbs/",
+            "-v", f"{os.path.expanduser('~')}/Music:/usr/share/rusic/Music",
             f"rusic{arch}:{version}"
         ]
     return docker_command
