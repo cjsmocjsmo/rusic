@@ -3,56 +3,55 @@
 ![Project Screenshot](screenshot.png "width=400px")
 
 rusic is part of the rusic trio (rusicsetup, rusic, rusic-svelte).
-Rusic has been designed to run on the raspberry pi 3 and above.
+Rusic has been designed to run on the raspberry pi 3b+, 4 and 5.
+This project will probably run on any debian based system.
 
 Install sequence:
 
-1. Run rusicsetup
-2. Run rusic
-3. Run rusic-svelte
+1. Run rusic
+2. Run rusic-svelte
 
 ## Prerequisites
 
-1. raspberrypiOS (bookworm)
-2. rusicsetup installed and executed
-3. docker
+1. raspberrypiOS (bookworm/trixie)
+2. docker installed and running
 
 ## Usage
 
-1. Create the directory /usr/share/rusic
+1. Create the directories:
+    /usr/share/rusic
+    /usr/share/rusic/db
+    /usr/share/rusic/thumbs
 2. Adjust permissions as needed to do the next step
 3. Git clone this repository to /usr/share/rusic/
-4. Edit run.sh as needed for your setup (pagination, address, port, etc...)
-5. Execute run.sh
+    ```bash
+    cd /usr/share/rusic
+    git clone https://github.com/cjsmocjsmo/rusic
+    ```
+   Your should have the folder layout such as:
+    /usr/share/rusic/rusic
+4. Execute rusic.py:
+    ```bash
+    python3 rusic.py -i 0.0.1
 
 ```bash
 mkdir /usr/share/rusic
+mkdir /usr/share/rusic/db
+mkdir /usr/share/rusic/thumbs
+
+cd /usr/share/rusic
 
 git clone https://github.com/cjsmocjsmo/rusic.git
 
 cd /usr/share/rusic/rusic
 
-nano /usr/share/rusic/rusic/run.sh
-
-#rpi3
-sh run.sh 32 0.0.1
-
-#rpi4 and above
-sh run.sh 64 0.0.1
+python3 rusic -i 0.0.1
 
 ```
 
 ## Updating
 
-To update simply re run RUN.sh with a new version
-
-```bash
-sh RUN.sh 32 0.0.2
-
-#or 
-
-sh RUN.sh 64 0.0.2
-```
+This is still a work in progress
 
 ## Warning
 
