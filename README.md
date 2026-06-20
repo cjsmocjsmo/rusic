@@ -49,6 +49,9 @@ python3 rusic -i 0.0.1
 
 ```
 
+The source code for the rust binaries in /rusic/setup can be found at:
+    https://github.com/cjsmocjsmo/rusicsetup
+
 ## Updating
 
 This is still a work in progress
