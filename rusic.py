@@ -1,4 +1,5 @@
 import argparse
+from glob import glob
 import os
 import subprocess
 
@@ -80,8 +81,8 @@ def main():
     print(docker_64_file)
 
     if os.uname().machine == "armv7l":
-        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-*"):
-            subprocess.run("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-*")
+        if glob.glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-*"):
+            subprocess.run(glob.glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-*")[0])
         else:
             print("Rusic Setup not found. Please install it first.")
             exit(1)
@@ -99,8 +100,8 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
-        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-*"):
-            subprocess.run("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-*")
+        if glob.glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-*"):
+            subprocess.run(glob.glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-*")[0])
         else:
             print("Rusic Setup not found. Please install it first.")
             exit(1)
