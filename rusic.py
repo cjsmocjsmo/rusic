@@ -74,19 +74,14 @@ def main():
 
     args = parser.parse_args()
 
-    
     docker_32_file = os.path.join(CWD, "RPI", "32", "Dockerfile")
     docker_64_file = os.path.join(CWD, "RPI", "64", "Dockerfile")
     print(docker_32_file)
     print(docker_64_file)
 
-    # count1 = args.version.replace(".", "")
-    # count = int(count1) + 1 - 1
-    # minusone = count - 1
-
     if os.uname().machine == "armv7l":
-        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-0.1.2"):
-            subprocess.run(["/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-0.1.2"])
+        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-*"):
+            subprocess.run("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-*")
         else:
             print("Rusic Setup not found. Please install it first.")
             exit(1)
@@ -104,8 +99,8 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
-        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.1.2"):
-            subprocess.run(["/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.1.2"])
+        if os.path.exists("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-*"):
+            subprocess.run("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-*")
         else:
             print("Rusic Setup not found. Please install it first.")
             exit(1)
