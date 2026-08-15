@@ -20,7 +20,7 @@ def docker_command(arch, version):
             "-p", "8080:8080",
             "-v", "/usr/share/rusic/db/:/usr/share/rusic/db/",
             "-v", "/usr/share/rusic/thumbs/:/usr/share/rusic/rusic/thumbs/",
-            "-v", f"{os.path.expanduser('~')}/NFSShare/MUSIC/Music:/usr/share/rusic/rusic/Music",
+            "-v", "/mnt/NFSMusic/MUSIC/Music:/usr/share/rusic/rusic/Music",
             f"rusic{arch}:{version}"
         ]
     return docker_command
