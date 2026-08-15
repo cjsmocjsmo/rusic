@@ -2,7 +2,7 @@ FROM debian:trixie
 
 RUN \
     apt-get update && \
-    apt-get dist-upgrade && \
+    apt-get -y dist-upgrade && \
     apt-get -y install golang git && \
     apt-get -y autoremove && \
     apt-get -y autoclean
