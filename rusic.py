@@ -81,7 +81,7 @@ def main():
     print(docker_64_file)
 
     if os.uname().machine == "armv7l":
-        rpi3 = glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-4dbrefactor")
+        rpi3 = glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-5dbrefactor")
         if os.path.exists(rpi3[0]):
             subprocess.run(rpi3[0])
         else:
@@ -101,7 +101,7 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
-        rpi4 = glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-4dbrefactor")
+        rpi4 = glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-5dbrefactor")
         if os.path.exists(rpi4[0]):
             subprocess.run(rpi4[0])
         else:
