@@ -45,12 +45,40 @@ JOIN albums al ON al.albumid = s.albumid
 JOIN artists ar ON ar.artistid = al.artistid
 `
 
+func nullStringValue(value sql.NullString) string {
+	if !value.Valid {
+		return ""
+	}
+	return value.String
+}
+
 func scanMusicInfo(rows *sql.Rows) (MusicInfo, error) {
 	var song MusicInfo
-	err := rows.Scan(&song.RusicId, &song.ImgUrl, &song.PlayPath, &song.Artist, &song.Artistid, &song.Album,
-		&song.Albumid, &song.Song, &song.Fullpath, &song.Extension, &song.Idx, &song.Page,
-		&song.FsizeResults, &song.Duration)
-	return song, err
+	var (
+		rusicID, imgURL, playPath, artist, artistID, album, albumID, songTitle, fullPath, extension, idx, page, fsizeResults, duration sql.NullString
+	)
+
+	err := rows.Scan(&rusicID, &imgURL, &playPath, &artist, &artistID, &album, &albumID, &songTitle, &fullPath, &extension, &idx, &page,
+		&fsizeResults, &duration)
+	if err != nil {
+		return song, err
+	}
+
+	song.RusicId = nullStringValue(rusicID)
+	song.ImgUrl = nullStringValue(imgURL)
+	song.PlayPath = nullStringValue(playPath)
+	song.Artist = nullStringValue(artist)
+	song.Artistid = nullStringValue(artistID)
+	song.Album = nullStringValue(album)
+	song.Albumid = nullStringValue(albumID)
+	song.Song = nullStringValue(songTitle)
+	song.Fullpath = nullStringValue(fullPath)
+	song.Extension = nullStringValue(extension)
+	song.Idx = nullStringValue(idx)
+	song.Page = nullStringValue(page)
+	song.FsizeResults = nullStringValue(fsizeResults)
+	song.Duration = nullStringValue(duration)
+	return song, nil
 }
 
 func RandomArt() []RandomArtStruct {

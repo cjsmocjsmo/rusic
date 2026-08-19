@@ -1,0 +1,48 @@
+Remaining Recommendation: Backend fix for playlist playback bug
+
+Symptom (frontend):
+- Playing a playlist attempts to load audio from
+  http://10.0.4.76:9090/[object%20Object]
+  and playback quits immediately.
+- Single-song playback (song/album pages) works fine.
+
+Root cause:
+- The `/playplaylist/{id}` endpoint returns track objects where fields such as
+  PlayPath (and possibly Artist, Song, ImgUrl) are serialized as JSON objects
+  like {"String": "...", "Valid": true} instead of plain strings.
+- This is the classic symptom of a Go `sql.NullString` (or similar nullable
+  wrapper type) being marshaled to JSON without a custom MarshalJSON/handling,
+  so the struct's internal shape leaks into the API response instead of a
+  plain string value.
+- When the frontend assigns this object directly to `audio.src`, the browser
+  stringifies the object to the literal text "[object Object]" and resolves it
+  against the page's own origin, producing the broken URL seen in the console.
+
+Fix needed in the backend service (not in this frontend repo):
+1. Locate the handler for `/playplaylist/{id}` (and any other playlist-related
+   endpoints returning song/track data for playback).
+2. Ensure PlayPath, Artist, Song, and ImgUrl fields are emitted as plain JSON
+   strings, not nested objects:
+   - If using `sql.NullString` (or equivalent) in the response struct, either:
+     a) Extract `.String` (respecting `.Valid`) into a plain `string` field
+        before building the response, or
+     b) Implement a custom `MarshalJSON` on the type so it serializes to a
+        plain string (empty string or null when not Valid), or
+     c) Use a plain `string` type in the API response DTO instead of the
+        nullable DB type, converting at the DB-to-DTO boundary.
+3. Confirm the single-song endpoints (used by song/album/artist pages) already
+   return plain strings for these fields, and mirror that same
+   serialization approach for the playlist endpoint so all endpoints are
+   consistent.
+4. After the fix, verify by calling `/playplaylist/{id}` directly (e.g. via
+   curl) and confirming PlayPath/Artist/Song/ImgUrl are plain JSON strings,
+   not objects.
+5. Re-test playlist playback end-to-end in the frontend to confirm audio.src
+   resolves to a real streaming URL and playback proceeds normally.
+
+Frontend note (already applied in rusic-svelte, no action needed there):
+- src/lib/sound2Store.js now has a `resolveStringField()` helper that unwraps
+  either a plain string or a {String, Valid} style object, and `play()` will
+  log a console.error and skip playback instead of crashing if PlayPath can't
+  be resolved. This is a defensive guard only — the real fix belongs in the
+  backend response serialization described above.
