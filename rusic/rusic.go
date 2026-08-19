@@ -855,7 +855,7 @@ func CoverArtFromPlayPath(playpath string) []string {
 
 }
 
-func PlayPlaylist(plid string) []string {
+func PlayPlaylist(plid string) []MusicInfo {
 	db, err := openDB()
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
@@ -865,15 +865,8 @@ func PlayPlaylist(plid string) []string {
 	id, err := getPlaylistID(db, plid)
 	if err != nil {
 		fmt.Println("Error looking up playlist id: ", err)
-		return []string{}
+		return []MusicInfo{}
 	}
 
-	songs := fetchPlaylistSongs(db, id)
-
-	var infolist []string
-	for _, song := range songs {
-		infolist = append(infolist, song.PlayPath)
-	}
-
-	return infolist
+	return fetchPlaylistSongs(db, id)
 }
