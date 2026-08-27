@@ -81,8 +81,8 @@ def main():
     print(docker_64_file)
 
     if os.uname().machine == "armv7l":
-        rpi3 = glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-0.4.1")
-        if os.path.exists(rpi3[0]):
+        rpi3 = glob(f"/usr/share/rusic/rusic/setup/rusicsetup-rpi3b-{args.version}")
+        if rpi3 and os.path.exists(rpi3[0]):
             subprocess.run(rpi3[0])
         else:
             print("Rusic Setup not found. Please install it first.")
@@ -101,8 +101,8 @@ def main():
         else:
             print("No action specified. Use -i, -u, or -d.")
     elif os.uname().machine == "aarch64":
-        rpi4 = glob("/usr/share/rusic/rusic/setup/rusicsetup-rpi4-0.4.1")
-        if os.path.exists(rpi4[0]):
+        rpi4 = glob(f"/usr/share/rusic/rusic/setup/rusicsetup-rpi4-{args.version}")
+        if rpi4 and os.path.exists(rpi4[0]):
             subprocess.run(rpi4[0])
         else:
             print("Rusic Setup not found. Please install it first.")
@@ -117,7 +117,7 @@ def main():
             rusic_update(args.version, docker_64_file, arch)
         elif args.delete:
             print(f"Deleting Rusic:{args.version}")
-            rusic_delete(args.version, docker_64_file, arch)
+            rusic_delete(args.version, arch)
         else:
             print("No action specified. Use -i, -u, or -d.")
     else:
