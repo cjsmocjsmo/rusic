@@ -10,12 +10,13 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	_ "github.com/mattn/go-sqlite3"
+	"log"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
-	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type RandomArtStruct struct {
@@ -84,25 +85,27 @@ func scanMusicInfo(rows *sql.Rows) (MusicInfo, error) {
 func RandomArt() []RandomArtStruct {
 	// Open log file
 	logPath := os.Getenv("RUSIC_LOG_PATH")
-    logFile, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer logFile.Close()
+	logFile, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer logFile.Close()
 
-    // Set the output log file
-    log.SetOutput(logFile)
+	// Set the output log file
+	log.SetOutput(logFile)
 
 	log.Println("RandomArt() called")
 	db, err := openDB()
 	if err != nil {
 		log.Println("Error opening database: ", err)
+		return []RandomArtStruct{}
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT id FROM album_images")
 	if err != nil {
 		log.Println("Error opening database: ", err)
+		return []RandomArtStruct{}
 	}
 	defer rows.Close()
 
@@ -119,6 +122,12 @@ func RandomArt() []RandomArtStruct {
 		log.Println("Error iterating over rows: %w", err)
 	}
 
+	thumbPaths := []RandomArtStruct{}
+	if len(idxlist) == 0 {
+		log.Println("No rows found in album_images, returning empty result")
+		return thumbPaths
+	}
+
 	rand.Seed(time.Now().UnixNano())
 
 	randomNumbers := []int{}
@@ -127,11 +136,11 @@ func RandomArt() []RandomArtStruct {
 		randomNumbers = append(randomNumbers, idxlist[randomIndex])
 	}
 
-	thumbPaths := []RandomArtStruct{}
 	for _, idx := range randomNumbers {
 		rows, err := db.Query("SELECT httpthumbpath, albumid FROM album_images WHERE id=?", idx)
 		if err != nil {
 			log.Println("Error executing query: %w", err)
+			continue
 		}
 		defer rows.Close()
 
@@ -148,10 +157,6 @@ func RandomArt() []RandomArtStruct {
 		if err := rows.Err(); err != nil {
 			log.Println("Error iterating over rows: %w", err)
 		}
-	}
-
-	if err != nil {
-		log.Println("Error marshaling data to JSON: %w", err)
 	}
 
 	log.Println(thumbPaths)
@@ -218,6 +223,7 @@ func ArtistStartsWith() []SongCountStruct {
 	rows, err := db.Query("SELECT first_letter, COUNT(*) FROM artists GROUP BY first_letter ORDER BY first_letter")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return []SongCountStruct{}
 	}
 	defer rows.Close()
 	results := []SongCountStruct{}
@@ -229,6 +235,9 @@ func ArtistStartsWith() []SongCountStruct {
 		}
 		startsWith.ID = len(results) + 1
 		results = append(results, startsWith)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 	return results
 }
@@ -242,6 +251,7 @@ func AlbumStartsWith() []SongCountStruct {
 	rows, err := db.Query("SELECT first_letter, COUNT(*) FROM albums GROUP BY first_letter ORDER BY first_letter")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return []SongCountStruct{}
 	}
 	defer rows.Close()
 	results := []SongCountStruct{}
@@ -253,6 +263,9 @@ func AlbumStartsWith() []SongCountStruct {
 		}
 		startsWith.ID = len(results) + 1
 		results = append(results, startsWith)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 	return results
 }
@@ -267,6 +280,7 @@ func SongForId(rusicId string) MusicInfo {
 	rows, err := db.Query(songSelectQuery+"WHERE s.rusicid = ?", rusicId)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return MusicInfo{}
 	}
 	defer rows.Close()
 
@@ -279,6 +293,9 @@ func SongForId(rusicId string) MusicInfo {
 			fmt.Println("song for id Error scanning row: ", err)
 			continue
 		}
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return song
@@ -316,6 +333,7 @@ func GetCurrentPlayingImg(albid string) MusicImgInfo {
 	rows, err := db.Query(query, albid)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return MusicImgInfo{}
 	}
 	defer rows.Close()
 
@@ -328,6 +346,9 @@ func GetCurrentPlayingImg(albid string) MusicImgInfo {
 			fmt.Println("getcurrentplayingimg Error scanning row: ", err)
 			continue
 		}
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return img
@@ -347,11 +368,12 @@ func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
 
 	artist := []ArtistForAlphaStruct{}
 
-	rows, _ := db.Query("SELECT name, artistid FROM artists WHERE first_letter = ? ORDER BY name COLLATE NOCASE", alpha)
-
+	rows, err := db.Query("SELECT name, artistid FROM artists WHERE first_letter = ? ORDER BY name COLLATE NOCASE", alpha)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return artist
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var startswith ArtistForAlphaStruct
 		if err := rows.Scan(&startswith.Artist, &startswith.Artistid); err != nil {
@@ -359,6 +381,9 @@ func ArtistForAlpha(alpha string) []ArtistForAlphaStruct {
 			continue
 		}
 		artist = append(artist, startswith)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return artist
@@ -385,7 +410,7 @@ func AlbumForAlpha(alpha string) []AlbumStruct {
 
 	albums := []AlbumForAlphaStruct{}
 
-	rows, _ := db.Query("SELECT name, albumid FROM albums WHERE first_letter = ? ORDER BY name COLLATE NOCASE", alpha)
+	rows, err := db.Query("SELECT name, albumid FROM albums WHERE first_letter = ? ORDER BY name COLLATE NOCASE", alpha)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 		return nil
@@ -398,13 +423,17 @@ func AlbumForAlpha(alpha string) []AlbumStruct {
 		}
 		albums = append(albums, startswith)
 	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
+	}
+	rows.Close()
 
 	albumList := []AlbumStruct{}
 	for _, alb := range albums {
-		rows, _ := db.Query("SELECT httpthumbpath FROM album_images WHERE albumid = ? ORDER BY CAST(idx AS INTEGER) LIMIT 1", alb.Albumid)
+		rows, err := db.Query("SELECT httpthumbpath FROM album_images WHERE albumid = ? ORDER BY CAST(idx AS INTEGER) LIMIT 1", alb.Albumid)
 		if err != nil {
 			fmt.Println("Error executing query: ", err)
-			return nil
+			continue
 		}
 		for rows.Next() {
 			var thumbpath string
@@ -414,6 +443,10 @@ func AlbumForAlpha(alpha string) []AlbumStruct {
 			}
 			albumList = append(albumList, AlbumStruct{Album: alb.Album, Albumid: alb.Albumid, HttpThumbPath: thumbpath})
 		}
+		if err := rows.Err(); err != nil {
+			fmt.Println("Error iterating over rows: ", err)
+		}
+		rows.Close()
 	}
 
 	return albumList
@@ -440,11 +473,12 @@ func AlbumsForArtist(artid string) []AlbumsForArtistAlbumStruct {
 	WHERE al.artistid = ?
 	GROUP BY al.albumid
 	ORDER BY al.name COLLATE NOCASE`
-	rows, _ := db.Query(query, artid)
+	rows, err := db.Query(query, artid)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 		return nil
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var album AlbumsForArtistAlbumStruct
 		if err := rows.Scan(&album.Albumid, &album.Album, &album.HttpThumbPath); err != nil {
@@ -452,6 +486,9 @@ func AlbumsForArtist(artid string) []AlbumsForArtistAlbumStruct {
 			continue
 		}
 		albums = append(albums, album)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return albums
@@ -465,10 +502,12 @@ func AlbumsForArtistSongs(albid string) []MusicInfo {
 	}
 	defer db.Close()
 
-	rows, _ := db.Query(songSelectQuery+"WHERE s.albumid = ? ORDER BY CAST(s.idx AS INTEGER)", albid)
+	rows, err := db.Query(songSelectQuery+"WHERE s.albumid = ? ORDER BY CAST(s.idx AS INTEGER)", albid)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return []MusicInfo{}
 	}
+	defer rows.Close()
 
 	songs := []MusicInfo{}
 	for rows.Next() {
@@ -478,6 +517,9 @@ func AlbumsForArtistSongs(albid string) []MusicInfo {
 			continue
 		}
 		songs = append(songs, song)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return songs
@@ -490,10 +532,12 @@ func SongPages() []string {
 	}
 	defer db.Close()
 
-	rows, _ := db.Query("SELECT DISTINCT page FROM songs ORDER BY CAST(page AS INTEGER)")
+	rows, err := db.Query("SELECT DISTINCT page FROM songs ORDER BY CAST(page AS INTEGER)")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return []string{}
 	}
+	defer rows.Close()
 
 	pages := []string{}
 	for rows.Next() {
@@ -503,6 +547,9 @@ func SongPages() []string {
 			continue
 		}
 		pages = append(pages, page)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return pages
@@ -515,10 +562,12 @@ func SongsForPage(page string) []MusicInfo {
 	}
 	defer db.Close()
 
-	rows, _ := db.Query(songSelectQuery+"WHERE s.page = ? ORDER BY CAST(s.idx AS INTEGER)", page)
+	rows, err := db.Query(songSelectQuery+"WHERE s.page = ? ORDER BY CAST(s.idx AS INTEGER)", page)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return []MusicInfo{}
 	}
+	defer rows.Close()
 
 	songs := []MusicInfo{}
 	for rows.Next() {
@@ -528,6 +577,9 @@ func SongsForPage(page string) []MusicInfo {
 			continue
 		}
 		songs = append(songs, song)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return songs
@@ -550,6 +602,9 @@ func PlaylistCheck() bool {
 
 	for rows.Next() {
 		return true
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	return false
@@ -657,6 +712,7 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 	rows, err := db.Query("SELECT rusicid FROM songs ORDER BY RANDOM() LIMIT ?", numSongs)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return PlaylistStruct{}
 	}
 	defer rows.Close()
 
@@ -668,6 +724,9 @@ func CreateRandomPlaylist(plname string, count string) PlaylistStruct {
 			continue
 		}
 		songRusicIds = append(songRusicIds, rid)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	songs := []MusicInfo{}
@@ -706,6 +765,7 @@ func AllPlaylists() []PlaylistStruct {
 	rows, err := db.Query("SELECT id, rusicid, name FROM playlists")
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
+		return []PlaylistStruct{}
 	}
 	defer rows.Close()
 
@@ -722,6 +782,9 @@ func AllPlaylists() []PlaylistStruct {
 			continue
 		}
 		basics = append(basics, pr)
+	}
+	if err := rows.Err(); err != nil {
+		fmt.Println("Error iterating over rows: ", err)
 	}
 
 	allplaylist := []PlaylistStruct{}
