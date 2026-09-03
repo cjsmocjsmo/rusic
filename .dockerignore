@@ -1,0 +1,11 @@
+.git
+.gitignore
+__pycache__/
+*.pyc
+LICENSES/
+README.md
+newdb.txt
+plalistfix.txt
+rusic.py
+screenshot.png
+setup/
