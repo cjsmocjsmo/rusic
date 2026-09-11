@@ -53,7 +53,7 @@ func main() {
 	r.GET("/addsongtoplaylist/:playlistid/:songid", rus_add_song_to_playlist)
 	r.GET("/removesongfromplaylist/:playlistid/:songid", rus_remove_song_from_playlist)
 	r.GET("/deleteplaylist/:rusicid", rus_delete_playlist)
-	r.GET("/coverartfromplaypath/:playpath", rus_cover_art_from_playpath)
+	r.GET("/coverartfromrusicid/:rusicid", rus_cover_art_from_rusicid)
 	r.GET("/playmusic/:songid", rus_PlayMusic)
 	r.GET("/playplaylist/:rusicid", rus_PlayPlayList)
 
@@ -329,9 +329,9 @@ func rus_delete_playlist(w http.ResponseWriter, _ *http.Request, params map[stri
 	writeJSON(w, http.StatusOK, playlists)
 }
 
-func rus_cover_art_from_playpath(w http.ResponseWriter, _ *http.Request, params map[string]string) {
-	playpath := params["playpath"]
-	coverart := rusic.CoverArtFromPlayPath(playpath)
+func rus_cover_art_from_rusicid(w http.ResponseWriter, _ *http.Request, params map[string]string) {
+	rusicid := params["rusicid"]
+	coverart := rusic.CoverArtFromRusicId(rusicid)
 	writeJSON(w, http.StatusOK, coverart)
 }
 

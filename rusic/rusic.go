@@ -916,14 +916,14 @@ func AddSongToPlaylist(playlistid string, songid string) []NewPlayListStruct {
 
 }
 
-func CoverArtFromPlayPath(playpath string) []string {
+func CoverArtFromRusicId(rusicid string) []string {
 	db, err := openDB()
 	if err != nil {
 		fmt.Println("Error opening database: ", err)
 	}
 	defer db.Close()
 
-	rows, err := db.Query(songSelectQuery+"WHERE s.playpath = ?", playpath)
+	rows, err := db.Query(songSelectQuery+"WHERE s.rusicid = ?", rusicid)
 	if err != nil {
 		fmt.Println("Error executing query: ", err)
 	}
