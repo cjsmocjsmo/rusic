@@ -83,7 +83,7 @@ func (h *musicHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Include encoding settings in the key so a future change does not reuse old output.
-	key := fmt.Sprintf("%x", sha256.Sum256([]byte(fmt.Sprintf("mp3-192k-v1\x00%s\x00%d\x00%d", source, info.Size(), info.ModTime().UnixNano()))))
+	key := fmt.Sprintf("%x", sha256.Sum256(fmt.Appendf(nil, "mp3-192k-v1\x00%s\x00%d\x00%d", source, info.Size(), info.ModTime().UnixNano())))
 	cached := filepath.Join(h.cache, key+".mp3")
 	if err := h.ensureCached(r.Context(), key, source, cached, info); err != nil {
 		if r.Context().Err() != nil {
