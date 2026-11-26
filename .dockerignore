@@ -1,6 +1,7 @@
 .git
 .gitignore
 __pycache__/
+cache/
 *.pyc
 LICENSES/
 README.md

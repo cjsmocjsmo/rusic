@@ -3,7 +3,7 @@ FROM debian:trixie
 RUN \
     apt-get update && \
     apt-get -y dist-upgrade && \
-    apt-get -y install golang git && \
+    apt-get -y install golang git ffmpeg && \
     apt-get -y autoremove && \
     apt-get -y autoclean
 
@@ -30,6 +30,7 @@ COPY playing.jpg /usr/share/rusic/rusic/thumbs/playing.jpg
 COPY go.mod /usr/share/rusic/rusic/go.mod
 COPY go.sum /usr/share/rusic/rusic/go.sum
 COPY main.go /usr/share/rusic/rusic/main.go
+COPY music.go /usr/share/rusic/rusic/music.go
 COPY rusic/rusic.go /usr/share/rusic/rusic/rusic/rusic.go
 
 WORKDIR  /usr/share/rusic/rusic

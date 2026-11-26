@@ -56,6 +56,27 @@ The source code for the rust binaries in /rusic/setup can be found at:
 
 This is still a work in progress
 
+## FLAC playback on Tizen
+
+Clients that cannot play FLAC can append `?format=mp3` to a `/Music/` URL.
+FLAC files are converted to 192 kbps MP3 using ffmpeg, then cached for later
+requests; other files and requests without the parameter are served unchanged.
+The first request waits for conversion, which can take time on a Raspberry Pi.
+At most two different files are converted at once; if both slots are busy,
+the server returns HTTP 503 and the client can retry.
+
+The Docker images include ffmpeg. For a non-Docker installation, install
+ffmpeg with the `libmp3lame` encoder and make it available on `PATH`.
+Set `RUSIC_MP3_CACHE_DIR` to a writable directory to choose the cache location.
+By default it is `mp3-cache` beside `RUSIC_DB_PATH`, or `cache/mp3` in the
+working directory if `RUSIC_DB_PATH` is unset. The standard Docker launcher
+mounts the database directory, so the default cache persists across container
+replacements. The cache is not size-limited; monitor available disk space and
+remove old cache files when needed. Cache invalidation uses the source path,
+size and modification time; if replacing a file while preserving both its size
+and timestamp, update its modification time or remove the cached files.
+Conversions continue if a client disconnects and time out after 10 minutes.
+
 ## Warning
 
 Rusic was designed to run on your home network and not on the wider internet.  It has no authentication system or TLS support, so you have been warned!!!

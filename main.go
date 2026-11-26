@@ -59,7 +59,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/thumbs/", http.StripPrefix("/thumbs/", http.FileServer(http.Dir("thumbs"))))
-	mux.Handle("/Music/", http.StripPrefix("/Music/", http.FileServer(http.Dir("Music"))))
+	mux.Handle("/Music/", http.StripPrefix("/Music/", newMusicHandler("Music", mp3CacheDir())))
 	mux.Handle("/", r)
 
 	h := withRecover(withCORS(withGzip(mux)))
@@ -167,7 +167,7 @@ func withRecover(next http.Handler) http.Handler {
 
 func withGzip(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+		if strings.HasPrefix(r.URL.Path, "/Music/") || !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
 			next.ServeHTTP(w, r)
 			return
 		}
